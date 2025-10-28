@@ -1,5 +1,5 @@
 /* =========================================================
-   KSRM Digital – Global Styles (FINAL)
+   KSRM Digital – Global Styles (FINAL, Deep-Navy Header)
    Design system: Light, calm, educational theme
    ========================================================= */
 
@@ -45,33 +45,42 @@ small { font-size: 0.875rem; }
 --------------------------- */
 .btn-primary{
   display:inline-block;
-  background-color:#2563EB;
+  background-color:#3B82F6;             /* brighter on dark header + light hero */
   color:#fff;
   padding:.8rem 1.6rem;
   border-radius:10px;
   font-weight:600;
   text-decoration:none;
   transition:all .25s ease;
-  box-shadow:0 6px 20px rgba(37,99,235,.18);
+  box-shadow:0 8px 24px rgba(59,130,246,.25);
 }
-.btn-primary:hover{ background-color:#1E40AF; transform:translateY(-1px); }
+.btn-primary:hover{ background-color:#2563EB; transform:translateY(-1px); }
 
 /* --------------------------
-   4. Header (polished)
+   4. Header (Deep Navy)
 --------------------------- */
 .site-header{
-  background:#fff;
-  border-bottom:1px solid #E5E7EB;
+  background:#0F172A;                   /* deep navy */
+  border-bottom:1px solid rgba(255,255,255,0.06);
   position:sticky; top:0; z-index:100;
-  box-shadow:0 2px 8px rgba(2,6,23,.04);
+  box-shadow:0 2px 8px rgba(2,6,23,.25);
 }
 .site-header .brand-name{
   font-family:'Poppins',sans-serif;
   font-weight:700; letter-spacing:.2px;
+  color:#E5E7EB;
 }
-.site-header a[data-nav="true"]{ color:#1f2937; opacity:.9; }
+.site-header .brand-tag{ color:#94A3B8; }
+.site-header a[data-nav="true"]{ color:#E5E7EB; opacity:.95; }
 .site-header a[data-nav="true"]:hover{
-  opacity:1; text-decoration:underline; text-underline-offset:3px;
+  opacity:1; color:#FFFFFF;
+  text-decoration:underline; text-underline-offset:3px;
+}
+
+/* Brand square (keeps identity pop on dark) */
+.brand-logo{
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  box-shadow: 0 4px 14px rgba(59,130,246,0.35);
 }
 
 /* --------------------------
@@ -82,7 +91,8 @@ small { font-size: 0.875rem; }
 }
 .hero-wrap{ max-width:900px; margin:0 auto; text-align:center; padding:100px 20px; }
 .hero-pill{
-  color:#2563EB; font-weight:600; text-transform:uppercase;
+  color:#3B82F6;                         /* matches button hue */
+  font-weight:600; text-transform:uppercase;
   font-size:.9rem; letter-spacing:.5px;
 }
 .hero-wrap h1{ font-size:3rem; letter-spacing:-.5px; margin:12px 0; }
@@ -153,13 +163,23 @@ small { font-size: 0.875rem; }
 }
 
 /* --------------------------
-   9. Footer
+   9. Footer (slightly darker to balance header)
 --------------------------- */
 .site-footer{
-  background:#0F172A; color:#CBD5E1;
+  background:#0B1220;                    /* subtle step darker than header */
+  color:#CBD5E1;
   text-align:center; padding:72px 20px 40px;
 }
 .site-footer a{ color:#93C5FD; margin:0 12px; text-decoration:none; }
 .site-footer a:hover{ text-decoration:underline; }
 .footer-disclaimer{ color:#94A3B8; font-size:13px; margin-top:18px; opacity:.9; }
 .footer-ads{ color:#64748B; font-size:12px; margin-top:8px; }
+
+/* --------------------------
+   10. Responsive
+--------------------------- */
+@media (max-width: 768px) {
+  .hero-wrap h1 { font-size: 2.1rem; }
+  #tools-grid { gap: 18px; }
+  .blog-grid { grid-template-columns: 1fr; }
+}
