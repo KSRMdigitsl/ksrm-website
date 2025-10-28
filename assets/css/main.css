@@ -1,51 +1,32 @@
 /* =========================================================
-   KSRM Digital – Global Styles
+   KSRM Digital – Global Styles (FINAL)
    Design system: Light, calm, educational theme
    ========================================================= */
 
 /* --------------------------
    1. Base + Reset
 --------------------------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
+html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: #111827;
   background-color: #F9FAFB;
   line-height: 1.6;
 }
 
 /* Links */
-a {
-  color: #2563EB;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: #1E3A8A;
-}
+a { color: #2563EB; text-decoration: none; transition: color 0.2s ease; }
+a:hover { color: #1E3A8A; }
 
 /* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
 
 /* Section spacing */
-section {
-  padding: 80px 0;
-}
+section { padding: 88px 0; }
+@media (max-width: 768px) { section { padding: 64px 0; } }
 
 /* --------------------------
    2. Typography
@@ -56,186 +37,129 @@ h1, h2, h3, h4, h5 {
   font-weight: 700;
   line-height: 1.3;
 }
-
-p {
-  color: #374151;
-  margin-bottom: 1rem;
-}
-
-small {
-  font-size: 0.875rem;
-}
+p { color: #374151; margin-bottom: 1rem; }
+small { font-size: 0.875rem; }
 
 /* --------------------------
    3. Buttons
 --------------------------- */
-.btn-primary {
-  display: inline-block;
-  background-color: #2563EB;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+.btn-primary{
+  display:inline-block;
+  background-color:#2563EB;
+  color:#fff;
+  padding:.8rem 1.6rem;
+  border-radius:10px;
+  font-weight:600;
+  text-decoration:none;
+  transition:all .25s ease;
+  box-shadow:0 6px 20px rgba(37,99,235,.18);
 }
-
-.btn-primary:hover {
-  background-color: #1E40AF;
-  transform: translateY(-1px);
-}
+.btn-primary:hover{ background-color:#1E40AF; transform:translateY(-1px); }
 
 /* --------------------------
-   4. Header
+   4. Header (polished)
 --------------------------- */
-.site-header {
-  background-color: #fff;
-  border-bottom: 1px solid #E5E7EB;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.site-header{
+  background:#fff;
+  border-bottom:1px solid #E5E7EB;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 8px rgba(2,6,23,.04);
 }
-
-.site-header .brand-name {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.2px;
+.site-header .brand-name{
+  font-family:'Poppins',sans-serif;
+  font-weight:700; letter-spacing:.2px;
+}
+.site-header a[data-nav="true"]{ color:#1f2937; opacity:.9; }
+.site-header a[data-nav="true"]:hover{
+  opacity:1; text-decoration:underline; text-underline-offset:3px;
 }
 
 /* --------------------------
    5. Hero
 --------------------------- */
-.hero-pill {
-  color: #2563EB;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
+#hero{
+  background: radial-gradient(1200px 400px at 50% -200px, rgba(37,99,235,.07), transparent 60%);
 }
+.hero-wrap{ max-width:900px; margin:0 auto; text-align:center; padding:100px 20px; }
+.hero-pill{
+  color:#2563EB; font-weight:600; text-transform:uppercase;
+  font-size:.9rem; letter-spacing:.5px;
+}
+.hero-wrap h1{ font-size:3rem; letter-spacing:-.5px; margin:12px 0; }
+.hero-wrap p{ color:#6B7280; max-width:640px; margin:0 auto 1rem; }
 
-.hero-wrap h1 {
-  font-size: 2.5rem;
+/* Quote styling */
+#quote-box{
+  margin-top:24px; min-height:26px; font-style:italic;
+  color:#475569; font-size:.95rem; opacity:.9; transition:opacity .6s ease;
 }
-
-.hero-wrap p {
-  color: #6B7280;
-  max-width: 640px;
-  margin: 0 auto 1rem;
+#quote-box:before, #quote-box:after{
+  content:"“"; letter-spacing:-2px; color:#94a3b8; margin:0 4px;
 }
+#quote-box:after{ content:"”"; }
 
 /* --------------------------
    6. Tools Grid
 --------------------------- */
-#tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+#tools-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:28px; margin-top:28px;
 }
-
-.tool-card {
-  background-color: #fff;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.tool-card{
+  background:#fff; border:1px solid #E6E9EF; border-radius:16px;
+  padding:24px; box-shadow:0 4px 8px rgba(0,0,0,.04);
+  display:flex; flex-direction:column; justify-content:space-between;
+  min-height:180px;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-
-.tool-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+.tool-card:hover{
+  transform:translateY(-4px); border-color:#DDE3F0;
+  box-shadow:0 10px 24px rgba(2,6,23,.08);
 }
+.tool-card h3{ color:#111827; font-weight:600; }
+.tool-card p{ margin:10px 0 18px; line-height:1.55; color:#374151; }
 
 /* --------------------------
    7. Blog Section
 --------------------------- */
-#blog-section {
-  text-align: center;
-}
+#blog-section{ text-align:center; }
+#blog-section h2{ margin-bottom:18px; font-family:'Poppins',sans-serif; }
 
-.blog-grid {
-  display: grid;
-  gap: 24px;
-  max-width: 1000px;
-  margin: 40px auto;
+.blog-grid{ display:grid; gap:20px; max-width:1050px; margin:40px auto; }
+.featured, .blog-card{
+  background:#fff; border-radius:16px;
+  box-shadow:0 4px 8px rgba(0,0,0,.05); padding:24px;
+  text-align:left;
 }
-
-.blog-card, .featured {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  padding: 20px;
+.featured img, .blog-card img{
+  width:100%; aspect-ratio:16/9; object-fit:cover;
+  border-radius:12px; background:#eef2ff;
 }
-
-.blog-card h4, .featured h3 {
-  color: #111827;
-  margin: 10px 0;
-}
+.featured h3{ font-size:1.4rem; margin:8px 0; }
+.featured p{ color:#475569; }
+.blog-card{ padding:18px; }
+.blog-card h4{ font-size:1.1rem; margin:6px 0; }
+.blog-card p{ color:#4b5563; font-size:.95rem; }
+.blog-card a, .featured a{ display:inline-block; margin-top:6px; font-weight:600; }
 
 /* --------------------------
    8. Ad Placeholders
 --------------------------- */
-.ad-placeholder {
-  border: 2px dashed #D1D5DB;
-  background: #F3F4F6;
-  color: #6B7280;
-  text-align: center;
-  padding: 20px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+.ad-placeholder{
+  border-radius:12px; border:2px dashed #D6DAE1;
+  background:#F7F8FB; color:#6B7280; text-align:center;
+  padding:22px; font-size:.9rem;
 }
 
 /* --------------------------
    9. Footer
 --------------------------- */
-.site-footer {
-  background-color: #0F172A;
-  color: #CBD5E1;
-  text-align: center;
-  padding: 60px 20px 40px;
+.site-footer{
+  background:#0F172A; color:#CBD5E1;
+  text-align:center; padding:72px 20px 40px;
 }
-
-.site-footer a {
-  color: #93C5FD;
-  margin: 0 12px;
-  text-decoration: none;
-}
-
-.site-footer a:hover {
-  text-decoration: underline;
-}
-
-.footer-disclaimer {
-  color: #94A3B8;
-  font-size: 13px;
-  margin-top: 16px;
-}
-
-.footer-ads {
-  color: #64748B;
-  font-size: 12px;
-  margin-top: 8px;
-}
-
-/* --------------------------
-   10. Responsive
---------------------------- */
-@media (max-width: 768px) {
-  .hero-wrap h1 {
-    font-size: 1.9rem;
-  }
-
-  section {
-    padding: 60px 0;
-  }
-
-  #tools-grid {
-    gap: 1.25rem;
-  }
-
-  .blog-grid {
-    grid-template-columns: 1fr;
-  }
-}
+.site-footer a{ color:#93C5FD; margin:0 12px; text-decoration:none; }
+.site-footer a:hover{ text-decoration:underline; }
+.footer-disclaimer{ color:#94A3B8; font-size:13px; margin-top:18px; opacity:.9; }
+.footer-ads{ color:#64748B; font-size:12px; margin-top:8px; }
