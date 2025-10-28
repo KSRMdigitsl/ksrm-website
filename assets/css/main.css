@@ -183,3 +183,60 @@ small { font-size: 0.875rem; }
   #tools-grid { gap: 18px; }
   .blog-grid { grid-template-columns: 1fr; }
 }
+/* ===== KSRM Dark Scheme — match /tools/ page ===== */
+
+/* Base surfaces & text */
+body { background:#0B1220; color:#E6EDF6; }
+h1,h2,h3,h4,h5 { color:#E6EDF6; }
+p, .hero-wrap p, .featured p, .blog-card p { color:#A8B3C7; }
+
+/* Header already dark. Keep links bright. */
+.site-header a[data-nav="true"]{ color:#FFFFFF !important; opacity:1 !important; }
+
+/* Hero */
+#hero {
+  background:
+    radial-gradient(1200px 420px at 50% -240px, rgba(80,120,255,.10), transparent 65%),
+    linear-gradient(180deg, rgba(10,16,28,.0), rgba(10,16,28,.0));
+}
+.hero-pill { color:#9AB6FF; }
+#quote-box { color:#9AA6BF; }
+
+/* Cards (tools + blog) */
+.tool-card,
+.featured,
+.blog-card {
+  background:#121826;               /* card surface */
+  border:1px solid #1F2735;         /* subtle edge */
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+.tool-card:hover,
+.featured:hover,
+.blog-card:hover {
+  transform: translateY(-3px);
+  border-color:#2A364A;
+  box-shadow: 0 16px 32px rgba(0,0,0,.35);
+}
+.tool-card h3, .featured h3, .blog-card h4 { color:#E6EDF6; }
+
+/* Links & buttons on dark */
+a { color:#90A8FF; }
+a:hover { color:#6E8DFF; }
+
+.btn-primary{
+  background:#6D8CFF;
+  box-shadow:0 10px 28px rgba(109,140,255,.25);
+}
+.btn-primary:hover{ background:#5375FF; }
+
+/* Ad placeholders on dark */
+.ad-placeholder{
+  background:#0F1522;
+  border:1px dashed #2A364A;
+  color:#8CA0C6;
+}
+
+/* Footer already dark; unify tone */
+.site-footer{ background:#0A111D; color:#C8D2E6; }
+.site-footer a{ color:#9BB2FF; }
+.footer-disclaimer{ color:#98A6BF; }
