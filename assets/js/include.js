@@ -8,7 +8,7 @@
 
     // Load header
     if (headerTarget) {
-      const res = await fetch("/partials/header.html");
+      const res = await fetch("partials/header.html");
       if (res.ok) {
         headerTarget.innerHTML = await res.text();
       } else {
@@ -18,7 +18,7 @@
 
     // Load footer
     if (footerTarget) {
-      const res = await fetch("/partials/footer.html");
+      const res = await fetch("partials/footer.html");
       if (res.ok) {
         footerTarget.innerHTML = await res.text();
       } else {

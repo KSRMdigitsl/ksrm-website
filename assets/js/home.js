@@ -15,11 +15,11 @@
 
   // Load all JSON files in parallel
   const [homeData, uiData, quotesData, blogData, flagsData] = await Promise.all([
-    fetchJSON("/data/home.json"),
-    fetchJSON("/data/ui.json"),
-    fetchJSON("/data/quotes.json", []),
-    fetchJSON("/data/blog.json", []),
-    fetchJSON("/flags.json", {})
+    fetchJSON("data/home.json"),
+    fetchJSON("data/ui.json"),
+    fetchJSON("data/quotes.json", []),
+    fetchJSON("data/blog.json", []),
+    fetchJSON("flags.json", {})
   ]);
 
   // Render Hero
