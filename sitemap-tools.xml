@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Tools hub -->
+  <url>
+    <loc>https://www.ksrm.digital/tools/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Add each tool page here once it's live (200 OK) -->
+  <!-- Examples (uncomment/replace with your real slugs when ready)
+  <url>
+    <loc>https://www.ksrm.digital/tools/salary-calculator-uk/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ksrm.digital/tools/sip-calculator/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.ksrm.digital/tools/emi-loan-calculator/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  -->
+</urlset>
