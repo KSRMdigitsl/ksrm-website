@@ -1,0 +1,241 @@
+/* =========================================================
+   KSRM Digital – Global Styles
+   Design system: Light, calm, educational theme
+   ========================================================= */
+
+/* --------------------------
+   1. Base + Reset
+--------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111827;
+  background-color: #F9FAFB;
+  line-height: 1.6;
+}
+
+/* Links */
+a {
+  color: #2563EB;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1E3A8A;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Section spacing */
+section {
+  padding: 80px 0;
+}
+
+/* --------------------------
+   2. Typography
+--------------------------- */
+h1, h2, h3, h4, h5 {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  color: #111827;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+p {
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+small {
+  font-size: 0.875rem;
+}
+
+/* --------------------------
+   3. Buttons
+--------------------------- */
+.btn-primary {
+  display: inline-block;
+  background-color: #2563EB;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary:hover {
+  background-color: #1E40AF;
+  transform: translateY(-1px);
+}
+
+/* --------------------------
+   4. Header
+--------------------------- */
+.site-header {
+  background-color: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header .brand-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* --------------------------
+   5. Hero
+--------------------------- */
+.hero-pill {
+  color: #2563EB;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.hero-wrap h1 {
+  font-size: 2.5rem;
+}
+
+.hero-wrap p {
+  color: #6B7280;
+  max-width: 640px;
+  margin: 0 auto 1rem;
+}
+
+/* --------------------------
+   6. Tools Grid
+--------------------------- */
+#tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.tool-card {
+  background-color: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* --------------------------
+   7. Blog Section
+--------------------------- */
+#blog-section {
+  text-align: center;
+}
+
+.blog-grid {
+  display: grid;
+  gap: 24px;
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.blog-card, .featured {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+
+.blog-card h4, .featured h3 {
+  color: #111827;
+  margin: 10px 0;
+}
+
+/* --------------------------
+   8. Ad Placeholders
+--------------------------- */
+.ad-placeholder {
+  border: 2px dashed #D1D5DB;
+  background: #F3F4F6;
+  color: #6B7280;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* --------------------------
+   9. Footer
+--------------------------- */
+.site-footer {
+  background-color: #0F172A;
+  color: #CBD5E1;
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.site-footer a {
+  color: #93C5FD;
+  margin: 0 12px;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-disclaimer {
+  color: #94A3B8;
+  font-size: 13px;
+  margin-top: 16px;
+}
+
+.footer-ads {
+  color: #64748B;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+/* --------------------------
+   10. Responsive
+--------------------------- */
+@media (max-width: 768px) {
+  .hero-wrap h1 {
+    font-size: 1.9rem;
+  }
+
+  section {
+    padding: 60px 0;
+  }
+
+  #tools-grid {
+    gap: 1.25rem;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+}

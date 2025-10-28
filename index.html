@@ -1,105 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>KSRM Digital — Free Finance & IT Tools</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Fast, accurate calculators and utilities. No sign-ups. No clutter." />
-  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="KSRM Digital — Free finance and IT tools designed to simplify your learning and digital journey." />
+  <meta name="theme-color" content="#2563EB" />
+  <title>KSRM Digital — Made to Learn. Built to Grow.</title>
 
-  <!-- Styles -->
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Main CSS -->
   <link rel="stylesheet" href="/assets/css/main.css" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" />
 </head>
 <body>
 
-  <!-- Path fixer for github.io project URLs (safe to keep) -->
-  <script>
-  (function(){
-    if (!location.hostname.endsWith('github.io')) return;
-    var seg = location.pathname.split('/').filter(Boolean)[0] || '';
-    var BASE = seg ? '/' + seg : '';
-    function fix(sel, attr){
-      document.querySelectorAll(sel).forEach(function(el){
-        var v = el.getAttribute(attr);
-        if (v && v.startsWith('/')) el.setAttribute(attr, BASE + v);
-      });
-    }
-    fix('link[rel="stylesheet"]','href'); fix('script[src]','src'); fix('img[src]','src'); fix('a[href]','href');
-  })();
-  </script>
-
-  <!-- Header -->
-  <div data-include="/partials/header.html"></div>
+  <!-- HEADER -->
+  <header data-include></header>
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <span class="pill">Tools by KSRM Digital</span>
-      <h1>Made to Learn. Built to Grow.</h1>
-      <p class="sub">Fast, accurate calculators and utilities. No sign-ups. No clutter.</p>
-      <div class="cta"><a class="btn" href="#tools">Explore Tools</a></div>
-    </div>
-  </section>
-
-  <!-- Ad placeholder (hero) -->
-  <div class="container"><div class="ad"><small>Ad placeholder — Hero banner (responsive)</small></div></div>
+  <section id="hero"></section>
 
   <!-- TOOLS -->
-  <main id="tools" class="section">
-    <div class="container grid">
-      <article class="card">
-        <div class="icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 18h12M8.5 18v-6.5a4 4 0 1 1 8 0" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M8.5 13h5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
-        <h3>Salary Calculator (UK)</h3>
-        <p>Gross → net, tax, NI and take-home.</p>
-        <a class="more" href="/tools/salary-uk/">Open tool →</a>
-      </article>
-
-      <article class="card">
-        <div class="icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19V5M20 19H4M7 14l4-4 3 3 4-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>SIP Calculator</h3>
-        <p>Monthly investing growth with compounding.</p>
-        <a class="more" href="/tools/sip/">Open tool →</a>
-      </article>
-
-      <article class="card">
-        <div class="icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="white" stroke-width="2"/><path d="M3 10h18" stroke="white" stroke-width="2"/><path d="M8 3v4M16 3v4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
-        <h3>EMI / Loan Calculator</h3>
-        <p>EMI, interest split & amortization schedule.</p>
-        <a class="more" href="/tools/emi/">Open tool →</a>
-      </article>
-    </div>
-  </main>
-
-  <!-- Ad placeholder (between tools & blog) -->
-  <div class="container"><div class="ad"><small>Ad placeholder — In-between section</small></div></div>
-
-  <!-- BLOG (instead of Learn) -->
-  <section class="section">
+  <section id="tools">
     <div class="container">
-      <h2>Blog</h2>
-      <div class="list">
-        <ul>
-          <li><strong>How UK salary tax works</strong> — PA, bands & NI in plain English.</li>
-          <li><strong>What SIP really means</strong> — compounding the easy way.</li>
-          <li><strong>EMI basics</strong> — reducing balance and prepayments.</li>
-        </ul>
-      </div>
+      <h2 style="text-align:center;font-family:Poppins,sans-serif;">Our Free Tools</h2>
+      <div id="tools-grid"></div>
     </div>
   </section>
 
-  <!-- Ad placeholder (footer area) -->
-  <div class="container"><div class="ad"><small>Ad placeholder — Near footer</small></div></div>
+  <!-- BLOG -->
+  <section id="blog-section"></section>
 
-  <!-- Footer -->
-  <div data-include="/partials/footer.html"></div>
+  <!-- FOOTER -->
+  <footer data-include></footer>
 
-  <!-- Include loader -->
+  <!-- JS includes -->
   <script src="/assets/js/include.js"></script>
+  <script src="/assets/js/home.js"></script>
 </body>
 </html>

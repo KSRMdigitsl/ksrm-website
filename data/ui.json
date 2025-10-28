@@ -1,0 +1,50 @@
+{
+  "nav": [
+    { "label": "Tools", "href": "#tools", "order": 1, "enabled": true },
+    { "label": "Blog", "href": "/blog/", "order": 2, "enabled": true },
+    { "label": "About", "href": "/about/", "order": 3, "enabled": true },
+    { "label": "Contact", "href": "/contact/", "order": 4, "enabled": true }
+  ],
+
+  "hero_cta": [
+    { "label": "Explore Tools", "href": "#tools", "variant": "primary", "order": 1, "enabled": true },
+    { "label": "Read Blog", "href": "/blog/", "variant": "secondary", "order": 2, "enabled": true }
+  ],
+
+  "tool_cards": [
+    {
+      "title": "Salary Calculator (UK)",
+      "desc": "Estimate your net pay, income tax, and NI instantly.",
+      "href": "/tools/salary-uk/",
+      "icon": "pound",
+      "cta_label": "Open Tool →",
+      "order": 1,
+      "enabled": true
+    },
+    {
+      "title": "SIP Calculator",
+      "desc": "Visualize your SIP growth and compounding returns.",
+      "href": "/tools/sip/",
+      "icon": "chart",
+      "cta_label": "Open Tool →",
+      "order": 2,
+      "enabled": true
+    },
+    {
+      "title": "EMI / Loan Calculator",
+      "desc": "Break down your EMI schedule and total interest cost.",
+      "href": "/tools/emi/",
+      "icon": "calendar",
+      "cta_label": "Open Tool →",
+      "order": 3,
+      "enabled": true
+    }
+  ],
+
+  "footer_links": [
+    { "label": "Privacy Policy", "href": "/privacy/", "order": 1, "enabled": true },
+    { "label": "Cookies", "href": "/cookies/", "order": 2, "enabled": true },
+    { "label": "Terms of Use", "href": "/terms/", "order": 3, "enabled": true },
+    { "label": "Contact", "href": "/contact/", "order": 4, "enabled": true }
+  ]
+}

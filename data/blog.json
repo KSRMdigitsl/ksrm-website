@@ -1,0 +1,44 @@
+[
+  {
+    "id": "uk-salary-tax-basics",
+    "title": "How UK Salary Tax Works (2025 Guide)",
+    "summary": "Understand UK income tax bands, NI contributions, and personal allowance in simple terms.",
+    "image": "/assets/img/blog-uk-tax.webp",
+    "alt": "Illustration of payslip and calculator",
+    "publish_date": "2025-10-15",
+    "status": "live",
+    "pinned": true,
+    "tags": ["finance", "uk", "tax"],
+    "est_read_min": 6,
+    "href": "/blog/uk-salary-tax-basics/",
+    "author": "KSRM Digital"
+  },
+  {
+    "id": "sip-vs-lumpsum",
+    "title": "SIP vs Lump Sum: Which Investment Strategy Wins?",
+    "summary": "Compare SIP and lump sum investing with real-world examples and returns simulation.",
+    "image": "/assets/img/blog-sip-vs-lumpsum.webp",
+    "alt": "Graph comparing SIP and lump sum",
+    "publish_date": "2025-09-25",
+    "status": "live",
+    "pinned": false,
+    "tags": ["finance", "investing"],
+    "est_read_min": 5,
+    "href": "/blog/sip-vs-lumpsum/",
+    "author": "KSRM Digital"
+  },
+  {
+    "id": "ai-tools-for-productivity",
+    "title": "Top AI Tools That Boost Productivity in 2025",
+    "summary": "Explore must-have AI tools for writing, coding, and automation to simplify daily work.",
+    "image": "/assets/img/blog-ai-tools.webp",
+    "alt": "AI digital assistant icons illustration",
+    "publish_date": "2025-09-05",
+    "status": "live",
+    "pinned": false,
+    "tags": ["ai", "productivity"],
+    "est_read_min": 4,
+    "href": "/blog/ai-tools-for-productivity/",
+    "author": "KSRM Digital"
+  }
+]
