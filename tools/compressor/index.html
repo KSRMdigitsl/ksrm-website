@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Image & File Compressor — KSRM Digital</title>
+  <meta name="description" content="Compress images (JPEG/WEBP/PNG) with quality and resize controls, or GZIP any file — all in your browser." />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+
+  <!-- Google Tag Manager (KSRM Website) -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
+  </script>
+  <!-- End Google Tag Manager -->
+
+  <link rel="stylesheet" href="../../assets/css/main.css?v=tools1" />
+  <style>
+    section#tool { background:#FFFFFF; }
+    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
+    .panel { background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,.04); }
+    .panel h2 { margin-bottom:8px; }
+    .row { display:flex; gap:12px; }
+    .field { flex:1; margin:10px 0; }
+    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
+    .field input, .field select {
+      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    }
+    .hint { color:#6B7280; font-size:.9rem; }
+    .tabs { display:flex; gap:8px; margin:8px 0 14px; }
+    .tab-btn { padding:8px 12px; border:1px solid #D8DFEA; border-radius:8px; background:#F9FBFF; cursor:pointer; font-weight:600; }
+    .tab-btn.active { background:#E8F0FF; border-color:#C7D2FE; }
+    .dropzone {
+      border:2px dashed #BFD0FF; border-radius:14px; padding:18px; text-align:center;
+      background:#F8FAFE; color:#374151;
+    }
+    .dropzone.drag { background:#EEF3FF; border-color:#8FA6FF; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
+    .card {
+      border:1px solid #E6E9EF; border-radius:12px; overflow:hidden; background:#fff;
+      display:flex; flex-direction:column;
+    }
+    .thumb { aspect-ratio: 4 / 3; object-fit:cover; background:#F3F4F6; }
+    .meta { padding:10px 12px; font-size:.92rem; color:#374151; display:grid; gap:4px; }
+    .meta small { color:#6B7280; }
+    .actions { display:flex; gap:8px; padding:10px 12px; border-top:1px solid #EEF2F7; }
+    .actions button { flex:1; }
+    .ad-placeholder { margin:16px 0; }
+    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <header data-include></header>
+
+  <section id="tool">
+    <div class="container">
+      <h1 style="text-align:center">Image & File Compressor</h1>
+      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
+        Compress images (JPEG/WEBP/PNG) with quality and resize. Or GZIP any file. Everything runs locally in your browser.
+      </p>
+
+      <div class="tool-wrap">
+        <!-- Controls -->
+        <div class="panel">
+          <h2>Controls</h2>
+
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="images">Images</button>
+            <button class="tab-btn" data-tab="gzip">GZIP (any file)</button>
+          </div>
+
+          <!-- Images tab -->
+          <div id="tab-images">
+            <div class="dropzone" id="dz-images">
+              <strong>Drop images here</strong> or <label style="color:#2563EB;cursor:pointer"><u>choose files</u>
+                <input id="pick-images" type="file" accept="image/*" multiple hidden />
+              </label>
+              <div class="hint" style="margin-top:6px">Supported: JPG, PNG, WEBP. We’ll strip metadata for smaller size.</div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="format">Output format</label>
+                <select id="format">
+                  <option value="image/webp">WEBP (smallest, recommended)</option>
+                  <option value="image/jpeg">JPEG</option>
+                  <option value="image/png">PNG</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="quality">Quality</label>
+                <input id="quality" type="range" min="0.1" max="1" step="0.05" value="0.8" />
+                <div class="hint"><span id="quality-val">0.80</span></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="maxw">Max width (px)</label>
+                <input id="maxw" type="number" min="0" step="10" value="1920" />
+                <div class="hint">0 = keep original</div>
+              </div>
+              <div class="field">
+                <label for="maxh">Max height (px)</label>
+                <input id="maxh" type="number" min="0" step="10" value="1080" />
+                <div class="hint">0 = keep original</div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px">
+              <button id="run-images" class="btn-primary">Compress Selected</button>
+              <button id="clear-images" class="btn-primary" style="background:#94A3B8;margin-left:8px">Clear</button>
+            </div>
+
+            <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
+          </div>
+
+          <!-- GZIP tab -->
+          <div id="tab-gzip" style="display:none">
+            <div class="dropzone" id="dz-gzip">
+              <strong>Drop any files here</strong> or <label style="color:#2563EB;cursor:pointer"><u>choose files</u>
+                <input id="pick-gzip" type="file" multiple hidden />
+              </label>
+              <div class="hint" style="margin-top:6px">Creates <code>.gz</code> versions using browser GZIP (Chromium/Edge).</div>
+            </div>
+
+            <div style="margin-top:12px">
+              <button id="run-gzip" class="btn-primary">GZIP Selected</button>
+              <button id="clear-gzip" class="btn-primary" style="background:#94A3B8;margin-left:8px">Clear</button>
+            </div>
+
+            <div class="note" style="margin-top:12px">
+              <strong>Heads up:</strong> Safari/Firefox may not support <code>CompressionStream</code> yet. We’ll show a friendly message if unavailable.
+            </div>
+
+            <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="panel">
+          <h2>Results</h2>
+
+          <div class="summary" id="summary" style="display:none">
+            <div class="kpi"><small>Original total</small><strong id="kpi-orig">—</strong></div>
+            <div class="kpi"><small>Compressed total</small><strong id="kpi-comp">—</strong></div>
+            <div class="kpi"><small>Saved</small><strong id="kpi-saved">—</strong></div>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Middle)</div>
+
+          <div id="results" class="grid" style="margin-top:10px">
+            <div class="card" id="empty-card">
+              <div class="meta" style="text-align:center">
+                <small>No files yet. Drop some images or files to get started.</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Bottom)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer data-include></footer>
+
+  <script src="../../assets/js/include.js?v=3" defer></script>
+  <script src="../../assets/js/tool-compressor.js?v=1" defer></script>
+</body>
+</html>
