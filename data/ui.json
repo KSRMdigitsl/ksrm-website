@@ -1,14 +1,14 @@
 {
   "nav": [
-    { "label": "Tools", "href": "#tools", "order": 1, "enabled": true },
-    { "label": "Blog", "href": "/blog/", "order": 2, "enabled": true },
-    { "label": "About", "href": "/about/", "order": 3, "enabled": true },
-    { "label": "Contact", "href": "/contact/", "order": 4, "enabled": true }
+    { "label": "Tools",   "href": "/tools/",  "order": 1, "enabled": true },
+    { "label": "Blog",    "href": "/blog/",   "order": 2, "enabled": true },
+    { "label": "About",   "href": "/about/",  "order": 3, "enabled": true },
+    { "label": "Contact", "href": "/contact/","order": 4, "enabled": true }
   ],
 
   "hero_cta": [
-    { "label": "Explore Tools", "href": "#tools", "variant": "primary", "order": 1, "enabled": true },
-    { "label": "Read Blog", "href": "/blog/", "variant": "secondary", "order": 2, "enabled": true }
+    { "label": "Explore Tools", "href": "/tools/", "variant": "primary",   "order": 1, "enabled": true },
+    { "label": "Read Blog",     "href": "/blog/",  "variant": "secondary", "order": 2, "enabled": true }
   ],
 
   "tool_cards": [
@@ -38,23 +38,22 @@
       "cta_label": "Open Tool →",
       "order": 3,
       "enabled": true
+    },
+    {
+      "title": "Image & File Compressor",
+      "desc": "Compress images (JPEG/WEBP/PNG) and GZIP any file — all in your browser.",
+      "href": "/tools/compressor/",
+      "icon": "compress",
+      "cta_label": "Open Tool →",
+      "order": 4,
+      "enabled": true
     }
-{
-  "title": "Image & File Compressor",
-  "desc": "Compress images (JPEG/WEBP/PNG) and GZIP any file — all in your browser.",
-  "href": "tools/compressor/",
-  "cta_label": "Open tool",
-  "enabled": true,
-  "order": 40
-}
-
   ],
-
 
   "footer_links": [
     { "label": "Privacy Policy", "href": "/privacy/", "order": 1, "enabled": true },
-    { "label": "Cookies", "href": "/cookies/", "order": 2, "enabled": true },
-    { "label": "Terms of Use", "href": "/terms/", "order": 3, "enabled": true },
-    { "label": "Contact", "href": "/contact/", "order": 4, "enabled": true }
+    { "label": "Cookies",        "href": "/cookies/", "order": 2, "enabled": true },
+    { "label": "Terms of Use",   "href": "/terms/",   "order": 3, "enabled": true },
+    { "label": "Contact",        "href": "/contact/", "order": 4, "enabled": true }
   ]
 }
