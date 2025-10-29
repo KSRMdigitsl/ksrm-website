@@ -21,6 +21,15 @@
       "order": 1,
       "enabled": true
     },
+{
+  "title": "Currency Converter (Live)",
+  "desc": "Convert between currencies instantly using live exchange rates.",
+  "href": "/tools/currency/",
+  "icon": "dollar-sign",
+  "cta_label": "Open Tool →",
+  "order": 6,
+  "enabled": true
+},
     {
       "title": "SIP Calculator",
       "desc": "Visualize your SIP growth and compounding returns.",

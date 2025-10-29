@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Currency Converter — KSRM Digital</title>
+  <meta name="description" content="Convert between currencies in real time with live exchange rates. Free online currency converter by KSRM Digital." />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+
+  <!-- Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
+  </script>
+  <!-- End Google Tag Manager -->
+
+  <link rel="stylesheet" href="../../assets/css/main.css?v=tools1" />
+  <style>
+    section#tool { background:#FFFFFF; }
+    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
+    .panel { background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,.04); }
+    .panel h2 { margin-bottom:8px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .field { flex:1; min-width:180px; margin:10px 0; }
+    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
+    .field input, .field select {
+      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    }
+    .swap-btn { cursor:pointer; background:#2563EB; color:#fff; border:none; border-radius:10px; padding:10px 14px; font-weight:600; }
+    .swap-btn:hover { background:#1D4ED8; }
+    .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
+    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
+    .kpi small { color:#64748B; display:block; }
+    .kpi strong { font-size:1.2rem; }
+    .ad-placeholder { margin:16px 0; }
+    @media (max-width:950px){ .tool-wrap { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <header data-include></header>
+
+  <section id="tool">
+    <div class="container">
+      <h1 style="text-align:center">Currency Converter</h1>
+      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
+        Convert between currencies instantly using live exchange rates from the European Central Bank.
+      </p>
+
+      <div class="tool-wrap">
+        <!-- Inputs -->
+        <div class="panel">
+          <h2>Convert</h2>
+
+          <div class="row">
+            <div class="field">
+              <label for="amount">Amount</label>
+              <input id="amount" type="number" min="0" step="0.01" value="100" />
+            </div>
+          </div>
+
+          <div class="row" style="align-items:flex-end">
+            <div class="field">
+              <label for="from">From</label>
+              <select id="from"></select>
+            </div>
+            <button id="swap" class="swap-btn" title="Swap currencies">⇅</button>
+            <div class="field">
+              <label for="to">To</label>
+              <select id="to"></select>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <button id="convert" class="btn-primary">Convert</button>
+            <button id="reset" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
+        </div>
+
+        <!-- Results -->
+        <div class="panel">
+          <h2>Results</h2>
+
+          <div class="summary" id="summary" style="display:none">
+            <div class="kpi"><small>Converted Amount</small><strong id="kpi-result">—</strong></div>
+            <div class="kpi"><small>Exchange Rate</small><strong id="kpi-rate">—</strong></div>
+          </div>
+
+          <p id="updated" style="margin-top:10px;color:#6B7280;font-size:0.9rem"></p>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Middle)</div>
+
+          <div id="notes" style="margin-top:20px;color:#6B7280;font-size:0.9rem">
+            Live data from exchangerate.host (ECB source). Rates update hourly.
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Bottom)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer data-include></footer>
+
+  <script src="../../assets/js/include.js?v=3" defer></script>
+  <script src="../../assets/js/tool-currency.js?v=1" defer></script>
+</body>
+</html>
