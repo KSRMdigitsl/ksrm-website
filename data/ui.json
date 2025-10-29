@@ -22,6 +22,15 @@
       "enabled": true
     },
 {
+  "title": "Age Calculator",
+  "desc": "Exact age in years, months, days — plus next birthday and zodiac.",
+  "href": "/tools/age/",
+  "icon": "calendar",
+  "cta_label": "Open Tool →",
+  "order": 7,
+  "enabled": true
+},
+{
   "title": "Currency Converter (Live)",
   "desc": "Convert between currencies instantly using live exchange rates.",
   "href": "/tools/currency/",
