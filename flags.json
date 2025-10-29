@@ -2,6 +2,10 @@
   "ads_enabled": false,
   "ads_layout": ["hero", "above_blog"],
   "hero_quotes": "on",
-  "analytics": "off",
+  "analytics": "gtm",
+  "gtm_enabled": true,
+  "gtm_container_id": "GTM-XXXXXXX",
+  "ga4_enabled": false,
+  "ga4_measurement_id": "G-XXXXXXXXXX",
   "theme": "light"
 }
