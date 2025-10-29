@@ -40,6 +40,15 @@
       "enabled": true
     }
   ],
+{
+  "title": "Image & File Compressor",
+  "desc": "Compress images (JPEG/WEBP/PNG) and GZIP any file — all in your browser.",
+  "href": "tools/compressor/",
+  "cta_label": "Open tool",
+  "enabled": true,
+  "order": 40
+}
+
 
   "footer_links": [
     { "label": "Privacy Policy", "href": "/privacy/", "order": 1, "enabled": true },
