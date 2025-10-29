@@ -39,7 +39,6 @@
       "order": 3,
       "enabled": true
     }
-  ],
 {
   "title": "Image & File Compressor",
   "desc": "Compress images (JPEG/WEBP/PNG) and GZIP any file — all in your browser.",
@@ -48,6 +47,8 @@
   "enabled": true,
   "order": 40
 }
+
+  ],
 
 
   "footer_links": [
