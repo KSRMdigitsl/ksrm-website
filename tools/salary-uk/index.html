@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salary Calculator (UK) — KSRM Digital</title>
+  <meta name="description" content="UK take-home calculator for 2024–25: income tax, NI, pension, student loan and monthly net pay. Supports rUK & Scotland." />
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+
+  <!-- Google Tag Manager (KSRM Website) -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
+  </script>
+  <!-- End Google Tag Manager -->
+
+  <link rel="stylesheet" href="../../assets/css/main.css?v=tools1" />
+  <style>
+    section#tool { background:#FFFFFF; }
+    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
+    .panel { background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,.04); }
+    .panel h2 { margin-bottom:8px; }
+    .row { display:flex; gap:12px; }
+    .field { flex:1; margin:10px 0; }
+    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
+    .field input, .field select {
+      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    }
+    .hint { color:#6B7280; font-size:.9rem; }
+    .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
+    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
+    .kpi small { color:#64748B; display:block; }
+    .kpi strong { font-size:1.2rem; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { border-bottom:1px solid #EEF2F7; text-align:right; padding:10px 8px; }
+    th { text-align:right; font-weight:600; color:#0F172A; background:#F8FAFE; }
+    td:first-child, th:first-child { text-align:left; }
+    .ad-placeholder { margin:16px 0; }
+    .note { background:#EFF6FF; border:1px solid #BFDBFE; color:#1E3A8A; border-radius:10px; padding:12px 14px; margin-top:12px; }
+    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <header data-include></header>
+
+  <section id="tool">
+    <div class="container">
+      <h1 style="text-align:center">Salary Calculator (UK)</h1>
+      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
+        2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance,
+        pension, student loans and take-home.
+      </p>
+
+      <div class="tool-wrap">
+        <!-- Inputs -->
+        <div class="panel">
+          <h2>Inputs</h2>
+
+          <div class="row">
+            <div class="field">
+              <label for="salary">Annual gross salary (£)</label>
+              <input id="salary" type="number" min="0" step="100" value="52000" />
+            </div>
+            <div class="field">
+              <label for="period">Show results per</label>
+              <select id="period">
+                <option value="year">Year</option>
+                <option value="month" selected>Month</option>
+                <option value="week">Week</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="pensionPct">Pension (employee) %</label>
+              <input id="pensionPct" type="number" min="0" step="0.5" value="5" />
+              <div class="hint">Assumes pre-tax employee contribution (reduces taxable pay).</div>
+            </div>
+            <div class="field">
+              <label for="pensionEmployer">Employer pension %</label>
+              <input id="pensionEmployer" type="number" min="0" step="0.5" value="3" />
+              <div class="hint">Shown for info; does not change tax/NI.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="taxYear">Tax year</label>
+              <select id="taxYear">
+                <option value="2024">2024–25</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="region">Region</label>
+              <select id="region">
+                <option value="rUK">England / Wales / NI</option>
+                <option value="Scotland">Scotland</option>
+              </select>
+              <div class="hint">Scotland uses its own income-tax bands/rates.</div>
+            </div>
+          </div>
+
+          <h3 style="margin:16px 0 6px">Student loan</h3>
+          <div class="row">
+            <div class="field">
+              <label for="slPlan">Undergraduate plan</label>
+              <select id="slPlan">
+                <option value="none" selected>None</option>
+                <option value="plan1">Plan 1</option>
+                <option value="plan2">Plan 2</option>
+                <option value="plan4">Plan 4 (Scotland)</option>
+                <option value="plan5">Plan 5 (England/Wales)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="slThreshold">UG threshold (£)</label>
+              <input id="slThreshold" type="number" min="0" step="1" value="27295" />
+              <div class="hint">Auto-fills per plan; editable.</div>
+            </div>
+            <div class="field">
+              <label for="slRate">UG rate %</label>
+              <input id="slRate" type="number" min="0" step="0.1" value="9" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label><input type="checkbox" id="pglEnabled" /> Postgraduate loan (PGL)</label>
+              <div class="hint">If you’re repaying a postgraduate loan as well.</div>
+            </div>
+            <div class="field">
+              <label for="pglThreshold">PGL threshold (£)</label>
+              <input id="pglThreshold" type="number" min="0" step="1" value="21000" />
+            </div>
+            <div class="field">
+              <label for="pglRate">PGL rate %</label>
+              <input id="pglRate" type="number" min="0" step="0.1" value="6" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <button id="calc" class="btn-primary">Calculate</button>
+            <button id="reset" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
+
+          <div class="note">
+            <strong>Assumptions.</strong> Personal Allowance £12,570 with taper above £100k (zero at £125,140).
+            rUK tax: 20%/40%/45%. Scotland: Starter 19%, Basic 20%, Intermediate 21%, Higher 42%, Advanced 45%, Top 48%.
+            Employee NI: 8% between £12,570–£50,270 then 2%. Student loan is calculated on annual earnings above the chosen threshold.
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="panel">
+          <h2>Results</h2>
+
+          <div class="summary">
+            <div class="kpi"><small>Gross pay</small><strong id="kpi-gross">—</strong></div>
+            <div class="kpi"><small>Take-home</small><strong id="kpi-net">—</strong></div>
+            <div class="kpi"><small>Income tax</small><strong id="kpi-tax">—</strong></div>
+            <div class="kpi"><small>NI (employee)</small><strong id="kpi-ni">—</strong></div>
+            <div class="kpi"><small>Student loan</small><strong id="kpi-sl">—</strong></div>
+            <div class="kpi"><small>Pension (employee)</small><strong id="kpi-pension">—</strong></div>
+            <div class="kpi"><small>Employer pension</small><strong id="kpi-emp">—</strong></div>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Middle)</div>
+
+          <h3 style="margin-top:10px">Breakdown</h3>
+          <div style="max-height:420px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th id="col-per">Per month</th>
+                  <th>Per year</th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                <tr><td colspan="3" style="text-align:center;color:#6B7280;padding:16px">Run a calculation to see the breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool – Bottom)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer data-include></footer>
+
+  <script src="../../assets/js/include.js?v=2" defer></script>
+  <script src="../../assets/js/tool-salary-uk.js?v=2" defer></script>
+</body>
+</html>
