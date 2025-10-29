@@ -47,6 +47,15 @@
       "cta_label": "Open Tool →",
       "order": 4,
       "enabled": true
+    },
+    {
+      "title": "PDF Tools Suite",
+      "desc": "Merge, split, or compress PDFs instantly — all in your browser.",
+      "href": "/tools/pdf/",
+      "icon": "file",
+      "cta_label": "Open Tool →",
+      "order": 5,
+      "enabled": true
     }
   ],
 
