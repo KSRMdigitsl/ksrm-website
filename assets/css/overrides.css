@@ -1,36 +1,94 @@
-/* --- Hero size override (half-height) --- */
-:root{
-  --hero-h-desktop: 42vh;  /* ~half screen */
-  --hero-h-mobile:  48vh;
-  --hero-pad-desktop: 56px;
-  --hero-pad-mobile: 32px;
+/* ================================
+   KSRM — UI Polish (Home + Global)
+   Safe to drop in /assets/css/overrides.css
+   ================================ */
+
+/* 1) Hero: compact height + gentle depth */
+#hero {
+  padding: 48px 0 32px;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+#hero .eyebrow,
+#hero small,
+#hero .subtle {
+  color: #64748b; /* lighter label color */
+}
+#hero h1 {
+  font-size: 2.4rem;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+#hero p {
+  max-width: 700px;
+  margin: 0 auto 12px;
 }
 
-#hero{
-  min-height: var(--hero-h-desktop) !important;
-  display: flex; align-items: center; justify-content: center;
-  padding-block: var(--hero-pad-desktop) !important;
+/* 2) Primary buttons — brand pop + hover */
+button,
+.btn,
+.cta-button,
+.btn-primary,
+#hero .btn-primary {
+  background: #46B2FF;        /* Tech Blue */
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border: 0;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover,
+.btn:hover,
+.cta-button:hover,
+.btn-primary:hover,
+#hero .btn-primary:hover {
+  background: #1B2A49;        /* Deep Navy */
+  box-shadow: 0 6px 16px rgba(27,42,73,.28);
+  transform: translateY(-2px);
 }
 
-#hero h1{
-  font-weight: 800;
-  font-size: clamp(28px, 4.2vw, 48px) !important;
-  line-height: 1.15; margin: 0 0 10px;
+/* 3) Tools grid cards — interactive hover */
+.tools-grid .tool-card,
+.tool-card {
+  transition: transform .2s ease, box-shadow .2s ease;
+  border-radius: 14px;
 }
-#hero p{
-  font-size: clamp(14px, 2.1vw, 18px) !important;
-  color: #475569; margin: 8px 0 0;
-}
-#hero .btn, #hero a.btn-primary{
-  padding: 10px 16px !important; border-radius: 12px;
-}
-
-@media (max-width: 768px){
-  #hero{
-    min-height: var(--hero-h-mobile) !important;
-    padding-block: var(--hero-pad-mobile) !important;
-  }
+.tools-grid .tool-card:hover,
+.tool-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(27,42,73,.12);
 }
 
-/* Shrink gap so Tools shows sooner */
-#tools{ padding-top: 28px; }
+/* 4) Blog preview section — light separation */
+#blog {
+  background: #f9fafb;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+#blog .blog-card {
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(2,6,23,.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+#blog .blog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(2,6,23,.12);
+}
+
+/* 5) Footer — subtle divider */
+.site-footer {
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+/* 6) Header logo — slight contrast on light displays */
+.site-header .site-logo img {
+  filter: drop-shadow(0 0 2px rgba(0,0,0,.18));
+}
+
+/* 7) Small-screen tuning */
+@media (max-width: 640px) {
+  #hero { padding: 36px 0 22px; }
+  #hero h1 { font-size: 1.85rem; }
+  #hero p { font-size: .95rem; }
+  .tools-grid { gap: 16px; }
+}
