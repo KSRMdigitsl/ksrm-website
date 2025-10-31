@@ -94,10 +94,10 @@ button:hover,
 /* larger screens = bigger logo */
 @media (min-width: 768px) {
   .site-header .bar { padding: 14px 24px; }
-  .site-header .site-logo img { height: 44px; }
+  .site-header .site-logo img { height: 100px; }
 }
 @media (min-width: 1200px) {
-  .site-header .site-logo img { height: 48px; }
+  .site-header .site-logo img { height: 100px; }
 }
 
 /* 7) FOOTER LOGO sizing to match header */
@@ -118,7 +118,7 @@ button:hover,
   .tools-grid { gap: 16px; }
 }
 .site-header .site-logo img {
-  height: 44px !important;
+  height: 100px !important;
 }
 @media (min-width: 768px) {
   .site-header .site-logo img {
@@ -127,6 +127,6 @@ button:hover,
 }
 @media (min-width: 1200px) {
   .site-header .site-logo img {
-    height: 48px !important;
+    height: 100px !important;
   }
 }
