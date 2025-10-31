@@ -1,9 +1,30 @@
 <!-- /partials/header.html -->
 <header class="site-header" role="banner">
+  <!-- Minimal inline styles so the partial is safe even if page CSS hasn't loaded yet -->
+  <style>
+    .site-header{background:#0f172a;}
+    .site-header .bar{
+      max-width:1200px;margin:0 auto;padding:12px 20px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .site-header .site-logo img{
+      height:36px;width:auto;display:block; /* prevents stretching or giant logo */
+    }
+    .site-header .site-title{color:#cbd5e1;font-weight:600;font-size:16px;margin-left:8px;display:none;}
+    .site-header nav{margin-left:auto;display:flex;gap:24px;align-items:center;}
+    .site-header nav a{
+      color:#e2e8f0;text-decoration:none;font-weight:500;
+    }
+    .site-header nav a:hover{color:#ffffff;text-decoration:underline;}
+    @media (max-width:720px){
+      .site-header nav{gap:16px;}
+    }
+  </style>
+
   <div class="bar">
     <a class="site-logo" href="/" aria-label="KSRM Home">
-      <!-- White logo for the navy header -->
-      <img src="/assets/img/KSRM_Logo_White_transparent.png" alt="KSRM" />
+      <!-- Use the small white transparent logo to match the dark header -->
+      <img src="/assets/img/KSRM_Logo_White_transparent.png" alt="KSRM">
       <span class="site-title" aria-hidden="true">KSRM</span>
     </a>
 
