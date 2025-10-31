@@ -83,7 +83,7 @@ button:hover,
 /* 6) HEADER LOGO: drop-shadow + responsive sizing */
 .site-header .site-logo img {
   filter: drop-shadow(0 0 2px rgba(0,0,0,.18));
-  height: 44px;             /* mobile base */
+  height: 50px;             /* mobile base */
   width: auto;
   transition: height .3s ease;
 }
@@ -118,15 +118,15 @@ button:hover,
   .tools-grid { gap: 16px; }
 }
 .site-header .site-logo img {
-  height: 100px !important;
+  height: 50px !important;
 }
 @media (min-width: 768px) {
   .site-header .site-logo img {
-    height: 44px !important;
+    height: 50px !important;
   }
 }
 @media (min-width: 1200px) {
   .site-header .site-logo img {
-    height: 100px !important;
+    height: 50px !important;
   }
 }
