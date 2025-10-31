@@ -1,11 +1,11 @@
 <!-- /partials/footer.html -->
 <footer class="site-footer" role="contentinfo">
   <div class="container" style="max-width:1200px;margin:0 auto;">
-    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+    <div class="footer-top">
       <a href="/" class="footer-logo" aria-label="KSRM Home">
-        <img src="/assets/img/KSRM_Logo_White_transparent.png" alt="KSRM" width="140" height="36">
+        <img src="/assets/img/KSRM_Logo_White_transparent.png" alt="KSRM">
       </a>
-      <nav style="margin-left:auto;display:flex;gap:18px;flex-wrap:wrap;">
+      <nav class="footer-nav">
         <a href="/privacy/">Privacy Policy</a>
         <a href="/cookies/">Cookies</a>
         <a href="/terms/">Terms of Use</a>
@@ -13,7 +13,7 @@
       </nav>
     </div>
 
-    <div style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.75)">
+    <div class="footer-copy">
       © <span id="y"></span> KSRM. Operated by 9th Dimension Digital Ltd.
       <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
     </div>

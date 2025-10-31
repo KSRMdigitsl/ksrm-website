@@ -62,3 +62,15 @@ html,body{
 }
 .site-footer a{ color: var(--ksrm-blue); text-decoration: none; }
 .site-footer a:hover{ text-decoration: underline; }
+/* ----- Footer layout + fix stretched logo ----- */
+.site-footer .footer-top{
+  display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.08);
+}
+.site-footer .footer-logo img{
+  height:36px; width:auto; display:block; /* prevents stretching */
+}
+.site-footer .footer-nav{
+  margin-left:auto; display:flex; gap:18px; flex-wrap:wrap;
+}
+.site-footer .footer-copy{ margin-top:14px; font-size:13px; color:rgba(255,255,255,.75) }
