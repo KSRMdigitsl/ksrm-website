@@ -17,49 +17,98 @@
   </script>
   <!-- End Google Tag Manager -->
 
-  <link rel="stylesheet" href="../../assets/css/main.css?v=tools1" />
+  <link rel="stylesheet" href="../../assets/css/main.css?v=tools2" />
+
   <style>
-    section#tool { background:#FFFFFF; }
-    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
-    .panel { background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,.04); }
-    .panel h2 { margin-bottom:8px; }
-    .row { display:flex; gap:12px; }
-    .field { flex:1; margin:10px 0; }
-    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
-    .field input, .field select {
-      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    :root{
+      --ink:#0f172a; --muted:#6b7280; --card:#ffffff; --line:#e6e9ef;
+      --chip:#f1f5ff; --chip-bd:#dbe7ff; --bg:#f7f9fc; --shadow:0 6px 16px rgba(2,6,23,.05);
+      --brand:#3b82f6; --brand-2:#2563eb; --ok:#16a34a; --danger:#ef4444;
     }
-    .hint { color:#6B7280; font-size:.9rem; }
-    .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
-    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
-    .kpi small { color:#64748B; display:block; }
-    .kpi strong { font-size:1.2rem; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { border-bottom:1px solid #EEF2F7; text-align:right; padding:10px 8px; }
-    th { text-align:right; font-weight:600; color:#0F172A; background:#F8FAFE; }
-    td:first-child, th:first-child { text-align:left; }
-    .ad-placeholder { margin:16px 0; }
-    .note { background:#EFF6FF; border:1px solid #BFDBFE; color:#1E3A8A; border-radius:10px; padding:12px 14px; margin-top:12px; }
-    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
+    body{background:#fff;}
+    header[data-include] + section{padding-top:8px;}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 16px 40px;}
+    .lead{max-width:820px;margin:6px auto 20px;color:var(--muted);text-align:center;}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+    @media(max-width:950px){.grid{grid-template-columns:1fr;gap:18px;}}
+
+    .panel{
+      background:var(--card);border:1px solid var(--line);border-radius:16px;
+      box-shadow:var(--shadow);padding:18px;
+    }
+    .panel h2{margin:0 0 12px;font-size:22px;color:var(--ink);}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .field{flex:1 1 180px;min-width:180px}
+    .field label{display:block;font-weight:600;color:var(--ink);margin:10px 0 6px}
+    .field input,.field select{
+      width:100%;padding:12px 14px;border:1px solid #d8dfea;background:#f9fbff;
+      border-radius:10px;font:inherit;outline:none
+    }
+    .hint{font-size:.9rem;color:var(--muted)}
+
+    .toolbar{display:flex;gap:12px;align-items:center;margin:14px 0 8px;flex-wrap:wrap}
+    .btn{border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+    .btn-primary{background:var(--brand);color:#fff;box-shadow:0 6px 18px rgba(59,130,246,.25)}
+    .btn-ghost{background:#eef2ff;color:#1d4ed8}
+    .btn-soft{background:#f1f5f9}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+    @media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
+    .kpi{
+      background:linear-gradient(180deg,#f8fbff,#f3f7ff);border:1px solid #e6ecff;
+      padding:14px;border-radius:12px
+    }
+    .kpi small{display:block;color:#64748b}
+    .kpi strong{display:block;font-size:1.24rem;color:var(--ink)}
+
+    /* Deduction bars */
+    .bars{margin:14px 0 4px}
+    .bar-row{display:flex;gap:12px;align-items:center;margin:6px 0}
+    .bar-row span{min-width:130px;color:var(--muted);font-size:.95rem}
+    .bar{
+      height:12px;background:#eef2ff;border-radius:999px;flex:1;position:relative;overflow:hidden
+    }
+    .bar i{position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      border-radius:999px;transition:width .35s ease}
+    .bar.-neg i{background:linear-gradient(90deg,#fecaca,#ef4444)}
+    .bar-label{min-width:92px;text-align:right;font-variant-numeric:tabular-nums}
+
+    /* Table */
+    .break{margin-top:10px;border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:420px}
+    table{border-collapse:collapse;width:100%}
+    th,td{padding:10px 10px;border-bottom:1px solid #eef2f7;text-align:right}
+    th{background:#f8fafe;color:var(--ink)}
+    td:first-child,th:first-child{text-align:left}
+
+    .note{background:var(--chip);border:1px solid var(--chip-bd);padding:12px 14px;border-radius:10px;margin-top:12px;color:#1e40af}
+    .muted{color:var(--muted)}
+    .ad-placeholder{margin:14px 0}
+
+    /* toast */
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#111827;color:#fff;
+      padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s}
+    .toast.show{opacity:1}
   </style>
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
   <header data-include></header>
 
   <section id="tool">
-    <div class="container">
-      <h1 style="text-align:center">Salary Calculator (UK)</h1>
-      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
+    <div class="wrap">
+      <h1 class="h1" style="text-align:center">Salary Calculator (UK)</h1>
+      <p class="lead">
         2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance,
-        pension, student loans and take-home.
+        pension, student loans and take-home. Share a run via the “Copy link” button.
       </p>
 
-      <div class="tool-wrap">
+      <div class="grid">
         <!-- Inputs -->
         <div class="panel">
           <h2>Inputs</h2>
@@ -67,11 +116,12 @@
           <div class="row">
             <div class="field">
               <label for="salary">Annual gross salary (£)</label>
-              <input id="salary" type="number" min="0" step="100" value="52000" />
+              <input id="salary" type="number" inputmode="decimal" min="0" step="100" value="52000" aria-describedby="s_hint" />
+              <div id="s_hint" class="hint">Enter total annual pay before deductions.</div>
             </div>
             <div class="field">
               <label for="period">Show results per</label>
-              <select id="period">
+              <select id="period" aria-label="Results period">
                 <option value="year">Year</option>
                 <option value="month" selected>Month</option>
                 <option value="week">Week</option>
@@ -95,21 +145,21 @@
           <div class="row">
             <div class="field">
               <label for="taxYear">Tax year</label>
-              <select id="taxYear">
+              <select id="taxYear" aria-label="Tax year">
                 <option value="2024">2024–25</option>
               </select>
             </div>
             <div class="field">
               <label for="region">Region</label>
-              <select id="region">
+              <select id="region" aria-label="Region (rUK or Scotland)">
                 <option value="rUK">England / Wales / NI</option>
                 <option value="Scotland">Scotland</option>
               </select>
-              <div class="hint">Scotland uses its own income-tax bands/rates.</div>
+              <div class="hint">Scotland uses different income-tax bands/rates.</div>
             </div>
           </div>
 
-          <h3 style="margin:16px 0 6px">Student loan</h3>
+          <h3 style="margin:14px 0 6px">Student loan</h3>
           <div class="row">
             <div class="field">
               <label for="slPlan">Undergraduate plan</label>
@@ -123,41 +173,43 @@
             </div>
             <div class="field">
               <label for="slThreshold">UG threshold (£)</label>
-              <input id="slThreshold" type="number" min="0" step="1" value="27295" />
+              <input id="slThreshold" type="number" min="0" step="1" />
               <div class="hint">Auto-fills per plan; editable.</div>
             </div>
             <div class="field">
               <label for="slRate">UG rate %</label>
-              <input id="slRate" type="number" min="0" step="0.1" value="9" />
+              <input id="slRate" type="number" min="0" step="0.1" />
             </div>
           </div>
 
           <div class="row">
             <div class="field">
               <label><input type="checkbox" id="pglEnabled" /> Postgraduate loan (PGL)</label>
-              <div class="hint">If you’re repaying a postgraduate loan as well.</div>
+              <div class="hint">Add if repaying a postgraduate loan.</div>
             </div>
             <div class="field">
               <label for="pglThreshold">PGL threshold (£)</label>
-              <input id="pglThreshold" type="number" min="0" step="1" value="21000" />
+              <input id="pglThreshold" type="number" min="0" step="1" />
             </div>
             <div class="field">
               <label for="pglRate">PGL rate %</label>
-              <input id="pglRate" type="number" min="0" step="0.1" value="6" />
+              <input id="pglRate" type="number" min="0" step="0.1" />
             </div>
           </div>
 
-          <div style="margin-top:12px">
-            <button id="calc" class="btn-primary">Calculate</button>
-            <button id="reset" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
+          <div class="toolbar" role="group" aria-label="Actions">
+            <button id="calc" class="btn btn-primary">Calculate</button>
+            <button id="reset" class="btn btn-soft">Reset</button>
+            <button id="share" class="btn btn-ghost" title="Copy a link with the current inputs">Copy link</button>
+            <span class="muted" id="perLabel" aria-live="polite"></span>
           </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
+          <div class="ad-placeholder">Ad Placeholder (Tool — Top)</div>
 
           <div class="note">
             <strong>Assumptions.</strong> Personal Allowance £12,570 with taper above £100k (zero at £125,140).
-            rUK tax: 20%/40%/45%. Scotland: Starter 19%, Basic 20%, Intermediate 21%, Higher 42%, Advanced 45%, Top 48%.
-            Employee NI: 8% between £12,570–£50,270 then 2%. Student loan is calculated on annual earnings above the chosen threshold.
+            rUK tax: 20% / 40% / 45%. Scotland: 19% / 20% / 21% / 42% / 45% / 48%.
+            Employee NI: 8% between £12,570–£50,270 then 2%. Student loan is charged on annual earnings above threshold(s).
           </div>
         </div>
 
@@ -165,20 +217,27 @@
         <div class="panel">
           <h2>Results</h2>
 
-          <div class="summary">
+          <div class="kpis" aria-live="polite">
             <div class="kpi"><small>Gross pay</small><strong id="kpi-gross">—</strong></div>
             <div class="kpi"><small>Take-home</small><strong id="kpi-net">—</strong></div>
             <div class="kpi"><small>Income tax</small><strong id="kpi-tax">—</strong></div>
             <div class="kpi"><small>NI (employee)</small><strong id="kpi-ni">—</strong></div>
             <div class="kpi"><small>Student loan</small><strong id="kpi-sl">—</strong></div>
             <div class="kpi"><small>Pension (employee)</small><strong id="kpi-pension">—</strong></div>
-            <div class="kpi"><small>Employer pension</small><strong id="kpi-emp">—</strong></div>
           </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Middle)</div>
+          <!-- Deduction bars -->
+          <div class="bars" aria-hidden="true">
+            <div class="bar-row"><span>Income tax</span><div class="bar -neg"><i id="bar-tax"></i></div><div class="bar-label" id="bl-tax">—</div></div>
+            <div class="bar-row"><span>NI (employee)</span><div class="bar -neg"><i id="bar-ni"></i></div><div class="bar-label" id="bl-ni">—</div></div>
+            <div class="bar-row"><span>Student loan</span><div class="bar -neg"><i id="bar-sl"></i></div><div class="bar-label" id="bl-sl">—</div></div>
+            <div class="bar-row"><span>Pension (employee)</span><div class="bar -neg"><i id="bar-pen"></i></div><div class="bar-label" id="bl-pen">—</div></div>
+          </div>
+
+          <div class="ad-placeholder">Ad Placeholder (Tool — Middle)</div>
 
           <h3 style="margin-top:10px">Breakdown</h3>
-          <div style="max-height:420px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
+          <div class="break">
             <table>
               <thead>
                 <tr>
@@ -188,12 +247,12 @@
                 </tr>
               </thead>
               <tbody id="tbody">
-                <tr><td colspan="3" style="text-align:center;color:#6B7280;padding:16px">Run a calculation to see the breakdown.</td></tr>
+                <tr><td colspan="3" style="text-align:center;color:#6B7280;padding:16px">Enter values and click Calculate.</td></tr>
               </tbody>
             </table>
           </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Bottom)</div>
+          <div class="ad-placeholder">Ad Placeholder (Tool — Bottom)</div>
         </div>
       </div>
     </div>
@@ -201,7 +260,9 @@
 
   <footer data-include></footer>
 
+  <div id="toast" class="toast" role="status" aria-live="polite">Link copied</div>
+
   <script src="../../assets/js/include.js?v=2" defer></script>
-  <script src="../../assets/js/tool-salary-uk.js?v=2" defer></script>
+  <script src="../../assets/js/tool-salary-uk.js?v=3" defer></script>
 </body>
 </html>
