@@ -1,9 +1,9 @@
-/* ================================
-   KSRM — UI Polish (Home + Global)
-   Safe to drop in /assets/css/overrides.css
-   ================================ */
+/* ===========================================================
+   KSRM — UI Polish + Responsive Logo Adjustments
+   Safe replacement for /assets/css/overrides.css
+   =========================================================== */
 
-/* 1) Hero: compact height + gentle depth */
+/* 1) HERO: compact height + subtle gradient */
 #hero {
   padding: 48px 0 32px;
   background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
@@ -11,7 +11,7 @@
 #hero .eyebrow,
 #hero small,
 #hero .subtle {
-  color: #64748b; /* lighter label color */
+  color: #64748b;
 }
 #hero h1 {
   font-size: 2.4rem;
@@ -23,13 +23,13 @@
   margin: 0 auto 12px;
 }
 
-/* 2) Primary buttons — brand pop + hover */
+/* 2) BUTTONS: vibrant + interactive */
 button,
 .btn,
 .cta-button,
 .btn-primary,
 #hero .btn-primary {
-  background: #46B2FF;        /* Tech Blue */
+  background: #46B2FF; /* Tech Blue */
   color: #fff;
   border-radius: 10px;
   font-weight: 600;
@@ -42,12 +42,12 @@ button:hover,
 .cta-button:hover,
 .btn-primary:hover,
 #hero .btn-primary:hover {
-  background: #1B2A49;        /* Deep Navy */
+  background: #1B2A49; /* Deep Navy */
   box-shadow: 0 6px 16px rgba(27,42,73,.28);
   transform: translateY(-2px);
 }
 
-/* 3) Tools grid cards — interactive hover */
+/* 3) TOOLS GRID: card hover lift */
 .tools-grid .tool-card,
 .tool-card {
   transition: transform .2s ease, box-shadow .2s ease;
@@ -59,7 +59,7 @@ button:hover,
   box-shadow: 0 6px 18px rgba(27,42,73,.12);
 }
 
-/* 4) Blog preview section — light separation */
+/* 4) BLOG PREVIEW: light separation */
 #blog {
   background: #f9fafb;
   padding-top: 40px;
@@ -75,17 +75,42 @@ button:hover,
   box-shadow: 0 6px 18px rgba(2,6,23,.12);
 }
 
-/* 5) Footer — subtle divider */
+/* 5) FOOTER: subtle divider */
 .site-footer {
   border-top: 1px solid rgba(255,255,255,.08);
 }
 
-/* 6) Header logo — slight contrast on light displays */
+/* 6) HEADER LOGO: drop-shadow + responsive sizing */
 .site-header .site-logo img {
   filter: drop-shadow(0 0 2px rgba(0,0,0,.18));
+  height: 36px;             /* mobile base */
+  width: auto;
+  transition: height .3s ease;
+}
+.site-header .bar {
+  padding: 12px 20px;
 }
 
-/* 7) Small-screen tuning */
+/* larger screens = bigger logo */
+@media (min-width: 768px) {
+  .site-header .bar { padding: 14px 24px; }
+  .site-header .site-logo img { height: 44px; }
+}
+@media (min-width: 1200px) {
+  .site-header .site-logo img { height: 48px; }
+}
+
+/* 7) FOOTER LOGO sizing to match header */
+.site-footer .footer-logo img {
+  height: 40px;
+  width: auto;
+  transition: height .3s ease;
+}
+@media (min-width: 1200px) {
+  .site-footer .footer-logo img { height: 44px; }
+}
+
+/* 8) MOBILE TUNING */
 @media (max-width: 640px) {
   #hero { padding: 36px 0 22px; }
   #hero h1 { font-size: 1.85rem; }
