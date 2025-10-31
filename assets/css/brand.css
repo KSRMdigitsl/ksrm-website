@@ -1,0 +1,64 @@
+/* ---------- KSRM Brand Vars ---------- */
+:root{
+  --ksrm-navy:   #1B2A49;  /* Header background */
+  --ksrm-blue:   #46B2FF;  /* Brand blue accents */
+  --ksrm-orange: #FF8A3D;  /* Brand orange accents */
+  --ksrm-white:  #FFFFFF;
+  --text-900:    #0F172A;
+  --text-700:    #334155;
+  --radius: 14px;
+  --shadow-lg: 0 10px 30px rgba(0,0,0,.15);
+}
+
+/* ---------- Base Typography ---------- */
+html,body{
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text-900);
+  background: #F8FAFC;
+}
+
+/* ---------- Header ---------- */
+.site-header{
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--ksrm-navy);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  backdrop-filter: saturate(140%) blur(6px);
+}
+.site-header .bar{
+  max-width: 1200px; margin: 0 auto; padding: 14px 20px;
+  display: flex; align-items: center; gap: 28px;
+}
+.site-logo{
+  display: inline-flex; align-items:center; gap: 12px; text-decoration:none;
+}
+.site-logo img{ height: 36px; width: auto; display: block; }
+.site-title{
+  font-weight: 800; letter-spacing: .2px; color: var(--ksrm-white);
+  font-size: 18px;
+}
+
+.nav{ margin-left: auto; display: flex; align-items: center; gap: 26px; }
+.nav a{
+  color: rgba(255,255,255,.88); text-decoration: none;
+  font-weight: 600; letter-spacing: .2px;
+  padding: 8px 10px; border-radius: 10px;
+}
+.nav a:hover{ background: rgba(255,255,255,.08); color: var(--ksrm-white); }
+.nav a.active{ background: rgba(70,178,255,.15); color: var(--ksrm-blue); }
+
+/* ---------- Buttons ---------- */
+.btn-primary{
+  background: var(--ksrm-blue); color: #031A2E;
+  padding: 10px 16px; border-radius: 12px; font-weight: 700;
+  text-decoration: none; box-shadow: var(--shadow-lg);
+}
+.btn-primary:hover{ filter: brightness(1.05); }
+
+/* ---------- Footer quick align (optional) ---------- */
+.site-footer{
+  background: var(--ksrm-navy); color: rgba(255,255,255,.85);
+  padding: 40px 20px; margin-top: 60px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.site-footer a{ color: var(--ksrm-blue); text-decoration: none; }
+.site-footer a:hover{ text-decoration: underline; }

@@ -1,57 +1,22 @@
-<header class="site-header"
-        style="background:#0F172A;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(2,6,23,.25);">
-  <div class="container header-wrap" style="min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px">
-    <!-- Brand -->
-    <a class="brand" href="/" aria-label="KSRM Digital — Home"
-       style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#E5E7EB">
-      <span class="brand-logo" aria-hidden="true"
-            style="height:32px;width:32px;border-radius:8px;
-                   background:linear-gradient(135deg,#3B82F6,#2563EB);
-                   box-shadow:0 4px 14px rgba(59,130,246,.35);display:inline-block"></span>
-      <span>
-        <span class="brand-name"
-              style="font-family:Poppins,sans-serif;font-weight:800;letter-spacing:.2px;color:#E5E7EB">KSRM Digital</span>
-        <small class="brand-tag" style="display:block;font-size:11px;color:#94A3B8">Made to Learn. Built to Grow.</small>
-      </span>
+<!-- /partials/header.html -->
+<header class="site-header" role="banner">
+  <div class="bar">
+    <a class="site-logo" href="/" aria-label="KSRM Home">
+      <!-- White logo for the navy header -->
+      <img
+        src="/assets/img/KSRM_Logo_White_transparent.png"
+        alt="KSRM"
+        width="160"
+        height="40"
+      />
+      <span class="site-title" aria-hidden="true">KSRM</span>
     </a>
 
-    <!-- Mobile toggle -->
-    <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle menu"
-            style="display:none;background:none;border:0;padding:8px">
-      <span class="bar" style="display:block;width:22px;height:2px;background:#E5E7EB;margin:4px 0;border-radius:2px"></span>
-      <span class="bar" style="display:block;width:22px;height:2px;background:#E5E7EB;margin:4px 0;border-radius:2px"></span>
-      <span class="bar" style="display:block;width:22px;height:2px;background:#E5E7EB;margin:4px 0;border-radius:2px"></span>
-    </button>
-
-    <!-- Nav -->
-    <nav id="primary-nav" class="nav" aria-label="Primary">
-      <ul style="display:flex;gap:22px;list-style:none;margin:0;padding:0">
-        <li><a data-nav="true" href="/tools/"    style="color:#E5E7EB;padding:10px 2px;text-decoration:none;opacity:.95">Tools</a></li>
-        <li><a data-nav="true" href="/blog/"    style="color:#E5E7EB;padding:10px 2px;text-decoration:none;opacity:.95">Blog</a></li>
-        <li><a data-nav="true" href="/about/"   style="color:#E5E7EB;padding:10px 2px;text-decoration:none;opacity:.95">About</a></li>
-        <li><a data-nav="true" href="/contact/" style="color:#E5E7EB;padding:10px 2px;text-decoration:none;opacity:.95">Contact</a></li>
-      </ul>
+    <nav id="mainNav" class="nav" role="navigation" aria-label="Main">
+      <a href="/#tools">Tools</a>
+      <a href="/blog/">Blog</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
     </nav>
   </div>
 </header>
-
-<script>
-(function(){
-  // Mobile nav behaviour
-  function init(){
-    const t=document.querySelector(".nav-toggle");
-    const nav=document.getElementById("primary-nav");
-    if(!t||!nav) return;
-    const mq = window.matchMedia("(max-width: 820px)");
-    function apply(){
-      t.style.display = mq.matches ? "block" : "none";
-      nav.classList.toggle("open", false);
-      t.setAttribute("aria-expanded","false");
-    }
-    (mq.addEventListener?mq.addEventListener("change",apply):mq.addListener(apply));
-    apply();
-    t.addEventListener("click",()=>{ const open=nav.classList.toggle("open"); t.setAttribute("aria-expanded", String(open)); });
-  }
-  if(document.readyState!=="loading") init(); else document.addEventListener("DOMContentLoaded", init);
-})();
-</script>

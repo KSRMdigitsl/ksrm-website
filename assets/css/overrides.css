@@ -1,0 +1,36 @@
+/* --- Hero size override (half-height) --- */
+:root{
+  --hero-h-desktop: 42vh;  /* ~half screen */
+  --hero-h-mobile:  48vh;
+  --hero-pad-desktop: 56px;
+  --hero-pad-mobile: 32px;
+}
+
+#hero{
+  min-height: var(--hero-h-desktop) !important;
+  display: flex; align-items: center; justify-content: center;
+  padding-block: var(--hero-pad-desktop) !important;
+}
+
+#hero h1{
+  font-weight: 800;
+  font-size: clamp(28px, 4.2vw, 48px) !important;
+  line-height: 1.15; margin: 0 0 10px;
+}
+#hero p{
+  font-size: clamp(14px, 2.1vw, 18px) !important;
+  color: #475569; margin: 8px 0 0;
+}
+#hero .btn, #hero a.btn-primary{
+  padding: 10px 16px !important; border-radius: 12px;
+}
+
+@media (max-width: 768px){
+  #hero{
+    min-height: var(--hero-h-mobile) !important;
+    padding-block: var(--hero-pad-mobile) !important;
+  }
+}
+
+/* Shrink gap so Tools shows sooner */
+#tools{ padding-top: 28px; }

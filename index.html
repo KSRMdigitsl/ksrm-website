@@ -1,60 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KSRM Digital — Free finance and IT tools designed to simplify your learning and digital journey." />
-  <meta name="theme-color" content="#2563EB" />
-  <title>KSRM Digital — Made to Learn. Built to Grow.</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>KSRM — Free Finance & IT Tools</title>
+  <meta name="description" content="KSRM provides free, fast, privacy-friendly tools for finance and IT. Made to Learn. Built to Grow.">
 
-  <!-- Google Tag Manager (KSRM Website) -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
-  </script>
-  <!-- End Google Tag Manager -->
+  <!-- Favicons / theme -->
+  <link rel="icon" type="image/png" href="/assets/img/KSRM_IconOnly_transparent.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/img/KSRM_IconOnly_transparent.png">
+  <meta name="theme-color" content="#1B2A49">
+  <meta property="og:site_name" content="KSRM Digital">
+  <meta property="og:title" content="KSRM — Free Finance & IT Tools">
+  <meta property="og:image" content="/assets/img/KSRM_IconOnly_transparent.png">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- CSS (brand first, then your main, then small overrides) -->
+  <link rel="stylesheet" href="/assets/css/brand.css">
+  <link rel="stylesheet" href="/assets/css/main.css?v=gtm2">
+  <link rel="stylesheet" href="/assets/css/overrides.css?v=h1">
 
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="assets/css/main.css?v=gtm2" />
-
-  <!-- Favicons -->
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <!-- (Optional) Google Tag Manager – keep your existing snippet if you use GTM -->
+  <!--
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');</script>
+  -->
 </head>
 <body>
-
-  <!-- Google Tag Manager (noscript) -->
+  <!-- (Optional) GTM noscript
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
+  -->
 
-  <!-- HEADER -->
-  <header data-include></header>
+  <!-- Shared header -->
+  <header data-include="/partials/header.html"></header>
 
-  <!-- HERO -->
-  <section id="hero"></section>
-
-  <!-- TOOLS -->
-  <section id="tools">
-    <div class="container">
-      <h2 style="text-align:center;font-family:Poppins,sans-serif;">Our Free Tools</h2>
-      <div id="tools-grid"></div>
+  <!-- HERO (now ~half the screen via overrides.css) -->
+  <section id="hero">
+    <div class="container" style="max-width:1100px;margin:0 auto;padding:0 20px;text-align:center">
+      <h1>Free Finance & IT Tools</h1>
+      <p>Fast, private, in-browser utilities to help you calculate, convert, and create — no sign-up required.</p>
+      <div style="margin-top:14px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a class="btn-primary" href="/#tools">Explore Tools</a>
+        <a class="btn-primary" style="background:#FF8A3D;color:#0B1225" href="/blog/">Read Blog</a>
+      </div>
     </div>
   </section>
 
-  <!-- BLOG -->
-  <section id="blog-section"></section>
+  <!-- TOOLS GRID (your existing markup can remain) -->
+  <section id="tools">
+    <div class="container" style="max-width:1100px;margin:0 auto;padding:0 20px">
+      <!-- Your tools grid/content already here -->
+      <!-- If this is populated via JS from /data/ui.json, leave as-is -->
+    </div>
+  </section>
 
-  <!-- FOOTER -->
-  <footer data-include></footer>
+  <!-- Shared footer -->
+  <footer data-include="/partials/footer.html"></footer>
 
-  <!-- JS includes -->
-  <script src="assets/js/include.js?v=logo1"></script>
-  <script src="assets/js/home.js?v=hero1"></script>
+  <!-- Includes loader + header active-link -->
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/header.js" defer></script>
 </body>
 </html>
