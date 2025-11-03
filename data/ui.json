@@ -31,6 +31,24 @@
   "enabled": true
 },
 {
+  "title": "VAT Calculator (UK)",
+  "desc": "Add or remove VAT (20%, 5%, 0% or custom).",
+  "href": "/tools/vat/",
+  "icon": "percent",
+  "cta_label": "Open Tool →",
+  "order": 7,
+  "enabled": true
+},
+{
+  "title": "Mortgage Calculator (UK)",
+  "desc": "Monthly payments, LTV & Stamp Duty with charts.",
+  "href": "/tools/mortgage/",
+  "icon": "home",
+  "cta_label": "Open Tool →",
+  "order": 6,
+  "enabled": true
+},
+{
   "title": "Currency Converter (Live)",
   "desc": "Convert between currencies instantly using live exchange rates.",
   "href": "/tools/currency/",
