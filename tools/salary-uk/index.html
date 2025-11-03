@@ -1,476 +1,338 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Salary Calculator (UK) — KSRM Digital</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Same CSS bundle your PDF page uses -->
+  <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="icon" href="/assets/img/favicon.png" sizes="32x32" />
 
+  <!-- Page-only micro tweaks (safe to delete if you prefer) -->
   <style>
-    :root{ --hdrH:64px; }
-
-    /* ====== NAMESPACE EVERYTHING UNDER .tool-salary ====== */
-    .tool-salary { --bg:#f6f8fb; --card:#fff; --text:#0f172a; --muted:#475569;
-      --brand:#3b82f6; --brand-2:#1e40af; --ok:#0ea5e9; --ring:#dbe4f0; --surface:#eef2f7;
-      --accent:#10b981; --shadow:0 10px 25px rgba(15,23,42,.06); --radius:18px;
-      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 600px at 50% -180px, #f0f5ff 0%, #ffffff 50%, #ffffff 100%) fixed,
-        var(--bg);
-    }
-    .tool-salary *{box-sizing:border-box}
-
-    /* header offset */
-    .tool-salary main{padding-top:calc(var(--hdrH) + 12px)}
-
-    /* sticky mini summary */
-    .tool-salary .mini{
-      position:sticky; top:calc(var(--hdrH) + 6px); z-index:40;
-      max-width:1280px; margin:0 auto 10px; padding:10px 16px;
-      display:flex; align-items:center; gap:14px;
-      border:1px solid var(--ring); background:#fff; border-radius:14px; box-shadow:var(--shadow);
-    }
-    .tool-salary .mini .pill{display:inline-flex; align-items:center; gap:8px;
-      background:#f6faff; color:#0f172a; border:1px solid var(--ring);
-      padding:8px 12px; border-radius:999px; font-weight:700}
-    .tool-salary .mini .muted{color:var(--muted); font-size:13px}
-    .tool-salary .mini .grow{flex:1}
-    .tool-salary .btn{
-      height:40px; padding:0 14px; border-radius:999px; border:1px solid var(--ring);
-      background:#fff; cursor:pointer; font:inherit; font-weight:700
-    }
-    .tool-salary .btn:hover{background:#f8fbff}
-    .tool-salary .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
-    .tool-salary .btn.primary:hover{background:#2563eb}
-
-    /* page title */
-    .tool-salary .page-wrap{max-width:1280px;margin:0 auto;padding:18px 20px 12px;}
-    .tool-salary .title{margin:0 0 6px; text-align:center; font-size:clamp(26px,4vw,40px); letter-spacing:-.02em; font-weight:800}
-    .tool-salary .lede{max-width:980px;margin:0 auto; text-align:center; color:var(--muted); font-size:15.5px}
-
-    /* layout */
-    .tool-salary .layout{max-width:1280px; margin:10px auto 60px; padding:0 20px; display:grid; grid-template-columns: 260px 1fr; gap:22px}
-    @media (max-width:1020px){ .tool-salary .layout{grid-template-columns:1fr} }
-
-    /* sidebar */
-    .tool-salary .sidebar{position:sticky; top:calc(var(--hdrH) + 72px); align-self:start}
-    .tool-salary .sidecard{background:#fff; border:1px solid var(--ring); border-radius:var(--radius); box-shadow:var(--shadow); padding:12px}
-    .tool-salary .sidecard h3{margin:0 0 10px; font-size:14px; color:var(--muted); letter-spacing:.04em; text-transform:uppercase}
-    .tool-salary .snav{display:flex; flex-direction:column; gap:6px}
-    .tool-salary .snav a{text-decoration:none; color:#0f172a; padding:10px 12px; border-radius:12px; border:1px solid transparent; display:flex; align-items:center; gap:10px}
-    .tool-salary .snav a:hover{background:#f7fbff; border-color:var(--ring)}
-    .tool-salary .snav small{color:var(--muted)}
-
-    /* cards */
-    .tool-salary .card{background:#fff; border:1px solid var(--ring); border-radius:var(--radius); box-shadow:var(--shadow)}
-    .tool-salary .card-pad{padding:22px}
-    .tool-salary .card h2{margin:0 0 18px; font-size:20px; letter-spacing:-.01em}
-
-    /* inputs */
-    .tool-salary .inputs{display:grid; grid-template-columns: 1fr 1fr; gap:16px}
-    @media (max-width:720px){ .tool-salary .inputs{grid-template-columns:1fr} }
-    .tool-salary .fld{display:flex; flex-direction:column; gap:8px}
-    .tool-salary .fld label{font-size:13px; color:var(--muted)}
-    .tool-salary .fld input, .tool-salary .fld select{
-      height:46px; border:1px solid var(--ring); border-radius:12px; padding:0 14px; font:inherit; background:#fff; outline:none;
-      appearance: none;
-    }
-    .tool-salary .fld input:focus, .tool-salary .fld select:focus{border-color:var(--brand); box-shadow:0 0 0 4px rgba(59,130,246,.12)}
-    .tool-salary .help{font-size:12px; color:var(--muted)}
-
-    /* toggle pills */
-    .tool-salary .toggle{display:inline-flex; background:#f1f5fb; padding:4px; border-radius:999px; border:1px solid var(--ring); gap:4px}
-    .tool-salary .toggle button{
-      min-width:70px; height:36px; padding:0 12px; border:none; background:transparent; border-radius:999px; cursor:pointer; font:inherit; font-weight:700; color:#0f172a
-    }
-    .tool-salary .toggle button.active{background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.06); border:1px solid var(--ring)}
-
-    /* chips */
-    .tool-salary .chips{display:flex; flex-wrap:wrap; gap:8px}
-    .tool-salary .chip{border:1px solid var(--ring); background:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700}
-    .tool-salary .chip:hover{background:#f8fbff}
-
-    /* callout */
-    .tool-salary .callout{
-      display:flex; gap:12px; border:1px solid var(--ring); background:linear-gradient(180deg,#fbfffd 0%,#f7fffd 100%); padding:12px 14px; border-radius:14px; color:#0f172a;
-    }
-    .tool-salary .callout .badge{min-width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-weight:800; color:#fff; background:var(--accent)}
-    .tool-salary .callout .muted{color:var(--muted); font-size:13px}
-
-    /* results grid */
-    .tool-salary .result-grid{display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:14px; margin-top:4px}
-    @media (max-width:720px){ .tool-salary .result-grid{grid-template-columns:1fr 1fr} }
-    .tool-salary .res{border:1px solid var(--ring); background:linear-gradient(180deg,#fbfdff 0%, #f7faff 100%); padding:14px 16px; border-radius:14px}
-    .tool-salary .res small{display:block; color:var(--muted); font-size:12px}
-    .tool-salary .res strong{display:block; font-size:20px; margin-top:6px}
-
-    /* bars */
-    .tool-salary .bars{display:grid; gap:10px; margin-top:18px}
-    .tool-salary .bar{display:flex; align-items:center; gap:10px}
-    .tool-salary .bar span{width:160px; font-size:13px; color:var(--muted)}
-    .tool-salary .track{flex:1; height:8px; background:var(--surface); border-radius:999px; overflow:hidden}
-    .tool-salary .fill{height:8px; background:linear-gradient(90deg, var(--brand), var(--ok)); border-radius:999px; width:0}
-
-    .tool-salary .section-title{margin:26px 0 12px; font-size:18px; letter-spacing:-.02em}
-    .tool-salary .ad-ghost{margin-top:18px;border:1px dashed var(--ring); color:var(--muted); border-radius:14px; padding:16px; text-align:center; font-size:14px}
+    .pill .period-toggle { display:flex; gap:6px; align-items:center; }
+    .period-toggle .chip { padding:6px 10px; border-radius:999px; border:1px solid var(--ui-border,#e6ebf2); background:#fff; cursor:pointer; font-weight:600; }
+    .period-toggle .chip.active { background:#eef3ff; border-color:#8fa6ff; }
+    .kpi-row { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+    .kpi { background:#f6f9ff; border:1px solid #e6ebf2; border-radius:10px; padding:10px 12px; }
+    .kpi small { color:#6b7280; display:block; }
+    .kpi strong { font-weight:700; }
+    .tile-grid { display:grid; grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) ); gap:14px; }
+    .tile { background:#f7f9ff; border:1px solid #e5ebf4; border-radius:12px; padding:14px; }
+    .tile small { color:#6b7280; display:block; }
+    .tile b { font-size:1.25rem; }
+    .bars { display:grid; gap:10px; margin-top:10px; }
+    .bar { display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center; }
+    .bar .track { height:8px; background:#eef2f8; border-radius:999px; overflow:hidden; }
+    .bar .fill { height:100%; background:#5b8cff; width:0; }
+    .chips-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .chip-x { padding:8px 10px; border-radius:999px; border:1px solid #e4e9f2; cursor:pointer; background:#fff; }
+    .ad-placeholder { border:1.5px dashed #dfe3ea; border-radius:12px; padding:18px; text-align:center; color:#6b7280; }
   </style>
 </head>
 
 <body>
+
   <!-- shared header -->
-  <div id="headerSlot"></div>
+  <header data-include></header>
 
-  <div class="tool-salary">
-    <!-- sticky summary -->
-    <div class="mini" aria-live="polite">
-      <div class="pill"><span id="miniPeriod">Month</span> • <span id="miniNet">£3,248.62</span></div>
-      <div class="muted">Effective tax rate:&nbsp;<strong id="miniEff">25.9%</strong></div>
-      <div class="grow"></div>
-      <button class="btn" id="copyLinkBtn">Copy link</button>
-      <button class="btn" id="resetBtn">Reset</button>
-      <a class="btn primary" href="/tools/">All tools</a>
-    </div>
+  <main class="container tool-page" style="padding-bottom:60px">
 
-    <div class="page-wrap">
-      <h1 class="title">Salary Calculator (UK)</h1>
-      <p class="lede">
-        2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance, pension &amp; student loan.
-        Use the quick presets or paste a salary; switch periods with the toggle.
+    <!-- ===== Top pill bar (matches PDF page) ===== -->
+    <section class="pillbar">
+      <div class="pill">
+        <div class="period-toggle" id="periodToggle">
+          <button class="chip active" data-per="month">Month</button>
+          <button class="chip" data-per="year">Year</button>
+          <button class="chip" data-per="week">Week</button>
+          <button class="chip" data-per="day">Day</button>
+          <span>•</span>
+          <b id="pill-net">£0.00</b>
+          <span style="color:#6b7280" id="pill-eff">(effective tax rate: 0%)</span>
+        </div>
+      </div>
+
+      <div class="pillbar-actions">
+        <button id="copyLink" class="btn-ghost">Copy link</button>
+        <button id="resetPage" class="btn-ghost">Reset</button>
+        <a href="/tools/" class="btn-ghost">All tools</a>
+      </div>
+    </section>
+
+    <!-- ===== Title / subtitle ===== -->
+    <header class="tool-header">
+      <h1>Salary Calculator (UK)</h1>
+      <p class="muted">
+        2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance, pension & student
+        loan. Use the quick presets or paste a salary; switch periods with the toggle.
       </p>
-    </div>
+    </header>
 
-    <div class="layout">
-      <!-- sidebar -->
-      <aside class="sidebar">
-        <div class="sidecard">
-          <h3>On this page</h3>
-          <nav class="snav">
-            <a href="#inputs"><strong>Inputs</strong><span class="grow"></span><small>gross, period, region</small></a>
-            <a href="#student"><strong>Student loan</strong><span class="grow"></span><small>plan</small></a>
-            <a href="#advanced"><strong>Advanced</strong><span class="grow"></span><small>employer %, tax year</small></a>
-            <a href="#breakdown"><strong>Breakdown</strong><span class="grow"></span><small>lines &amp; bars</small></a>
+    <section class="tool-layout">
+      <!-- ===== Left sticky TOC (same structure as PDF) ===== -->
+      <aside class="toc">
+        <div class="toc-inner">
+          <h4>On this page</h4>
+          <nav>
+            <a href="#inputs"      class="toc-link">Inputs</a>
+            <a href="#loan"        class="toc-link">Student loan</a>
+            <a href="#advanced"    class="toc-link">Advanced</a>
+            <a href="#results"     class="toc-link">Results</a>
+            <a href="#breakdown"   class="toc-link">Breakdown</a>
           </nav>
         </div>
       </aside>
 
-      <!-- content -->
-      <main id="content">
+      <!-- ===== Right content ===== -->
+      <div class="content">
+
+        <!-- ===== Inputs card (mirrors PDF “tip + kpis + fields” pattern) ===== -->
         <section id="inputs" class="card">
-          <div class="card-pad">
-            <h2>Inputs</h2>
-            <div class="callout" style="margin-bottom:14px">
-              <div class="badge">i</div>
-              <div>
-                <div><strong>Tip:</strong> Choose a preset or type any number. Period toggle affects all outputs.</div>
-                <div class="muted">Employee pension reduces taxable pay; employer % is shown for info.</div>
-              </div>
+          <div class="tip">
+            <strong>Tip</strong> — Choose a preset or type any number. Period toggle affects all outputs.
+            Employee pension reduces taxable pay; employer % is shown for info.
+          </div>
+
+          <div class="chips-row" style="margin-top:10px">
+            <button class="chip-x" data-preset="25000">£25k</button>
+            <button class="chip-x" data-preset="35000">£35k</button>
+            <button class="chip-x" data-preset="50000">£50k</button>
+            <button class="chip-x" data-preset="75000">£75k</button>
+            <button class="chip-x" data-preset="100000">£100k</button>
+          </div>
+
+          <div class="row" style="margin-top:12px; gap:12px">
+            <div class="field">
+              <label for="gross">Annual gross salary (£)</label>
+              <input id="gross" class="input" type="number" inputmode="decimal" placeholder="52000" />
+              <small class="muted">Pre-tax income for the tax year.</small>
             </div>
 
-            <div class="chips" style="margin-bottom:10px">
-              <button class="chip" data-preset="25000">£25k</button>
-              <button class="chip" data-preset="35000">£35k</button>
-              <button class="chip" data-preset="50000">£50k</button>
-              <button class="chip" data-preset="75000">£75k</button>
-              <button class="chip" data-preset="100000">£100k</button>
+            <div class="field">
+              <label>Show results per</label>
+              <div class="period-toggle" id="periodToggleInline">
+                <button class="chip active" data-per="month">Month</button>
+                <button class="chip" data-per="year">Year</button>
+                <button class="chip" data-per="week">Week</button>
+                <button class="chip" data-per="day">Day</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px; gap:12px">
+            <div class="field">
+              <label for="penEmp">Pension (employee) %</label>
+              <input id="penEmp" class="input" type="number" step="0.1" placeholder="5" />
+              <small class="muted">Reduces taxable pay, thus tax and NI.</small>
             </div>
 
-            <div class="inputs">
-              <div class="fld">
-                <label for="gross">Annual gross salary (£)</label>
-                <input id="gross" type="number" step="1" min="0" value="52000"/>
-                <div class="help">Pre-tax income for the tax year.</div>
-              </div>
+            <div class="field">
+              <label for="penEr">Employer pension %</label>
+              <input id="penEr" class="input" type="number" step="0.1" placeholder="3" />
+              <small class="muted">Shown for info; does not change tax/NI.</small>
+            </div>
+          </div>
 
-              <div class="fld">
-                <label>Show results per</label>
-                <div class="toggle" role="tablist" aria-label="Result period">
-                  <button class="active" data-per="month" aria-selected="true" role="tab">Month</button>
-                  <button data-per="year" role="tab">Year</button>
-                  <button data-per="week" role="tab">Week</button>
-                  <button data-per="day" role="tab">Day</button>
-                </div>
-              </div>
+          <div class="row" style="margin-top:12px; gap:12px">
+            <div class="field">
+              <label for="taxYear">Tax year</label>
+              <select id="taxYear" class="input">
+                <option value="2024">2024–25</option>
+                <option value="2023">2023–24</option>
+              </select>
+            </div>
 
-              <div class="fld">
-                <label for="empPen">Pension (employee) %</label>
-                <input id="empPen" type="number" step="0.5" min="0" value="5"/>
-                <div class="help">Reduces taxable pay, thus tax and NI.</div>
-              </div>
-
-              <div class="fld">
-                <label for="region">Region</label>
-                <select id="region">
-                  <option value="EWNI" selected>England / Wales / NI</option>
-                  <option value="SCT">Scotland</option>
-                </select>
-                <div class="help">Scotland uses different income-tax bands.</div>
-              </div>
+            <div class="field">
+              <label for="region">Region</label>
+              <select id="region" class="input">
+                <option value="EWNI">England / Wales / NI</option>
+                <option value="SCO">Scotland</option>
+              </select>
+              <small class="muted">Scotland uses different income-tax bands.</small>
             </div>
           </div>
         </section>
 
-        <section id="student" class="card" style="margin-top:18px">
-          <div class="card-pad">
-            <h2>Student loan</h2>
-            <div class="inputs">
-              <div class="fld">
-                <label for="slPlan">Plan</label>
-                <select id="slPlan">
-                  <option value="none" selected>None</option>
-                  <option value="p1">Plan 1</option>
-                  <option value="p2">Plan 2</option>
-                  <option value="p4">Plan 4 (Scotland)</option>
-                  <option value="pg">Postgraduate</option>
-                </select>
-              </div>
+        <!-- ===== Student loan card ===== -->
+        <section id="loan" class="card">
+          <h3>Student loan</h3>
+          <div class="row" style="gap:12px">
+            <div class="field">
+              <label for="loanPlan">Plan</label>
+              <select id="loanPlan" class="input">
+                <option value="none">None</option>
+                <option value="plan1">Plan 1</option>
+                <option value="plan2">Plan 2</option>
+                <option value="plan4">Plan 4 (Scotland)</option>
+                <option value="plan5">Plan 5 (England)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" id="pgLoan" />
+                <span>Postgraduate loan</span>
+              </label>
             </div>
           </div>
         </section>
 
-        <section id="advanced" class="card" style="margin-top:18px">
-          <div class="card-pad">
-            <h2>Advanced</h2>
-            <div class="inputs">
-              <div class="fld">
-                <label for="erPen">Employer pension %</label>
-                <input id="erPen" type="number" step="0.5" min="0" value="3"/>
-                <div class="help">Displayed only in the overview.</div>
-              </div>
-
-              <div class="fld">
-                <label for="taxYear">Tax year</label>
-                <select id="taxYear">
-                  <option value="2024" selected>2024–25</option>
-                </select>
-                <div class="help">The engine uses the 2024–25 bands.</div>
-              </div>
+        <!-- ===== Advanced card ===== -->
+        <section id="advanced" class="card">
+          <h3>Advanced</h3>
+          <p class="muted">Options for detailed scenarios (keep defaults if unsure).</p>
+          <div class="row" style="gap:12px">
+            <div class="field">
+              <label for="additionalPension">Additional voluntary pension %</label>
+              <input id="additionalPension" class="input" type="number" step="0.1" placeholder="0" />
+            </div>
+            <div class="field">
+              <label for="allowances">Other pre-tax allowances (£/yr)</label>
+              <input id="allowances" class="input" type="number" step="1" placeholder="0" />
             </div>
           </div>
         </section>
 
-        <section id="breakdown" class="card" style="margin-top:18px">
-          <div class="card-pad">
-            <h2>Results</h2>
+        <!-- ===== Results card (tiles + bars like we mocked) ===== -->
+        <section id="results" class="card">
+          <h3>Results</h3>
 
-            <div class="result-grid" aria-live="polite">
-              <div class="res"><small>Gross pay</small><strong id="grossOut">£4,333.33</strong></div>
-              <div class="res"><small>Take-home</small><strong id="netOut">£3,248.62</strong></div>
-              <div class="res"><small>Income tax</small><strong id="taxOut">£613.83</strong></div>
-              <div class="res"><small>NI (employee)</small><strong id="niOut">£254.22</strong></div>
-              <div class="res"><small>Student loan</small><strong id="slOut">£0.00</strong></div>
-              <div class="res"><small>Pension (employee)</small><strong id="penOut">£216.67</strong></div>
+          <div class="tile-grid">
+            <div class="tile">
+              <small>Gross pay</small>
+              <b id="rGross">£0.00</b>
             </div>
-
-            <div class="bars" style="margin-top:16px">
-              <div class="bar"><span>Income tax</span><div class="track"><div class="fill" id="barTax"></div></div></div>
-              <div class="bar"><span>NI (employee)</span><div class="track"><div class="fill" id="barNi"></div></div></div>
-              <div class="bar"><span>Student loan</span><div class="track"><div class="fill" id="barSl"></div></div></div>
-              <div class="bar"><span>Pension</span><div class="track"><div class="fill" id="barPen"></div></div></div>
+            <div class="tile">
+              <small>Take-home</small>
+              <b id="rNet">£0.00</b>
             </div>
+            <div class="tile">
+              <small>Income tax</small>
+              <b id="rTax">£0.00</b>
+            </div>
+            <div class="tile">
+              <small>NI (employee)</small>
+              <b id="rNi">£0.00</b>
+            </div>
+            <div class="tile">
+              <small>Student loan</small>
+              <b id="rLoan">£0.00</b>
+            </div>
+            <div class="tile">
+              <small>Pension (employee)</small>
+              <b id="rPen">£0.00</b>
+            </div>
+          </div>
 
-            <div class="ad-ghost">Ad Placeholder (Tool — Middle)</div>
+          <div class="bars">
+            <div class="bar">
+              <div class="track"><div class="fill" id="barTax"></div></div>
+              <span id="lblTax">£0</span>
+            </div>
+            <div class="bar">
+              <div class="track"><div class="fill" id="barNi"></div></div>
+              <span id="lblNi">£0</span>
+            </div>
+            <div class="bar">
+              <div class="track"><div class="fill" id="barLoan"></div></div>
+              <span id="lblLoan">£0</span>
+            </div>
+            <div class="bar">
+              <div class="track"><div class="fill" id="barPen"></div></div>
+              <span id="lblPen">£0</span>
+            </div>
+          </div>
 
-            <h3 class="section-title">Breakdown</h3>
-            <div class="ad-ghost">TODO: Detailed lines table (monthly / annual).</div>
+          <div class="ad-placeholder" style="margin-top:16px">Ad placeholder — Tool (Middle)</div>
+        </section>
+
+        <!-- ===== Breakdown card ===== -->
+        <section id="breakdown" class="card">
+          <h3>Breakdown</h3>
+          <div id="breakdownBody" class="muted">
+            Detailed lines & bands (income tax, NI, student loan) will appear here after calculation.
           </div>
         </section>
-      </main>
-    </div>
-  </div>
+
+      </div>
+    </section>
+  </main>
 
   <!-- shared footer -->
-  <div id="footerSlot" style="margin-top:20px"></div>
+  <footer data-include></footer>
+
+  <!-- include loader (same used on PDF page) -->
+  <script src="../../assets/js/include.js"></script>
+
+  <!-- Your existing salary logic; keep your file name/path here -->
+  <script src="./tool-salary.js"></script>
 
   <script>
-    /* header/footer inject + offset */
-    (async function shell(){
-      const [h, f] = await Promise.all([
-        fetch('/partials/header.html').then(r=>r.text()).catch(()=> ''),
-        fetch('/partials/footer.html').then(r=>r.text()).catch(()=> '')
-      ]);
-      const hs = document.getElementById('headerSlot');
-      const fs = document.getElementById('footerSlot');
-      if(h) hs.innerHTML = h;
-      if(f) fs.innerHTML = f;
+    // Lightweight glue so this layout talks nicely to your existing calculator.
+    // If your tool-salary.js already wires all these IDs, this block can be removed.
 
-      const link = document.querySelector('#headerSlot nav a[href="/tools/"]');
-      if(link) link.style.textDecoration = 'underline';
+    const $ = (s, r=document)=>r.querySelector(s);
+    const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
 
-      const headerEl = hs.firstElementChild || hs;
-      const setHdrH = () => {
-        const h = headerEl.getBoundingClientRect().height || 64;
-        document.documentElement.style.setProperty('--hdrH', h + 'px');
-      };
-      setHdrH();
-      new ResizeObserver(setHdrH).observe(headerEl);
-      window.addEventListener('load', setHdrH, {once:true});
-      window.addEventListener('resize', setHdrH);
-    })();
-
-    /* calc engine (scoped DOM) */
-    const £ = n => n.toLocaleString('en-GB',{style:'currency',currency:'GBP'});
-    const pct = n => (n*100).toFixed(1) + '%';
-
-    const DOM = {
-      gross:  document.getElementById('gross'),
-      empPen: document.getElementById('empPen'),
-      erPen:  document.getElementById('erPen'),
-      region: document.getElementById('region'),
-      slPlan: document.getElementById('slPlan'),
-
-      grossOut: document.getElementById('grossOut'),
-      netOut:   document.getElementById('netOut'),
-      taxOut:   document.getElementById('taxOut'),
-      niOut:    document.getElementById('niOut'),
-      slOut:    document.getElementById('slOut'),
-      penOut:   document.getElementById('penOut'),
-
-      barTax: document.getElementById('barTax'),
-      barNi:  document.getElementById('barNi'),
-      barSl:  document.getElementById('barSl'),
-      barPen: document.getElementById('barPen'),
-
-      miniPeriod: document.getElementById('miniPeriod'),
-      miniNet: document.getElementById('miniNet'),
-      miniEff: document.getElementById('miniEff'),
-
-      toggle: document.querySelector('.tool-salary .toggle'),
-      chips:  document.querySelectorAll('.tool-salary .chip'),
-      copyBtn:document.getElementById('copyLinkBtn'),
-      reset:  document.getElementById('resetBtn'),
-    };
-
-    let period = 'month';
-
-    function bands(region){
-      if(region==='SCT'){ return { pa:12570, basic:[0.19,14732], inter:[0.21,13869], higher:[0.42,74869], top:0.45 }; }
-      return { pa:12570, basic:[0.20,37700], higher:[0.40,125140], add:0.45 };
-    }
-    function incomeTax(annual, region){
-      const b = bands(region);
-      let taxable = Math.max(0, annual - b.pa), tax = 0;
-      if(region==='SCT'){
-        const take = amt => { const t=Math.min(taxable, amt); taxable-=t; return t; };
-        tax += take(b.basic[1]) * b.basic[0];
-        tax += take(b.inter[1]) * b.inter[0];
-        tax += take(74869) * b.higher;
-        tax += taxable * b.top;
-        return tax;
-      } else {
-        const take = amt => { const t=Math.min(taxable, amt); taxable-=t; return t; };
-        tax += take(b.basic[1]) * b.basic[0];
-        tax += take(b.higher) * 0.40;
-        tax += taxable * b.add;
-        return tax;
-      }
-    }
-    function niEmployee(annual){
-      const prim=12570, upper=50270;
-      if(annual<=prim) return 0;
-      let ni=0; const main=Math.min(annual,upper)-prim;
-      if(main>0) ni+=main*0.08;
-      if(annual>upper) ni+=(annual-upper)*0.02;
-      return ni;
-    }
-    function studentLoan(annual, plan){
-      const cfg={none:{thr:Infinity,rate:0}, p1:{thr:22015,rate:0.09}, p2:{thr:27295,rate:0.09}, p4:{thr:27660,rate:0.09}, pg:{thr:21000,rate:0.06}}[plan||'none'];
-      const excess=Math.max(0,annual-cfg.thr); return excess*cfg.rate;
-    }
-    const perDiv = p => p==='year'?1 : p==='month'?12 : p==='week'?52 : 260;
-
-    function setPeriod(p){
-      period=p;
-      document.querySelectorAll('.tool-salary .toggle button').forEach(b=>{
-        const on = b.dataset.per===p;
-        b.classList.toggle('active', on);
-        b.setAttribute('aria-selected', on ? 'true' : 'false');
+    // Keep period chips in sync (top pill and inline group)
+    function syncPeriodButtons(per){
+      $$("#periodToggle .chip, #periodToggleInline .chip").forEach(btn=>{
+        btn.classList.toggle("active", btn.dataset.per === per);
       });
     }
-
-    function calc(){
-      const grossAnnual = Number(DOM.gross.value||0);
-      const empPenPct   = Math.max(0, Number(DOM.empPen.value||0))/100;
-      const region      = DOM.region.value;
-      const sl          = DOM.slPlan.value;
-
-      const empPenAnnual = grossAnnual*empPenPct;
-      const taxableBase  = grossAnnual-empPenAnnual;
-
-      const tax = incomeTax(taxableBase,region);
-      const ni  = niEmployee(taxableBase);
-      const slA = studentLoan(taxableBase,sl);
-      const netAnnual = grossAnnual - tax - ni - slA - empPenAnnual;
-
-      const d=perDiv(period);
-      const g=grossAnnual/d, n=netAnnual/d, t=tax/d, i=ni/d, s=slA/d, p=empPenAnnual/d;
-
-      DOM.grossOut.textContent=£(g);
-      DOM.netOut.textContent  =£(n);
-      DOM.taxOut.textContent  =£(t);
-      DOM.niOut.textContent   =£(i);
-      DOM.slOut.textContent   =£(s);
-      DOM.penOut.textContent  =£(p);
-
-      const max=Math.max(g,n,t+i+s+p)||1;
-      DOM.barTax.style.width=(t/max*100).toFixed(1)+'%';
-      DOM.barNi .style.width=(i/max*100).toFixed(1)+'%';
-      DOM.barSl .style.width=(s/max*100).toFixed(1)+'%';
-      DOM.barPen.style.width=(p/max*100).toFixed(1)+'%';
-
-      DOM.miniPeriod.textContent=period.charAt(0).toUpperCase()+period.slice(1);
-      DOM.miniNet.textContent=£(n);
-      const eff = (1-(n/g))||0;
-      DOM.miniEff.textContent=pct(eff);
-    }
-
-    // events
-    document.addEventListener('click', e=>{
-      const pill = e.target.closest('.tool-salary .toggle button');
-      if(pill){ setPeriod(pill.dataset.per); calc(); }
-      const chip = e.target.closest('.tool-salary .chip');
-      if(chip){ DOM.gross.value = chip.dataset.preset; calc(); }
-    });
-    ['input','change'].forEach(evt=>{
-      document.addEventListener(evt, e=>{
-        if(e.target.matches('#gross,#empPen,#erPen,#region,#slPlan,#taxYear')) calc();
-      }, true);
-    });
-
-    // copy/reset
-    document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
-      const params=new URLSearchParams({
-        s:DOM.gross.value||0, per:period, pen:DOM.empPen.value||0, emp:DOM.erPen.value||0,
-        r:DOM.region.value, sl:DOM.slPlan.value
-      }).toString();
-      const url=`${location.origin}${location.pathname}?${params}`;
-      navigator.clipboard.writeText(url).then(()=>{
-        const b=document.getElementById('copyLinkBtn'); b.textContent='Copied ✓';
-        setTimeout(()=> b.textContent='Copy link',1200);
+    $$("#periodToggle .chip, #periodToggleInline .chip").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const per = btn.dataset.per;
+        syncPeriodButtons(per);
+        document.dispatchEvent(new CustomEvent("salary:setPeriod", { detail: per }));
       });
     });
-    document.getElementById('resetBtn').addEventListener('click', ()=>{
-      DOM.gross.value=52000; DOM.empPen.value=5; DOM.erPen.value=3;
-      DOM.region.value='EWNI'; DOM.slPlan.value='none';
-      setPeriod('month'); calc(); history.replaceState({},'',location.pathname);
+
+    // Presets
+    $$(".chip-x[data-preset]").forEach(ch=>{
+      ch.addEventListener("click", ()=>{
+        $("#gross").value = ch.dataset.preset;
+        document.dispatchEvent(new Event("salary:recalc"));
+      });
     });
 
-    // query load
-    (function fromQuery(){
-      const q=new URLSearchParams(location.search);
-      if(q.has('s')) DOM.gross.value=q.get('s');
-      if(q.has('pen')) DOM.empPen.value=q.get('pen');
-      if(q.has('emp')) DOM.erPen.value=q.get('emp');
-      if(q.has('r')) DOM.region.value=q.get('r');
-      if(q.has('sl')) DOM.slPlan.value=q.get('sl');
-      if(q.has('per')) setPeriod(q.get('per'));
-    })();
+    // Copy/reset
+    $("#copyLink").addEventListener("click", ()=>{
+      navigator.clipboard.writeText(location.href).then(()=>alert("Link copied."));
+    });
+    $("#resetPage").addEventListener("click", ()=>location.href="/tools/salary-uk/");
 
-    // init
-    setPeriod(period); calc();
+    // Bridges to update UI from your core calculator (emit these from tool-salary.js)
+    document.addEventListener("salary:update", (e)=>{
+      const d = e.detail; if(!d) return;
+      $("#rGross").textContent = d.grossFmt;
+      $("#rNet").textContent   = d.netFmt;
+      $("#rTax").textContent   = d.taxFmt;
+      $("#rNi").textContent    = d.niFmt;
+      $("#rLoan").textContent  = d.loanFmt;
+      $("#rPen").textContent   = d.penFmt;
+
+      $("#pill-net").textContent = d.netFmt;
+      $("#pill-eff").textContent = `(effective tax rate: ${d.effectiveRate})`;
+
+      // Bars (% of gross)
+      const pct = (v)=> Math.max(0, Math.min(100, d.gross > 0 ? (v/d.gross*100) : 0));
+      $("#barTax").style.width  = pct(d.tax)  + "%";
+      $("#barNi").style.width   = pct(d.ni)   + "%";
+      $("#barLoan").style.width = pct(d.loan) + "%";
+      $("#barPen").style.width  = pct(d.pen)  + "%";
+
+      $("#lblTax").textContent  = d.taxFmt;
+      $("#lblNi").textContent   = d.niFmt;
+      $("#lblLoan").textContent = d.loanFmt;
+      $("#lblPen").textContent  = d.penFmt;
+
+      // Breakdown HTML (optional)
+      if (d.breakdownHtml) $("#breakdownBody").innerHTML = d.breakdownHtml;
+    });
+
+    // Initial sync
+    syncPeriodButtons("month");
   </script>
 </body>
 </html>
