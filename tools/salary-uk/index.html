@@ -19,8 +19,8 @@
     --chip-on:#3b82f6;
     --chip-on-ink:#fff;
   }
-  html,body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-  .wrap{max-width:1200px;margin:0 auto;padding:16px 20px 40px}
+  html,body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:0}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px 20px 40px;position:relative;}
 
   .chips{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
   .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;color:#111827}
@@ -48,17 +48,26 @@
     width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:600
   }
 
-  /* ads block spacing */
+  /* ads */
   .ads{margin:16px 0}
+  .ads-vertical{
+    position:absolute;
+    right:-180px;
+    top:160px;
+    width:160px;
+    display:block;
+  }
+  @media(max-width:1300px){
+    .ads-vertical{display:none;}
+  }
 </style>
 </head>
 <body>
 
-<!-- Load header -->
 <div id="header-slot"></div>
 
 <main class="wrap">
-  <!-- top chips & quick actions -->
+  <!-- Horizontal ad under chip bar -->
   <div class="chips" id="chipbar">
     <button class="chip is-on" data-period="month" id="chipMonth">Month</button>
     <button class="chip" data-period="year" id="chipYear">Year</button>
@@ -73,9 +82,8 @@
     <a class="chip" href="/tools/">All tools</a>
   </div>
 
-  <!-- TOP GOOGLE AD -->
   <div class="ads">
-    <!-- ad1 -->
+    <!-- horizontal ad1 -->
     <ins class="adsbygoogle"
         style="display:block"
         data-ad-client="ca-pub-9718922267093672"
@@ -87,6 +95,18 @@
 
   <h1>Salary Calculator (UK)</h1>
   <p class="lead">2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance, pension, and student loan. Use the quick presets or paste a salary; switch periods with the toggle.</p>
+
+  <!-- Vertical sidebar ad (desktop only) -->
+  <div class="ads-vertical">
+    <!-- vertical ad -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9718922267093672"
+         data-ad-slot="1830841042"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
   <div class="grid">
     <!-- Inputs -->
@@ -141,7 +161,7 @@
           </div>
 
           <div class="ads">
-            <!-- ad1 -->
+            <!-- horizontal ad1 -->
             <ins class="adsbygoogle"
                 style="display:block"
                 data-ad-client="ca-pub-9718922267093672"
@@ -172,9 +192,8 @@
           <div class="bd"><div id="bk"></div></div>
         </section>
 
-        <!-- BOTTOM GOOGLE AD -->
+        <!-- Bottom horizontal ad -->
         <div class="ads">
-          <!-- ad1 -->
           <ins class="adsbygoogle"
               style="display:block"
               data-ad-client="ca-pub-9718922267093672"
@@ -188,11 +207,9 @@
   </div>
 </main>
 
-<!-- Load footer -->
 <div id="footer-slot"></div>
 
 <script>
-  // Load partials
   async function loadPartial(id, url){
     try{
       const r = await fetch(url,{cache:'no-cache'});
@@ -203,7 +220,6 @@
   loadPartial('footer-slot','/partials/footer.html');
 </script>
 
-<!-- Calculator JS -->
 <script src="./salary.js"></script>
 </body>
 </html>
