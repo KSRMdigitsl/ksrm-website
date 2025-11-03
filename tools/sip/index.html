@@ -5,10 +5,10 @@
   <title>SIP Calculator — KSRM Digital</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- Google AdSense (global) -->
+  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
 
-  <!-- Chart.js for the growth chart -->
+  <!-- Chart.js for growth chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -57,12 +57,10 @@
 </head>
 <body>
 
-<!-- Header -->
 <div id="header-slot"></div>
 
 <main class="wrap">
 
-  <!-- top chips -->
   <div class="chips">
     <span class="chip is-on">SIP</span>
     <span class="chip" id="chipSummary">Total Value: £0.00</span>
@@ -73,9 +71,8 @@
     <a class="chip" href="/tools/">All tools</a>
   </div>
 
-  <!-- TOP AD (horizontal) -->
+  <!-- TOP AD -->
   <div class="ads">
-    <!-- ad1 -->
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-9718922267093672"
@@ -86,11 +83,10 @@
   </div>
 
   <h1>SIP Calculator</h1>
-  <p class="lead">Project your SIP growth with monthly compounding. Supports annual step-up in contributions, realistic return assumptions, and a clear growth chart.</p>
+  <p class="lead">Project your SIP growth with monthly compounding. Supports annual step-up in contributions and a clear growth chart.</p>
 
   <!-- Vertical AD (desktop) -->
   <div class="ads-vertical">
-    <!-- vertical -->
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-9718922267093672"
@@ -141,13 +137,12 @@
             </select>
           </div>
           <div style="display:flex;align-items:end">
-            <button id="btnCalc" class="btn primary" style="width:100%">Calculate</button>
+            <button id="btnCalc" type="button" class="btn primary" style="width:100%">Calculate</button>
           </div>
         </div>
 
-        <!-- MID AD (horizontal) -->
+        <!-- MID AD -->
         <div class="ads">
-          <!-- ad1 -->
           <ins class="adsbygoogle"
                style="display:block"
                data-ad-client="ca-pub-9718922267093672"
@@ -164,27 +159,17 @@
       <div class="hd">Results</div>
       <div class="bd">
         <div class="stat-grid">
-          <div class="stat">
-            <div class="k">Total Value</div>
-            <div class="v" id="rValue">£0.00</div>
-          </div>
-          <div class="stat">
-            <div class="k">Total Invested</div>
-            <div class="v" id="rInvested">£0.00</div>
-          </div>
-          <div class="stat">
-            <div class="k">Total Gain</div>
-            <div class="v" id="rGain">£0.00</div>
-          </div>
+          <div class="stat"><div class="k">Total Value</div><div class="v" id="rValue">£0.00</div></div>
+          <div class="stat"><div class="k">Total Invested</div><div class="v" id="rInvested">£0.00</div></div>
+          <div class="stat"><div class="k">Total Gain</div><div class="v" id="rGain">£0.00</div></div>
         </div>
 
         <div style="margin-top:14px">
           <canvas id="sipChart" height="320"></canvas>
         </div>
 
-        <!-- BOTTOM AD (horizontal) -->
+        <!-- BOTTOM AD -->
         <div class="ads">
-          <!-- ad1 -->
           <ins class="adsbygoogle"
                style="display:block"
                data-ad-client="ca-pub-9718922267093672"
@@ -199,14 +184,13 @@
   </div>
 </main>
 
-<!-- Footer -->
 <div id="footer-slot"></div>
 
 <script>
-  // Load partials (absolute paths for Azure)
-  async function loadPartial(id, url){
+  // Load header/footer (absolute paths for Azure)
+  async function loadPartial(id,url){
     try{
-      const r = await fetch(url, {cache:'no-store'});
+      const r = await fetch(url,{cache:'no-store'});
       if(r.ok) document.getElementById(id).innerHTML = await r.text();
     }catch(e){ console.warn('Partial load failed:', url, e); }
   }
@@ -214,7 +198,7 @@
   loadPartial('footer-slot','/partials/footer.html');
 </script>
 
-<!-- SIP logic -->
-<script src="./sip.js"></script>
+<!-- Defer to ensure DOM is parsed before our code runs -->
+<script src="./sip.js" defer></script>
 </body>
 </html>
