@@ -5,7 +5,7 @@
 <title>Salary Calculator (UK) — KSRM Digital</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<!-- Auto Ads (recommended by Google) -->
+<!-- Google AdSense Auto Ads -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
 
 <style>
@@ -54,7 +54,7 @@
 </head>
 <body>
 
-<!-- Mount header + footer (fetcher at bottom) -->
+<!-- Load header -->
 <div id="header-slot"></div>
 
 <main class="wrap">
@@ -71,6 +71,18 @@
     <button class="chip" id="btnCopy">Copy link</button>
     <button class="chip" id="btnReset">Reset</button>
     <a class="chip" href="/tools/">All tools</a>
+  </div>
+
+  <!-- TOP GOOGLE AD -->
+  <div class="ads">
+    <!-- ad1 -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-9718922267093672"
+        data-ad-slot="3997839388"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <h1>Salary Calculator (UK)</h1>
@@ -127,18 +139,16 @@
               <option value="pgl">Postgraduate (PGL)</option>
             </select>
           </div>
-          <div>
-            <!-- ad block inside inputs column -->
-            <div class="ads">
-              <!-- ad1 -->
-              <ins class="adsbygoogle"
-                  style="display:block"
-                  data-ad-client="ca-pub-9718922267093672"
-                  data-ad-slot="3997839388"
-                  data-ad-format="auto"
-                  data-full-width-responsive="true"></ins>
-              <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-            </div>
+
+          <div class="ads">
+            <!-- ad1 -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-9718922267093672"
+                data-ad-slot="3997839388"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
           </div>
         </div>
       </div>
@@ -149,28 +159,20 @@
       <div class="hd">Results</div>
       <div class="bd">
         <div class="stat-grid">
-          <div class="stat">
-            <div class="k">Gross pay</div>
-            <div class="v" id="rGross">£0.00</div>
-          </div>
-          <div class="stat">
-            <div class="k">Take-home</div>
-            <div class="v" id="rTake">£0.00</div>
-          </div>
-          <div class="stat">
-            <div class="k">Income tax</div>
-            <div class="v" id="rTax">£0.00</div>
-          </div>
-          <div class="stat">
-            <div class="k">NI (employee)</div>
-            <div class="v" id="rNI">£0.00</div>
-          </div>
-          <div class="stat">
-            <div class="k">Pension (employee)</div>
-            <div class="v" id="rPen">£0.00</div>
-          </div>
+          <div class="stat"><div class="k">Gross pay</div><div class="v" id="rGross">£0.00</div></div>
+          <div class="stat"><div class="k">Take-home</div><div class="v" id="rTake">£0.00</div></div>
+          <div class="stat"><div class="k">Income tax</div><div class="v" id="rTax">£0.00</div></div>
+          <div class="stat"><div class="k">NI (employee)</div><div class="v" id="rNI">£0.00</div></div>
+          <div class="stat"><div class="k">Pension (employee)</div><div class="v" id="rPen">£0.00</div></div>
         </div>
 
+        <!-- Breakdown -->
+        <section class="card" style="margin-top:16px">
+          <div class="hd">Breakdown</div>
+          <div class="bd"><div id="bk"></div></div>
+        </section>
+
+        <!-- BOTTOM GOOGLE AD -->
         <div class="ads">
           <!-- ad1 -->
           <ins class="adsbygoogle"
@@ -179,35 +181,29 @@
               data-ad-slot="3997839388"
               data-ad-format="auto"
               data-full-width-responsive="true"></ins>
-          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
-
-        <!-- Breakdown card -->
-        <section class="card" style="margin-top:16px">
-          <div class="hd">Breakdown</div>
-          <div class="bd">
-            <div id="bk"></div>
-          </div>
-        </section>
       </div>
     </section>
   </div>
 </main>
 
+<!-- Load footer -->
 <div id="footer-slot"></div>
 
 <script>
-  // Fetch partials
+  // Load partials
   async function loadPartial(id, url){
     try{
-      const res = await fetch(url,{cache:'no-cache'});
-      document.getElementById(id).innerHTML = await res.text();
-    }catch(e){ console.warn('Partial load failed', url); }
+      const r = await fetch(url,{cache:'no-cache'});
+      if(r.ok) document.getElementById(id).innerHTML = await r.text();
+    }catch(e){ console.warn('Partial load failed:', url); }
   }
   loadPartial('header-slot','/partials/header.html');
   loadPartial('footer-slot','/partials/footer.html');
 </script>
 
+<!-- Calculator JS -->
 <script src="./salary.js"></script>
 </body>
 </html>
