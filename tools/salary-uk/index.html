@@ -1,338 +1,238 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Salary Calculator (UK) — KSRM Digital</title>
+  <title>Salary SmartFlow (UK) – KSRM Digital</title>
 
-  <!-- Same CSS bundle your PDF page uses -->
-  <link rel="stylesheet" href="../../assets/css/main.css" />
-  <link rel="icon" href="/assets/img/favicon.png" sizes="32x32" />
+  <!-- Fonts (Poppins + Inter). If you already load these globally, you can drop this. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- Page-only micro tweaks (safe to delete if you prefer) -->
-  <style>
-    .pill .period-toggle { display:flex; gap:6px; align-items:center; }
-    .period-toggle .chip { padding:6px 10px; border-radius:999px; border:1px solid var(--ui-border,#e6ebf2); background:#fff; cursor:pointer; font-weight:600; }
-    .period-toggle .chip.active { background:#eef3ff; border-color:#8fa6ff; }
-    .kpi-row { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
-    .kpi { background:#f6f9ff; border:1px solid #e6ebf2; border-radius:10px; padding:10px 12px; }
-    .kpi small { color:#6b7280; display:block; }
-    .kpi strong { font-weight:700; }
-    .tile-grid { display:grid; grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) ); gap:14px; }
-    .tile { background:#f7f9ff; border:1px solid #e5ebf4; border-radius:12px; padding:14px; }
-    .tile small { color:#6b7280; display:block; }
-    .tile b { font-size:1.25rem; }
-    .bars { display:grid; gap:10px; margin-top:10px; }
-    .bar { display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center; }
-    .bar .track { height:8px; background:#eef2f8; border-radius:999px; overflow:hidden; }
-    .bar .fill { height:100%; background:#5b8cff; width:0; }
-    .chips-row { display:flex; gap:8px; flex-wrap:wrap; }
-    .chip-x { padding:8px 10px; border-radius:999px; border:1px solid #e4e9f2; cursor:pointer; background:#fff; }
-    .ad-placeholder { border:1.5px dashed #dfe3ea; border-radius:12px; padding:18px; text-align:center; color:#6b7280; }
-  </style>
+  <!-- Page styles -->
+  <link rel="stylesheet" href="/assets/css/salary-uk.css">
 </head>
-
 <body>
 
-  <!-- shared header -->
-  <header data-include></header>
+  <!-- Header partial (injected via JS) -->
+  <div data-partial="header" data-src="/partials/header.html"></div>
 
-  <main class="container tool-page" style="padding-bottom:60px">
-
-    <!-- ===== Top pill bar (matches PDF page) ===== -->
-    <section class="pillbar">
+  <!-- Top summary stripe -->
+  <section class="topbar">
+    <div class="wrap topbar__inner">
       <div class="pill">
-        <div class="period-toggle" id="periodToggle">
-          <button class="chip active" data-per="month">Month</button>
-          <button class="chip" data-per="year">Year</button>
-          <button class="chip" data-per="week">Week</button>
-          <button class="chip" data-per="day">Day</button>
-          <span>•</span>
-          <b id="pill-net">£0.00</b>
-          <span style="color:#6b7280" id="pill-eff">(effective tax rate: 0%)</span>
+        <button class="period-toggle" data-period="month" aria-pressed="true">Month</button>
+        <span class="pill__value" id="pillTakeHome">£0.00</span>
+      </div>
+      <div class="fxrate">Effective tax rate: <strong id="fxRate">0%</strong></div>
+      <div class="actions">
+        <button class="btn ghost" id="btnCopy">Copy link</button>
+        <button class="btn ghost" id="btnReset">Reset</button>
+        <a class="btn primary" href="/tools/">All tools</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page title + context -->
+  <header class="wrap pagehead">
+    <h1 class="h1">Salary SmartFlow (UK)</h1>
+    <p class="lede">
+      2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance,
+      pension and student loan. Use the quick presets or paste a salary; switch periods with the toggle.
+    </p>
+  </header>
+
+  <main class="wrap grid">
+    <!-- Left rail: page nav -->
+    <aside class="rail">
+      <nav class="rail__nav" aria-label="On this page">
+        <h3>On this page</h3>
+        <a href="#inputs"><span>Inputs</span><small>gross, period, region</small></a>
+        <a href="#student"><span>Student loan</span><small>plan</small></a>
+        <a href="#advanced"><span>Advanced</span><small>employer %, tax year</small></a>
+        <a href="#breakdown"><span>Breakdown</span><small>lines & bars</small></a>
+      </nav>
+    </aside>
+
+    <!-- Center column: inputs -->
+    <section id="inputs" class="card inputs">
+      <div class="tip">
+        <span class="tip__icon" aria-hidden="true">i</span>
+        <div class="tip__text">
+          <strong>Tip:</strong> Choose a preset or type any number. Period toggle affects all outputs.
+          Employee pension reduces taxable pay; employer % is shown for info.
         </div>
       </div>
 
-      <div class="pillbar-actions">
-        <button id="copyLink" class="btn-ghost">Copy link</button>
-        <button id="resetPage" class="btn-ghost">Reset</button>
-        <a href="/tools/" class="btn-ghost">All tools</a>
+      <div class="chiprow">
+        <button class="chip" data-preset="25000">£25k</button>
+        <button class="chip" data-preset="35000">£35k</button>
+        <button class="chip" data-preset="50000">£50k</button>
+        <button class="chip" data-preset="75000">£75k</button>
+        <button class="chip" data-preset="100000">£100k</button>
+      </div>
+
+      <div class="fieldgrid">
+        <label class="field">
+          <span>Annual gross salary (£)</span>
+          <input id="gross" type="text" inputmode="decimal" placeholder="52000" value="52000">
+          <small>Pre-tax income for the tax year.</small>
+        </label>
+
+        <fieldset class="field field--toggle">
+          <legend>Show results per</legend>
+          <div class="seg">
+            <button class="seg__btn is-active" data-period="month">Month</button>
+            <button class="seg__btn" data-period="year">Year</button>
+            <button class="seg__btn" data-period="week">Week</button>
+            <button class="seg__btn" data-period="day">Day</button>
+          </div>
+        </fieldset>
+
+        <label class="field">
+          <span>Pension (employee) %</span>
+          <input id="penEmp" type="number" min="0" max="100" step="0.5" value="5">
+          <small>Reduces taxable pay, thus tax and NI.</small>
+        </label>
+
+        <label class="field">
+          <span>Region</span>
+          <select id="region">
+            <option value="EWNI" selected>England / Wales / NI</option>
+            <option value="SCT">Scotland</option>
+          </select>
+          <small>Scotland uses different income-tax bands.</small>
+        </label>
       </div>
     </section>
 
-    <!-- ===== Title / subtitle ===== -->
-    <header class="tool-header">
-      <h1>Salary Calculator (UK)</h1>
-      <p class="muted">
-        2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance, pension & student
-        loan. Use the quick presets or paste a salary; switch periods with the toggle.
-      </p>
-    </header>
-
-    <section class="tool-layout">
-      <!-- ===== Left sticky TOC (same structure as PDF) ===== -->
-      <aside class="toc">
-        <div class="toc-inner">
-          <h4>On this page</h4>
-          <nav>
-            <a href="#inputs"      class="toc-link">Inputs</a>
-            <a href="#loan"        class="toc-link">Student loan</a>
-            <a href="#advanced"    class="toc-link">Advanced</a>
-            <a href="#results"     class="toc-link">Results</a>
-            <a href="#breakdown"   class="toc-link">Breakdown</a>
-          </nav>
+    <!-- Right column: results (cards + bars) -->
+    <section class="results">
+      <div class="card resume">
+        <div class="kpi">
+          <span>Gross pay</span>
+          <strong id="kpiGross">£0.00</strong>
         </div>
-      </aside>
+        <div class="kpi">
+          <span>Take-home</span>
+          <strong id="kpiTakeHome">£0.00</strong>
+        </div>
+        <div class="kpi">
+          <span>Income tax</span>
+          <strong id="kpiTax">£0.00</strong>
+        </div>
+        <div class="kpi">
+          <span>NI (employee)</span>
+          <strong id="kpiNI">£0.00</strong>
+        </div>
+        <div class="kpi">
+          <span>Pension (employee)</span>
+          <strong id="kpiPen">£0.00</strong>
+        </div>
 
-      <!-- ===== Right content ===== -->
-      <div class="content">
+        <div class="bars">
+          <div class="bar"><span>Income tax</span><div class="bar__fill" id="barTax"></div><div class="bar__val" id="barTaxVal">£0</div></div>
+          <div class="bar"><span>NI (employee)</span><div class="bar__fill" id="barNI"></div><div class="bar__val" id="barNIVal">£0</div></div>
+          <div class="bar"><span>Pension</span><div class="bar__fill" id="barPen"></div><div class="bar__val" id="barPenVal">£0</div></div>
+        </div>
 
-        <!-- ===== Inputs card (mirrors PDF “tip + kpis + fields” pattern) ===== -->
-        <section id="inputs" class="card">
-          <div class="tip">
-            <strong>Tip</strong> — Choose a preset or type any number. Period toggle affects all outputs.
-            Employee pension reduces taxable pay; employer % is shown for info.
-          </div>
+        <div class="adslot">Ad Placeholder (Tool — Middle)</div>
+      </div>
 
-          <div class="chips-row" style="margin-top:10px">
-            <button class="chip-x" data-preset="25000">£25k</button>
-            <button class="chip-x" data-preset="35000">£35k</button>
-            <button class="chip-x" data-preset="50000">£50k</button>
-            <button class="chip-x" data-preset="75000">£75k</button>
-            <button class="chip-x" data-preset="100000">£100k</button>
-          </div>
+      <!-- Insights -->
+      <div class="card info">
+        <h3>Insights</h3>
+        <p id="insightA">As of the 2024–25 tax year, the UK basic rate of income tax is 20%.</p>
+        <a href="https://www.gov.uk/income-tax-rates" target="_blank" rel="noopener">More info</a>
+      </div>
 
-          <div class="row" style="margin-top:12px; gap:12px">
-            <div class="field">
-              <label for="gross">Annual gross salary (£)</label>
-              <input id="gross" class="input" type="number" inputmode="decimal" placeholder="52000" />
-              <small class="muted">Pre-tax income for the tax year.</small>
-            </div>
+      <div class="card info">
+        <h3>Increasing your pension contribution</h3>
+        <p>
+          Try raising your contribution from <span id="insPenFrom">5%</span> to <span id="insPenTo">8%</span>;
+          the model will show your new take-home and long-run investing benefit.
+        </p>
+        <button class="btn subtle" id="btnTryPension">Try it</button>
+      </div>
+    </section>
 
-            <div class="field">
-              <label>Show results per</label>
-              <div class="period-toggle" id="periodToggleInline">
-                <button class="chip active" data-per="month">Month</button>
-                <button class="chip" data-per="year">Year</button>
-                <button class="chip" data-per="week">Week</button>
-                <button class="chip" data-per="day">Day</button>
-              </div>
-            </div>
-          </div>
+    <!-- Student loan -->
+    <section id="student" class="card wide">
+      <h2 class="h2">Student loan</h2>
+      <div class="row row--2">
+        <label class="field">
+          <span>Plan</span>
+          <select id="loanPlan">
+            <option value="none" selected>None</option>
+            <option value="plan1">Plan 1</option>
+            <option value="plan2">Plan 2</option>
+            <option value="plan4">Plan 4</option>
+            <option value="postgrad">Postgraduate</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Monthly repayment (modelled)</span>
+          <input id="loanOut" type="text" readonly value="£0.00">
+        </label>
+      </div>
+      <small>Repayments are modelled thresholds; verify exact terms on GOV.UK.</small>
+    </section>
 
-          <div class="row" style="margin-top:12px; gap:12px">
-            <div class="field">
-              <label for="penEmp">Pension (employee) %</label>
-              <input id="penEmp" class="input" type="number" step="0.1" placeholder="5" />
-              <small class="muted">Reduces taxable pay, thus tax and NI.</small>
-            </div>
+    <!-- Advanced -->
+    <section id="advanced" class="card wide">
+      <h2 class="h2">Advanced Options</h2>
+      <div class="row row--3">
+        <label class="field">
+          <span>Employer pension % <small>(for info – not deducted from take-home)</small></span>
+          <input id="penEr" type="number" min="0" max="100" step="0.5" value="3">
+        </label>
 
-            <div class="field">
-              <label for="penEr">Employer pension %</label>
-              <input id="penEr" class="input" type="number" step="0.1" placeholder="3" />
-              <small class="muted">Shown for info; does not change tax/NI.</small>
-            </div>
-          </div>
+        <label class="field">
+          <span>Tax year</span>
+          <select id="taxYear">
+            <option value="2024" selected>2024–25</option>
+          </select>
+        </label>
 
-          <div class="row" style="margin-top:12px; gap:12px">
-            <div class="field">
-              <label for="taxYear">Tax year</label>
-              <select id="taxYear" class="input">
-                <option value="2024">2024–25</option>
-                <option value="2023">2023–24</option>
-              </select>
-            </div>
+        <label class="field">
+          <span>NI category</span>
+          <select id="niCat">
+            <option value="A" selected>A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </label>
+      </div>
+    </section>
 
-            <div class="field">
-              <label for="region">Region</label>
-              <select id="region" class="input">
-                <option value="EWNI">England / Wales / NI</option>
-                <option value="SCO">Scotland</option>
-              </select>
-              <small class="muted">Scotland uses different income-tax bands.</small>
-            </div>
-          </div>
-        </section>
-
-        <!-- ===== Student loan card ===== -->
-        <section id="loan" class="card">
-          <h3>Student loan</h3>
-          <div class="row" style="gap:12px">
-            <div class="field">
-              <label for="loanPlan">Plan</label>
-              <select id="loanPlan" class="input">
-                <option value="none">None</option>
-                <option value="plan1">Plan 1</option>
-                <option value="plan2">Plan 2</option>
-                <option value="plan4">Plan 4 (Scotland)</option>
-                <option value="plan5">Plan 5 (England)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label class="checkbox">
-                <input type="checkbox" id="pgLoan" />
-                <span>Postgraduate loan</span>
-              </label>
-            </div>
-          </div>
-        </section>
-
-        <!-- ===== Advanced card ===== -->
-        <section id="advanced" class="card">
-          <h3>Advanced</h3>
-          <p class="muted">Options for detailed scenarios (keep defaults if unsure).</p>
-          <div class="row" style="gap:12px">
-            <div class="field">
-              <label for="additionalPension">Additional voluntary pension %</label>
-              <input id="additionalPension" class="input" type="number" step="0.1" placeholder="0" />
-            </div>
-            <div class="field">
-              <label for="allowances">Other pre-tax allowances (£/yr)</label>
-              <input id="allowances" class="input" type="number" step="1" placeholder="0" />
-            </div>
-          </div>
-        </section>
-
-        <!-- ===== Results card (tiles + bars like we mocked) ===== -->
-        <section id="results" class="card">
-          <h3>Results</h3>
-
-          <div class="tile-grid">
-            <div class="tile">
-              <small>Gross pay</small>
-              <b id="rGross">£0.00</b>
-            </div>
-            <div class="tile">
-              <small>Take-home</small>
-              <b id="rNet">£0.00</b>
-            </div>
-            <div class="tile">
-              <small>Income tax</small>
-              <b id="rTax">£0.00</b>
-            </div>
-            <div class="tile">
-              <small>NI (employee)</small>
-              <b id="rNi">£0.00</b>
-            </div>
-            <div class="tile">
-              <small>Student loan</small>
-              <b id="rLoan">£0.00</b>
-            </div>
-            <div class="tile">
-              <small>Pension (employee)</small>
-              <b id="rPen">£0.00</b>
-            </div>
-          </div>
-
-          <div class="bars">
-            <div class="bar">
-              <div class="track"><div class="fill" id="barTax"></div></div>
-              <span id="lblTax">£0</span>
-            </div>
-            <div class="bar">
-              <div class="track"><div class="fill" id="barNi"></div></div>
-              <span id="lblNi">£0</span>
-            </div>
-            <div class="bar">
-              <div class="track"><div class="fill" id="barLoan"></div></div>
-              <span id="lblLoan">£0</span>
-            </div>
-            <div class="bar">
-              <div class="track"><div class="fill" id="barPen"></div></div>
-              <span id="lblPen">£0</span>
-            </div>
-          </div>
-
-          <div class="ad-placeholder" style="margin-top:16px">Ad placeholder — Tool (Middle)</div>
-        </section>
-
-        <!-- ===== Breakdown card ===== -->
-        <section id="breakdown" class="card">
-          <h3>Breakdown</h3>
-          <div id="breakdownBody" class="muted">
-            Detailed lines & bands (income tax, NI, student loan) will appear here after calculation.
-          </div>
-        </section>
-
+    <!-- Breakdown -->
+    <section id="breakdown" class="card wide">
+      <h2 class="h2">Breakdown</h2>
+      <div class="tablewrap">
+        <table class="table">
+          <thead>
+            <tr><th>Item</th><th class="t-right">Amount</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Gross</td><td class="t-right" id="tbGross">£0.00</td></tr>
+            <tr><td>Income tax</td><td class="t-right" id="tbTax">£0.00</td></tr>
+            <tr><td>National Insurance</td><td class="t-right" id="tbNI">£0.00</td></tr>
+            <tr><td>Pension (employee)</td><td class="t-right" id="tbPen">£0.00</td></tr>
+            <tr><td>Student loan</td><td class="t-right" id="tbLoan">£0.00</td></tr>
+            <tr class="total"><td>Take-home</td><td class="t-right" id="tbNet">£0.00</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>
 
-  <!-- shared footer -->
-  <footer data-include></footer>
+  <!-- Footer partial -->
+  <div data-partial="footer" data-src="/partials/footer.html"></div>
 
-  <!-- include loader (same used on PDF page) -->
-  <script src="../../assets/js/include.js"></script>
-
-  <!-- Your existing salary logic; keep your file name/path here -->
-  <script src="./tool-salary.js"></script>
-
-  <script>
-    // Lightweight glue so this layout talks nicely to your existing calculator.
-    // If your tool-salary.js already wires all these IDs, this block can be removed.
-
-    const $ = (s, r=document)=>r.querySelector(s);
-    const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
-
-    // Keep period chips in sync (top pill and inline group)
-    function syncPeriodButtons(per){
-      $$("#periodToggle .chip, #periodToggleInline .chip").forEach(btn=>{
-        btn.classList.toggle("active", btn.dataset.per === per);
-      });
-    }
-    $$("#periodToggle .chip, #periodToggleInline .chip").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const per = btn.dataset.per;
-        syncPeriodButtons(per);
-        document.dispatchEvent(new CustomEvent("salary:setPeriod", { detail: per }));
-      });
-    });
-
-    // Presets
-    $$(".chip-x[data-preset]").forEach(ch=>{
-      ch.addEventListener("click", ()=>{
-        $("#gross").value = ch.dataset.preset;
-        document.dispatchEvent(new Event("salary:recalc"));
-      });
-    });
-
-    // Copy/reset
-    $("#copyLink").addEventListener("click", ()=>{
-      navigator.clipboard.writeText(location.href).then(()=>alert("Link copied."));
-    });
-    $("#resetPage").addEventListener("click", ()=>location.href="/tools/salary-uk/");
-
-    // Bridges to update UI from your core calculator (emit these from tool-salary.js)
-    document.addEventListener("salary:update", (e)=>{
-      const d = e.detail; if(!d) return;
-      $("#rGross").textContent = d.grossFmt;
-      $("#rNet").textContent   = d.netFmt;
-      $("#rTax").textContent   = d.taxFmt;
-      $("#rNi").textContent    = d.niFmt;
-      $("#rLoan").textContent  = d.loanFmt;
-      $("#rPen").textContent   = d.penFmt;
-
-      $("#pill-net").textContent = d.netFmt;
-      $("#pill-eff").textContent = `(effective tax rate: ${d.effectiveRate})`;
-
-      // Bars (% of gross)
-      const pct = (v)=> Math.max(0, Math.min(100, d.gross > 0 ? (v/d.gross*100) : 0));
-      $("#barTax").style.width  = pct(d.tax)  + "%";
-      $("#barNi").style.width   = pct(d.ni)   + "%";
-      $("#barLoan").style.width = pct(d.loan) + "%";
-      $("#barPen").style.width  = pct(d.pen)  + "%";
-
-      $("#lblTax").textContent  = d.taxFmt;
-      $("#lblNi").textContent   = d.niFmt;
-      $("#lblLoan").textContent = d.loanFmt;
-      $("#lblPen").textContent  = d.penFmt;
-
-      // Breakdown HTML (optional)
-      if (d.breakdownHtml) $("#breakdownBody").innerHTML = d.breakdownHtml;
-    });
-
-    // Initial sync
-    syncPeriodButtons("month");
-  </script>
+  <!-- Partials loader (injects header/footer) -->
+  <script defer src="/assets/js/partials.js"></script>
+  <!-- Calculator logic -->
+  <script defer src="/assets/js/salary-uk.js"></script>
 </body>
 </html>
