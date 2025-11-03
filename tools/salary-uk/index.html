@@ -4,289 +4,237 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Salary Calculator (UK) — KSRM Digital</title>
-  <meta name="description" content="Quick UK salary calculator (2024–25). See take-home pay, tax, NI and pension with simple inputs and responsive layout.">
-  <link rel="icon" href="/assets/img/favicon.png" />
 
-  <!-- Google AdSense (publisher: KSRM) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
 
   <style>
     :root{
-      --page:#f6f7fb; --card:#fff; --line:#e7eaf0; --text:#0b1220; --muted:#768196;
-      --brand:#2e66f5; --pill:#eef3ff; --radius:14px; --shadow:0 10px 28px rgba(17,24,39,.08);
+      --bg:#f7f9fc;--card:#fff;--ink:#0f172a;--muted:#5b677a;--line:#e7eaf0;
+      --brand:#3b82f6;--accent:#ff8a3d;--shadow:0 8px 28px rgba(18,26,42,.08);--radius:14px;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{background:var(--page); color:var(--text); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.45}
-    .wrap{max-width:980px;margin:0 auto;padding:26px 18px 80px}
-    .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
-    .pad{padding:18px}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif}
+    .page{max-width:1200px;margin:0 auto;padding:24px 20px 64px}
+    #site-header,#site-footer{min-height:64px}
 
-    .title{font-size:clamp(26px,3.2vw,36px); margin:10px 0 6px; font-weight:800}
-    .lede{color:var(--muted); margin:0 0 18px}
+    .headline{font:700 34px/1.2 Poppins,Inter,sans-serif;margin:10px 0 6px}
+    .intro{color:var(--muted);margin:8px 0 20px;max-width:80ch}
 
-    /* Inputs */
-    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    @media (max-width:720px){.grid{grid-template-columns:1fr}}
-    .field{display:flex; flex-direction:column; gap:6px}
-    .field label{font-weight:600; font-size:14px}
-    input[type="number"],select{
-      width:100%; padding:12px 12px; border:1px solid var(--line); border-radius:10px; background:#fff; outline:none;
+    .chipbar{
+      display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+      background:#fff;padding:12px 14px;border-radius:999px;border:1px solid var(--line);
+      box-shadow:var(--shadow);position:sticky;top:0;z-index:5
     }
-    input:focus,select:focus{border-color:#cbd7ff; box-shadow:0 0 0 3px #e8efff}
+    .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600}
+    .chip.is-on{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
+    .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .ads{margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:var(--shadow)}
 
-    /* Period pills */
-    .pills{display:flex; gap:6px; background:#f0f3f9; border-radius:999px; padding:4px; width:max-content}
-    .pills button{border:0;background:transparent;padding:8px 12px;border-radius:999px;font-weight:600;cursor:pointer}
-    .pills .is-active{background:var(--pill); color:var(--brand)}
-
-    /* Actions */
-    .row-between{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:10px}
-    .link{color:var(--brand); font-weight:600; text-decoration:none; cursor:pointer}
-    .link:hover{text-decoration:underline}
-    .muted{color:var(--muted)}
-
-    /* KPIs */
-    .kpis{display:grid; grid-template-columns:repeat(5,1fr); gap:12px}
-    @media (max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}}
-    @media (max-width:540px){.kpis{grid-template-columns:repeat(2,1fr)}}
-    .kpi{border:1px solid var(--line); border-radius:12px; padding:14px}
-    .kpi h5{margin:0 0 6px; color:#6b7381; font-size:12px; letter-spacing:.06em; text-transform:uppercase}
-    .kpi .v{font-weight:800; font-size:20px}
-
-    /* Ad slots */
-    .ad{margin:16px 0 8px}
-    .ad > ins.adsbygoogle{display:block}
+    .layout{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:16px}
+    @media (max-width:1000px){.layout{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card .hd{padding:16px 18px 8px;border-bottom:1px solid var(--line);font-weight:700}
+    .card .bd{padding:18px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:700px){.grid-2{grid-template-columns:1fr}}
+    .field{display:flex;flex-direction:column;gap:8px}
+    .field label{font-weight:600}
+    .field input,.field select{height:46px;border-radius:12px;border:1px solid var(--line);padding:0 14px;background:#fff;font-weight:600}
+    .preset-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .preset{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;cursor:pointer;font-weight:600}
+    .preset:hover{border-color:var(--ink)}
+    .stat{border:1px dashed var(--line);border-radius:14px;padding:14px;background:#fff}
+    .stat .t{color:var(--muted);font-size:12px;margin-bottom:6px}
+    .stat .v{font:700 24px/1 Inter,sans-serif}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#fff}
+    .row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+    .row:last-child{border-bottom:none}
   </style>
 </head>
 <body>
 
-  <!-- Header via partial -->
-  <div id="site-header" data-include="/partials/header.html"></div>
+<div id="site-header"></div>
 
-  <div class="wrap">
-    <h1 class="title">Salary Calculator (UK)</h1>
-    <p class="lede">Enter your salary and see take-home, tax, NI, and pension. Simple, fast, and mobile-friendly.</p>
+<div class="page">
 
-    <!-- TOP AD -->
-    <div class="card pad ad">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-9718922267093672"
-           data-ad-slot="XXXXXXXXXX"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
+  <!-- Summary -->
+  <div class="chipbar">
+    <button id="chip-month" class="chip is-on">Month</button>
+    <button id="chip-year" class="chip">Year</button>
+    <span class="chip" id="chip-takehome">£0.00</span>
+    <span class="chip">Effective tax rate: <span id="chip-rate">0%</span></span>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn" id="btn-copy">Copy link</button>
+      <button class="btn" id="btn-reset">Reset</button>
     </div>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-
-    <!-- INPUTS -->
-    <section class="card pad" aria-label="Inputs">
-      <div class="grid">
-        <div class="field">
-          <label for="inSalary">Annual gross salary (£)</label>
-          <input id="inSalary" type="number" min="0" step="1" placeholder="e.g. 52000" />
-        </div>
-
-        <div class="field">
-          <label>Show results per</label>
-          <div class="pills" id="periodPills">
-            <button type="button" class="is-active" data-per="month">Month</button>
-            <button type="button" data-per="year">Year</button>
-            <button type="button" data-per="week">Week</button>
-            <button type="button" data-per="day">Day</button>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="inEmpPen">Pension (employee) %</label>
-          <input id="inEmpPen" type="number" min="0" step="0.1" placeholder="e.g. 5" />
-        </div>
-
-        <div class="field">
-          <label for="inRegion">Region</label>
-          <select id="inRegion">
-            <option value="EWNI">England / Wales / NI</option>
-            <option value="SCT">Scotland</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row-between">
-        <span class="muted">Optional: <a class="link" id="loanToggle">Student loan</a></span>
-        <div>
-          <button class="link" id="copyLink">Copy link</button>
-          <span class="muted">•</span>
-          <button class="link" id="resetAll">Reset</button>
-        </div>
-      </div>
-
-      <!-- Collapsible: Student Loan -->
-      <div id="loanBox" style="display:none; margin-top:12px">
-        <div class="grid">
-          <div class="field">
-            <label for="inLoanPlan">Loan plan</label>
-            <select id="inLoanPlan">
-              <option value="none">None</option>
-              <option value="plan1">Plan 1</option>
-              <option value="plan2">Plan 2</option>
-              <option value="plan4">Plan 4 (Scotland)</option>
-              <option value="plan5">Plan 5</option>
-              <option value="postgrad">Postgraduate</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="inTaxYear">Tax year</label>
-            <select id="inTaxYear">
-              <option value="2024">2024–25</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESULTS -->
-    <section class="card pad" aria-label="Results" style="margin-top:14px">
-      <div class="kpis">
-        <div class="kpi"><h5>Gross</h5><div class="v" id="kpiGross">£0.00</div></div>
-        <div class="kpi"><h5>Take-home</h5><div class="v" id="kpiTake">£0.00</div></div>
-        <div class="kpi"><h5>Income tax</h5><div class="v" id="kpiTax">£0.00</div></div>
-        <div class="kpi"><h5>NI (employee)</h5><div class="v" id="kpiNI">£0.00</div></div>
-        <div class="kpi"><h5>Pension</h5><div class="v" id="kpiPen">£0.00</div></div>
-      </div>
-      <p class="muted" style="margin:12px 0 0">Effective tax rate: <strong id="effRate">0%</strong></p>
-    </section>
-
-    <!-- MIDDLE AD -->
-    <div class="card pad ad">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-9718922267093672"
-           data-ad-slot="YYYYYYYYYY"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-    </div>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-
-    <!-- BREAKDOWN (optional) -->
-    <section class="card pad" aria-label="Breakdown" style="margin-top:14px">
-      <h3 style="margin:0 0 8px">Breakdown</h3>
-      <p class="muted">Keep this minimal; if you have a table, render it here. Otherwise leave it simple.</p>
-    </section>
-
-    <!-- BOTTOM AD -->
-    <div class="card pad ad">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-9718922267093672"
-           data-ad-slot="ZZZZZZZZZZ"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-    </div>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
   </div>
 
-  <!-- Footer via partial -->
-  <div id="site-footer" data-include="/partials/footer.html"></div>
+  <h1 class="headline">Salary Calculator (UK)</h1>
+  <p class="intro">Estimate your monthly or yearly take-home pay with UK tax, NI, pension and student loan for 2024–25.</p>
 
-  <script>
-    // ---- Include partials (header/footer) ----
-    document.querySelectorAll('[data-include]').forEach(async el=>{
-      try{
-        const res = await fetch(el.getAttribute('data-include'), {cache:'no-store'});
-        el.innerHTML = await res.text();
-      }catch(e){ console.warn('Include failed', e); }
-    });
+  <!-- Ad 1 -->
+  <div class="ads">
+    <!-- ad1 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9718922267093672"
+         data-ad-slot="3997839388"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
-    // ---- Tiny UI + stub calc (replace with your real logic) ----
-    const $ = s=>document.querySelector(s), $$ = s=>document.querySelectorAll(s);
+  <div class="layout">
+    <!-- Inputs -->
+    <section class="card">
+      <div class="hd">Inputs</div>
+      <div class="bd">
+        <div class="preset-row">
+          <button class="preset" data-s="25000">£25k</button>
+          <button class="preset" data-s="35000">£35k</button>
+          <button class="preset" data-s="50000">£50k</button>
+          <button class="preset" data-s="75000">£75k</button>
+          <button class="preset" data-s="100000">£100k</button>
+        </div>
 
-    const inSalary = $('#inSalary');
-    const inEmpPen = $('#inEmpPen');
-    const inRegion = $('#inRegion');
-    const inLoanPlan = $('#inLoanPlan');
-    const inTaxYear = $('#inTaxYear');
+        <div class="grid-2">
+          <div class="field">
+            <label for="salary">Annual gross salary (£)</label>
+            <input id="salary" type="number" min="0" step="100" value="52000" />
+          </div>
+          <div class="field">
+            <label for="pen">Pension (employee) %</label>
+            <input id="pen" type="number" min="0" step="0.5" value="5" />
+          </div>
+          <div class="field">
+            <label for="region">Region</label>
+            <select id="region">
+              <option value="EWNI" selected>England / Wales / NI</option>
+              <option value="SCT">Scotland</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="loan">Student loan</label>
+            <select id="loan">
+              <option value="none">None</option>
+              <option value="plan1">Plan 1</option>
+              <option value="plan2" selected>Plan 2</option>
+              <option value="plan4">Plan 4 (Scotland)</option>
+              <option value="pgl">Postgraduate</option>
+            </select>
+          </div>
+        </div>
+        <button id="btn-calc" class="btn primary" style="margin-top:10px">Recalculate</button>
+      </div>
+    </section>
 
-    const kGross = $('#kpiGross'), kTake = $('#kpiTake'), kTax = $('#kpiTax'), kNI = $('#kpiNI'), kPen = $('#kpiPen');
-    const effRate = $('#effRate');
+    <!-- Results -->
+    <section class="card">
+      <div class="hd">Results</div>
+      <div class="bd">
+        <div class="grid-2">
+          <div class="stat"><div class="t">Gross pay</div><div class="v" id="r-gross">£0.00</div></div>
+          <div class="stat"><div class="t">Take-home</div><div class="v" id="r-take">£0.00</div></div>
+          <div class="stat"><div class="t">Income tax</div><div class="v" id="r-tax">£0.00</div></div>
+          <div class="stat"><div class="t">NI (employee)</div><div class="v" id="r-ni">£0.00</div></div>
+          <div class="stat"><div class="t">Pension</div><div class="v" id="r-pen">£0.00</div></div>
+        </div>
+        <div class="row"><span>Effective tax rate</span><span class="pill" id="r-rate">0%</span></div>
+      </div>
+    </section>
+  </div>
 
-    let period = 'month';
+  <!-- Ad 2 -->
+  <div class="ads">
+    <!-- ad2 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9718922267093672"
+         data-ad-slot="3997839388"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
-    // Toggle loan box
-    $('#loanToggle').addEventListener('click',()=>{
-      const box = $('#loanBox'); box.style.display = box.style.display==='none' ? 'block' : 'none';
-    });
+  <!-- Breakdown -->
+  <section class="card" style="margin-top:16px">
+    <div class="hd">Breakdown</div>
+    <div class="bd">
+      <p class="intro">Detailed breakdown of income tax, NI, pension, and student loan based on 2024–25 thresholds.</p>
+    </div>
+  </section>
 
-    // Period pills
-    $$('#periodPills button').forEach(b=>{
-      b.addEventListener('click',()=>{
-        $$('#periodPills button').forEach(x=>x.classList.remove('is-active'));
-        b.classList.add('is-active');
-        period = b.dataset.per;
-        recalc();
-      });
-    });
+  <!-- Ad 3 -->
+  <div class="ads">
+    <!-- ad3 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9718922267093672"
+         data-ad-slot="3997839388"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
-    // Copy & reset
-    $('#copyLink').addEventListener('click',()=>{
-      const params = new URLSearchParams({
-        s: inSalary.value || '',
-        per: period,
-        pen: inEmpPen.value || '',
-        r: inRegion.value || '',
-        sl: inLoanPlan?.value || 'none',
-        ty: inTaxYear?.value || '2024'
-      });
-      navigator.clipboard.writeText(location.origin + location.pathname + '?' + params.toString());
-    });
-    $('#resetAll').addEventListener('click',()=>{
-      inSalary.value=''; inEmpPen.value=''; inRegion.value='EWNI';
-      if(inLoanPlan) inLoanPlan.value='none'; if(inTaxYear) inTaxYear.value='2024';
-      period='month'; $$('#periodPills button').forEach(x=>x.classList.remove('is-active'));
-      $('#periodPills button[data-per="month"]').classList.add('is-active');
-      recalc();
-    });
+</div>
 
-    // Wire inputs
-    [inSalary,inEmpPen,inRegion,inLoanPlan,inTaxYear].forEach(el=>el && el.addEventListener('input', recalc));
+<div id="site-footer"></div>
 
-    function factor(p){ return p==='year'?1: p==='month'?1/12: p==='week'?1/52: 1/260; }
-    function £(n){ return (n||0).toLocaleString('en-GB',{style:'currency',currency:'GBP'}); }
+<script>
+(async()=>{ // Load partials
+  const inject=async(id,path)=>{
+    try{
+      const r=await fetch(path,{cache:'no-store'});
+      if(r.ok)document.getElementById(id).innerHTML=await r.text();
+    }catch(e){console.warn('Include failed',path,e);}
+  };
+  await inject('site-header','/partials/header.html');
+  await inject('site-footer','/partials/footer.html');
+})();
 
-    // Placeholder calc (swap for your real engine)
-    function recalc(){
-      const s = +inSalary.value || 0;
-      const empP = +inEmpPen.value || 0;
-      const f = factor(period);
-      const gross = s * f;
-      const pen = gross * (empP/100);
-      const tax = Math.max(0, gross*0.14);  // placeholder
-      const ni  = Math.max(0, gross*0.06);  // placeholder
-      const take = Math.max(0, gross - tax - ni - pen);
-      const eff = gross ? Math.round((1 - take/gross)*100) : 0;
+// === Calculator ===
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+let period='month';
 
-      kGross.textContent = £(gross);
-      kTake.textContent  = £(take);
-      kTax.textContent   = £(tax);
-      kNI.textContent    = £(ni);
-      kPen.textContent   = £(pen);
-      effRate.textContent = eff + '%';
-    }
+const els={
+  salary:$('#salary'),pen:$('#pen'),region:$('#region'),loan:$('#loan'),
+  rGross:$('#r-gross'),rTake:$('#r-take'),rTax:$('#r-tax'),
+  rNI:$('#r-ni'),rPen:$('#r-pen'),rRate:$('#r-rate'),
+  chipTake:$('#chip-takehome'),chipRate:$('#chip-rate'),
+  chipMonth:$('#chip-month'),chipYear:$('#chip-year')
+};
 
-    // QS support (from copy link)
-    (function initQS(){
-      const q = new URLSearchParams(location.search);
-      if(q.has('s')) inSalary.value = q.get('s');
-      if(q.has('per')) {
-        period = q.get('per');
-        $$('#periodPills button').forEach(x=>x.classList.remove('is-active'));
-        (document.querySelector(`#periodPills button[data-per="${period}"]`) || document.querySelector('#periodPills button[data-per="month"]')).classList.add('is-active');
-      }
-      if(q.has('pen')) inEmpPen.value = q.get('pen');
-      if(q.has('r')) inRegion.value = q.get('r');
-      if(q.has('sl') && $('#loanBox')) { $('#loanBox').style.display='block'; inLoanPlan.value = q.get('sl'); }
-      if(q.has('ty') && inTaxYear) inTaxYear.value = q.get('ty');
-      recalc();
-    })();
-  </script>
+const fmt=n=>n.toLocaleString('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:2});
+const PERSONAL_ALLOWANCE=12570,BASIC_BAND=37700,HIGHER_LIMIT=125140,NI_PT=12570,NI_UEL=50270,NI_MAIN=0.08,NI_ADD=0.02;
+const SL_THRESH={none:Infinity,plan1:24390,plan2:27295,plan4:27660,pgl:21000};
+const SL_RATE={plan1:0.09,plan2:0.09,plan4:0.09,pgl:0.06};
+function clampPA(i){if(i<=100000)return PERSONAL_ALLOWANCE;const t=(i-100000)/2;return Math.max(0,PERSONAL_ALLOWANCE-t);}
+function taxEWNI(i,p){const pa=clampPA(i),taxable=Math.max(0,i-p-pa);let tax=0;const b=Math.min(taxable,BASIC_BAND);tax+=b*.2;const h=Math.max(0,taxable-BASIC_BAND);tax+=Math.min(h,125140-BASIC_BAND)*.4;const add=Math.max(0,taxable-125140);tax+=add*.45;return tax;}
+function taxSCT(i,p){const pa=clampPA(i);let taxable=Math.max(0,i-p-pa),tax=0,prev=0,bands=[[14976,.19],[26756,.20],[43662,.21],[75000,.42],[125140,.45],[Infinity,.48]];for(const[b,r]of bands){const slice=Math.min(taxable,b-prev);if(slice>0){tax+=slice*r;taxable-=slice;prev=b;}if(taxable<=0)break;}return tax;}
+function ni(i,p){const niI=Math.max(0,i-p);let n=0;const m=Math.max(0,Math.min(niI,NI_UEL)-NI_PT);n+=m*NI_MAIN;const a=Math.max(0,niI-NI_UEL);n+=a*NI_ADD;return n;}
+function loan(i,plan){if(plan==='none')return 0;const thr=SL_THRESH[plan],r=SL_RATE[plan];return Math.max(0,(i-thr))*r;}
+function calc(){
+  const s=+els.salary.value||0,pPct=+els.pen.value||0,empPen=s*(pPct/100),reg=els.region.value,plan=els.loan.value;
+  const tax=reg==='SCT'?taxSCT(s,empPen):taxEWNI(s,empPen),niV=ni(s,empPen),loanV=loan(s,plan);
+  const take=s-tax-niV-loanV-empPen;const div=period==='month'?12:1;
+  els.rGross.textContent=fmt(s/div);els.rTax.textContent=fmt(tax/div);
+  els.rNI.textContent=fmt(niV/div);els.rPen.textContent=fmt(empPen/div);
+  els.rTake.textContent=fmt(take/div);
+  const eff=s>0?((s-take)/s*100):0;els.rRate.textContent=eff.toFixed(1)+'%';
+  els.chipTake.textContent=fmt(take/div);els.chipRate.textContent=eff.toFixed(1)+'%';
+  els.chipMonth.classList.toggle('is-on',period==='month');els.chipYear.classList.toggle('is-on',period==='year');
+}
+$$('.preset').forEach(b=>b.addEventListener('click',()=>{els.salary.value=b.dataset.s;calc();}));
+$('#chip-month').addEventListener('click',()=>{period='month';calc();});
+$('#chip-year').addEventListener('click',()=>{period='year';calc();});
+$('#btn-calc').addEventListener('click',calc);
+$('#btn-reset').addEventListener('click',()=>{els.salary.value=52000;els.pen.value=5;els.region.value='EWNI';els.loan.value='plan2';period='month';calc();});
+$('#btn-copy').addEventListener('click',()=>{navigator.clipboard.writeText(location.href);});
+calc();
+</script>
 </body>
 </html>
