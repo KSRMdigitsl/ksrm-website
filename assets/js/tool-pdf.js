@@ -1,324 +1,153 @@
-// tool-pdf.js — Merge, Split, (basic) Compress PDFs in-browser with thumbnails
-(function(){
-  const $ = id => document.getElementById(id);
-  const fmtBytes = b => {
-    if (!Number.isFinite(b)) return "—";
-    const u = ["B","KB","MB","GB"]; let i = 0, n = b;
-    while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
-    return `${n.toFixed(i===0?0:2)} ${u[i]}`;
+// tool-pdf.js — KSRM Digital (pdf-lib based, client-side)
+(() => {
+  const { PDFDocument, degrees } = window.PDFLib || {};
+  const $ = sel => document.querySelector(sel);
+  const outBox = $('#outBox');
+
+  // ---- Mode tabs ----
+  const modeChips = $('#modeChips');
+  modeChips.addEventListener('click', e => {
+    const btn = e.target.closest('.chip');
+    if(!btn) return;
+    const mode = btn.dataset.mode;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('is-on'));
+    btn.classList.add('is-on');
+    document.querySelectorAll('.mode').forEach(m => m.style.display = 'none');
+    $('#mode-' + mode).style.display = '';
+    outBox.innerHTML = `<div class="hint">Run a tool to see download links and thumbnails.</div>`;
+  });
+
+  // Helpers
+  const readAsArrayBuffer = f => new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsArrayBuffer(f); });
+  const saveBlob = (bytes, name) => {
+    const blob = new Blob([bytes], {type:'application/pdf'});
+    const href = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = href; a.download = name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(href), 5000);
+    return { blob, href };
+  };
+  const fmtSize = b => {
+    if (b == null || isNaN(b)) return '—';
+    const u=['B','KB','MB','GB']; let i=0, n=b; while(n>=1024&&i<u.length-1){n/=1024;i++;}
+    return `${n.toFixed(i?2:0)} ${u[i]}`;
   };
 
-  // ---------- STATE ----------
-  let tab = "merge";
-  let mergeFiles = [];     // [{file, ab, pages, thumbUrl, size}]
-  let splitFile = null;    // same shape as element in mergeFiles
-  let compressFile = null; // idem
-  let outputs = [];        // [{name, blob, size, url}]
-
-  // ---------- TABS ----------
-  const tabBtns = document.querySelectorAll(".tab-btn");
-  tabBtns.forEach(btn => btn.addEventListener("click", () => {
-    tabBtns.forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    tab = btn.dataset.tab;
-    $("tab-merge").style.display    = tab==="merge"    ? "block" : "none";
-    $("tab-split").style.display    = tab==="split"    ? "block" : "none";
-    $("tab-compress").style.display = tab==="compress" ? "block" : "none";
-    render();
-  }));
-
-  // ---------- DROPZONES ----------
-  function wireDropzone(el, onFiles) {
-    ["dragenter","dragover"].forEach(ev => el.addEventListener(ev, e => {
-      e.preventDefault(); e.stopPropagation(); el.classList.add("drag");
-    }));
-    ["dragleave","drop"].forEach(ev => el.addEventListener(ev, e => {
-      e.preventDefault(); e.stopPropagation(); el.classList.remove("drag");
-    }));
-    el.addEventListener("drop", e => {
-      const files = Array.from(e.dataTransfer.files || []).filter(f => f.type === "application/pdf");
-      onFiles(files);
-    });
+  // Basic PDF page thumbnails (placeholder: we show page numbers; proper raster preview needs extra libs)
+  function renderThumbs(nPages){
+    const frag = document.createDocumentFragment();
+    for(let i=1;i<=nPages;i++){
+      const el = document.createElement('span');
+      el.className = 'thumb';
+      el.textContent = `Page ${i}`;
+      frag.appendChild(el);
+    }
+    return frag;
   }
 
-  wireDropzone($("dz-merge"), files => addMergeFiles(files));
-  wireDropzone($("dz-split"), files => { if (files[0]) addSplitFile(files[0]); });
-  wireDropzone($("dz-compress"), files => { if (files[0]) addCompressFile(files[0]); });
+  // ---- MERGE ----
+  $('#btnMerge').addEventListener('click', async () => {
+    try{
+      const files = $('#mergeFiles').files;
+      if(!files || !files.length) return alert('Select PDFs to merge.');
 
-  $("pick-merge").addEventListener("change", e => {
-    const files = Array.from(e.target.files || []).filter(f => f.type === "application/pdf");
-    addMergeFiles(files); e.target.value = "";
-  });
-  $("pick-split").addEventListener("change", e => {
-    const f = (e.target.files||[])[0]; if (f) addSplitFile(f); e.target.value="";
-  });
-  $("pick-compress").addEventListener("change", e => {
-    const f = (e.target.files||[])[0]; if (f) addCompressFile(f); e.target.value="";
-  });
-
-  // ---------- LOADERS & THUMBNAILS ----------
-  async function fileToArrayBuffer(file) {
-    return new Promise((res, rej) => {
-      const fr = new FileReader();
-      fr.onload = () => res(fr.result);
-      fr.onerror = rej;
-      fr.readAsArrayBuffer(file);
-    });
-  }
-
-  async function renderThumbFromAB(ab) {
-    if (!window.pdfjsLib) return null;
-    const loadingTask = pdfjsLib.getDocument({ data: ab });
-    const pdf = await loadingTask.promise;
-    const page = await pdf.getPage(1);
-    const viewport = page.getViewport({ scale: 0.25 }); // small thumb
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = Math.floor(viewport.width);
-    canvas.height = Math.floor(viewport.height);
-    await page.render({ canvasContext: ctx, viewport }).promise;
-    return canvas.toDataURL("image/webp", 0.8);
-  }
-
-  async function addMergeFiles(files) {
-    for (const f of files) {
-      try {
-        const ab = await fileToArrayBuffer(f);
-        const { PDFDocument } = window.PDFLib;
-        const pdf = await PDFDocument.load(ab);
-        const thumbUrl = await renderThumbFromAB(ab);
-        mergeFiles.push({ file: f, ab, pages: pdf.getPageCount(), thumbUrl, size: f.size });
-      } catch (e) {
-        alert(`Failed to read ${f.name}`);
+      const outPdf = await PDFDocument.create();
+      let totalPages = 0;
+      for (const f of files){
+        const bytes = await readAsArrayBuffer(f);
+        const src = await PDFDocument.load(bytes);
+        const copied = await outPdf.copyPages(src, src.getPageIndices());
+        copied.forEach(p => outPdf.addPage(p));
+        totalPages += src.getPageCount();
       }
-    }
-    render();
-  }
-
-  async function addSplitFile(file) {
-    try {
-      const ab = await fileToArrayBuffer(file);
-      const { PDFDocument } = window.PDFLib;
-      const pdf = await PDFDocument.load(ab);
-      const thumbUrl = await renderThumbFromAB(ab);
-      splitFile = { file, ab, pages: pdf.getPageCount(), thumbUrl, size: file.size };
-      render();
-    } catch (e) {
-      alert(`Failed to read ${file.name}`);
-    }
-  }
-
-  async function addCompressFile(file) {
-    try {
-      const ab = await fileToArrayBuffer(file);
-      const { PDFDocument } = window.PDFLib;
-      const pdf = await PDFDocument.load(ab);
-      const thumbUrl = await renderThumbFromAB(ab);
-      compressFile = { file, ab, pages: pdf.getPageCount(), thumbUrl, size: file.size };
-      render();
-    } catch (e) {
-      alert(`Failed to read ${file.name}`);
-    }
-  }
-
-  // ---------- ACTIONS ----------
-  $("run-merge").addEventListener("click", async () => {
-    if (mergeFiles.length < 2) { alert("Please add at least two PDFs to merge."); return; }
-    try {
-      const { PDFDocument } = window.PDFLib;
-      const merged = await PDFDocument.create();
-      for (const f of mergeFiles) {
-        const src = await PDFDocument.load(f.ab);
-        const pages = await merged.copyPages(src, src.getPageIndices());
-        pages.forEach(p => merged.addPage(p));
-      }
-      const bytes = await merged.save({ useObjectStreams: true });
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      const name = ($("mergeName").value || "merged.pdf").trim() || "merged.pdf";
-      addOutput(name, blob);
-    } catch (e) {
-      console.error(e);
-      alert("Merge failed. Please try different files.");
-    }
+      const outBytes = await outPdf.save({ useObjectStreams: true });
+      outBox.innerHTML = `<div><strong>Merged</strong> ${files.length} files, <strong>${totalPages}</strong> pages. <br><em>Approx size:</em> ${fmtSize(outBytes.byteLength)}</div>`;
+      const { href } = saveBlob(outBytes, 'merged.pdf');
+      const link = document.createElement('div');
+      link.style.marginTop = '8px';
+      link.innerHTML = `<a class="btn" href="${href}" download="merged.pdf">Download merged.pdf</a>`;
+      outBox.appendChild(link);
+      outBox.appendChild(renderThumbs(totalPages));
+    }catch(err){ console.error(err); alert('Merge failed. Try smaller files or fewer at once.'); }
   });
 
-  $("run-split").addEventListener("click", async () => {
-    if (!splitFile) { alert("Please add a PDF to split."); return; }
-    const range = ($("splitRange").value || "").trim();
-    if (!range) { alert("Enter a page range (e.g., 1-3,6,9-10)."); return; }
-    const indices = parseRange(range, splitFile.pages);
-    if (indices.length === 0) { alert("No valid pages in range."); return; }
+  // ---- SPLIT ----
+  function parseRanges(rangesStr, max){
+    if(!rangesStr) return Array.from({length:max},(_,i)=>i+1); // all single pages
+    const set = new Set();
+    rangesStr.split(',').map(s=>s.trim()).forEach(part=>{
+      if(!part) return;
+      if(part.includes('-')){
+        const [a,b] = part.split('-').map(n=>parseInt(n,10));
+        if(a>=1 && b>=a && b<=max){ for(let x=a;x<=b;x++) set.add(x); }
+      }else{
+        const n = parseInt(part,10);
+        if(n>=1 && n<=max) set.add(n);
+      }
+    });
+    return Array.from(set).sort((a,b)=>a-b);
+  }
 
-    try {
-      const { PDFDocument } = window.PDFLib;
-      const src = await PDFDocument.load(splitFile.ab);
+  $('#btnSplit').addEventListener('click', async () => {
+    try{
+      const f = $('#splitFile').files?.[0];
+      if(!f) return alert('Choose a PDF to split.');
+      const bytes = await readAsArrayBuffer(f);
+      const src = await PDFDocument.load(bytes);
+      const n = src.getPageCount();
+      const req = parseRanges($('#ranges').value, n);
+      if(!req.length) return alert('No valid pages to extract.');
+
       const out = await PDFDocument.create();
-      const pages = await out.copyPages(src, indices.map(i => i-1));
-      pages.forEach(p => out.addPage(p));
-      const bytes = await out.save({ useObjectStreams: true });
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      const name = ($("splitName").value || "split.pdf").trim() || "split.pdf";
-      addOutput(name, blob);
-    } catch (e) {
-      console.error(e);
-      alert("Split failed. Please try again.");
-    }
+      const copy = await out.copyPages(src, req.map(p=>p-1));
+      copy.forEach(p => out.addPage(p));
+      const outBytes = await out.save({ useObjectStreams: true });
+      outBox.innerHTML = `<div><strong>Split</strong> selected ${req.length} page(s) from ${n}. <br><em>Approx size:</em> ${fmtSize(outBytes.byteLength)}</div>`;
+      const { href } = saveBlob(outBytes, `split_${req[0]}-${req[req.length-1]}.pdf`);
+      const link = document.createElement('div');
+      link.style.marginTop='8px';
+      link.innerHTML = `<a class="btn" href="${href}" download="split.pdf">Download split.pdf</a>`;
+      outBox.appendChild(link);
+      outBox.appendChild(renderThumbs(req.length));
+    }catch(err){ console.error(err); alert('Split failed. Ensure the PDF is valid and not encrypted.'); }
   });
 
-  $("run-compress").addEventListener("click", async () => {
-    if (!compressFile) { alert("Please add a PDF to compress."); return; }
-    try {
-      // Basic recompress: reload + save with object streams (often shrinks metadata/structure)
-      const { PDFDocument } = window.PDFLib;
-      const src = await PDFDocument.load(compressFile.ab);
-      const bytes = await src.save({ useObjectStreams: true });
-      const blob = new Blob([bytes], { type: "application/pdf" });
-      const name = ($("compressName").value || "compressed.pdf").trim() || "compressed.pdf";
-      addOutput(name, blob);
-    } catch (e) {
-      console.error(e);
-      alert("Compress failed. Some PDFs won’t reduce without image downscaling (coming soon).");
-    }
+  // ---- ROTATE ----
+  $('#btnRotate').addEventListener('click', async () => {
+    try{
+      const f = $('#rotFile').files?.[0];
+      if(!f) return alert('Choose a PDF to rotate.');
+      const deg = parseInt($('#rotDeg').value, 10) || 90;
+      const bytes = await readAsArrayBuffer(f);
+      const pdf = await PDFDocument.load(bytes);
+      const pages = pdf.getPages();
+      pages.forEach(p => p.setRotation(degrees(deg)));
+      const outBytes = await pdf.save({ useObjectStreams: true });
+      outBox.innerHTML = `<div>Rotated <strong>${pages.length}</strong> page(s) by <strong>${deg}°</strong>. <br><em>Approx size:</em> ${fmtSize(outBytes.byteLength)}</div>`;
+      const { href } = saveBlob(outBytes, `rotated_${deg}.pdf`);
+      const link = document.createElement('div');
+      link.style.marginTop='8px';
+      link.innerHTML = `<a class="btn" href="${href}" download="rotated.pdf">Download rotated.pdf</a>`;
+      outBox.appendChild(link);
+      outBox.appendChild(renderThumbs(pages.length));
+    }catch(err){ console.error(err); alert('Rotate failed.'); }
   });
 
-  $("clear-merge").addEventListener("click", () => { mergeFiles = []; render(); });
-  $("clear-split").addEventListener("click", () => { splitFile = null; render(); });
-  $("clear-compress").addEventListener("click", () => { compressFile = null; render(); });
-
-  // ---------- RANGE PARSER ----------
-  function parseRange(s, max) {
-    // "1-3,6,8-10" -> [1,2,3,6,8,9,10] within [1..max]
-    const out = new Set();
-    s.split(",").map(t => t.trim()).filter(Boolean).forEach(tok => {
-      if (/^\d+$/.test(tok)) {
-        const n = Number(tok); if (n>=1 && n<=max) out.add(n);
-      } else {
-        const m = tok.match(/^(\d+)-(\d+)$/);
-        if (m) {
-          let a = Number(m[1]), b = Number(m[2]);
-          if (a>b) [a,b] = [b,a];
-          for (let i=a;i<=b;i++) if (i>=1 && i<=max) out.add(i);
-        }
-      }
-    });
-    return Array.from(out).sort((a,b)=>a-b);
-  }
-
-  // ---------- RESULTS RENDER ----------
-  function addOutput(name, blob) {
-    const url = URL.createObjectURL(blob);
-    outputs.unshift({ name, blob, url, size: blob.size });
-    render();
-  }
-
-  function removeOutput(idx) {
-    const o = outputs[idx];
-    if (o && o.url) URL.revokeObjectURL(o.url);
-    outputs.splice(idx,1);
-  }
-
-  function render() {
-    // KPIs
-    let fileCount = 0, totalSize = 0;
-    if (tab === "merge") {
-      fileCount = mergeFiles.length;
-      totalSize = mergeFiles.reduce((a,f)=>a+(f.size||0),0);
-    } else if (tab === "split") {
-      fileCount = splitFile ? 1 : 0;
-      totalSize = splitFile ? splitFile.size : 0;
-    } else {
-      fileCount = compressFile ? 1 : 0;
-      totalSize = compressFile ? compressFile.size : 0;
-    }
-    $("kpi-count").textContent = fileCount || "—";
-    $("kpi-size").textContent  = fileCount ? fmtBytes(totalSize) : "—";
-    $("kpi-output").textContent = outputs.length ? fmtBytes(outputs[0].size) : "—";
-    $("summary").style.display = (fileCount || outputs.length) ? "grid" : "none";
-
-    // Cards
-    const resultsEl = $("results");
-    if (!resultsEl) return;
-
-    const pendingCards = [];
-    if (tab === "merge") {
-      mergeFiles.forEach((f, idx) => pendingCards.push(cardFile(f, { showOrder:true, idx, list:"merge" })));
-    } else if (tab === "split" && splitFile) {
-      pendingCards.push(cardFile(splitFile, { list:"split" }));
-    } else if (tab === "compress" && compressFile) {
-      pendingCards.push(cardFile(compressFile, { list:"compress" }));
-    }
-
-    const outputCards = outputs.map((o, i) => cardOutput(o, i));
-    const empty =
-      pendingCards.length === 0 && outputCards.length === 0
-        ? `<div class="card"><div class="meta" style="text-align:center"><small>No PDFs yet. Drop files on the left to begin.</small></div></div>`
-        : "";
-
-    resultsEl.innerHTML = outputCards.join("") + pendingCards.join("") + empty;
-
-    // Wire output buttons
-    outputs.forEach((o, i) => {
-      const dl = document.querySelector(`#out-dl-${i}`);
-      const rm = document.querySelector(`#out-rm-${i}`);
-      dl && dl.addEventListener("click", () => {
-        const a = document.createElement("a");
-        a.href = o.url; a.download = o.name; document.body.appendChild(a); a.click(); a.remove();
-      });
-      rm && rm.addEventListener("click", () => { removeOutput(i); render(); });
-    });
-
-    // Wire reorder/remove for merge list
-    if (tab === "merge") {
-      mergeFiles.forEach((f, i) => {
-        const up = document.querySelector(`#m-up-${i}`);
-        const dn = document.querySelector(`#m-dn-${i}`);
-        const rm = document.querySelector(`#m-rm-${i}`);
-        up && up.addEventListener("click", () => { if (i>0) { [mergeFiles[i-1],mergeFiles[i]]=[mergeFiles[i],mergeFiles[i-1]]; render(); }});
-        dn && dn.addEventListener("click", () => { if (i<mergeFiles.length-1) { [mergeFiles[i+1],mergeFiles[i]]=[mergeFiles[i],mergeFiles[i+1]]; render(); }});
-        rm && rm.addEventListener("click", () => { mergeFiles.splice(i,1); render(); });
-      });
-    }
-  }
-
-  function cardFile(f, opts) {
-    const t = f.file ? f.file.name : "PDF";
-    const thumb = f.thumbUrl ? `<img class="thumb" alt="" src="${f.thumbUrl}">` : `<div class="thumb"></div>`;
-    const orderBtns = opts && opts.showOrder ? `
-      <div class="actions">
-        <button id="m-up-${opts.idx}" class="btn-primary">↑</button>
-        <button id="m-dn-${opts.idx}" class="btn-primary">↓</button>
-        <button id="m-rm-${opts.idx}" class="btn-primary" style="background:#94A3B8">Remove</button>
-      </div>` : ``;
-
-    return `
-      <div class="card">
-        ${thumb}
-        <div class="meta">
-          <div><strong title="${escapeHTML(t)}">${escapeHTML(t)}</strong></div>
-          <small>${f.pages || "?"} page(s) • ${fmtBytes(f.size || 0)}</small>
-        </div>
-        ${orderBtns}
-      </div>
-    `;
-  }
-
-  function cardOutput(o, idx) {
-    return `
-      <div class="card">
-        <div class="meta">
-          <div><strong title="${escapeHTML(o.name)}">${escapeHTML(o.name)}</strong></div>
-          <small>Output • ${fmtBytes(o.size || 0)}</small>
-        </div>
-        <div class="actions">
-          <button id="out-dl-${idx}" class="btn-primary">Download</button>
-          <button id="out-rm-${idx}" class="btn-primary" style="background:#94A3B8">Remove</button>
-        </div>
-      </div>
-    `;
-  }
-
-  const escapeHTML = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-
-  // initial render
-  render();
+  // ---- OPTIMIZE ----
+  $('#btnOptimize').addEventListener('click', async () => {
+    try{
+      const f = $('#optFile').files?.[0];
+      if(!f) return alert('Choose a PDF to optimize.');
+      const bytes = await readAsArrayBuffer(f);
+      const pdf = await PDFDocument.load(bytes);
+      // Re-save with object streams (may reduce size a bit)
+      const outBytes = await pdf.save({ useObjectStreams: true });
+      const saved = bytes.byteLength - outBytes.byteLength;
+      outBox.innerHTML = `<div>Optimized: <strong>${fmtSize(bytes.byteLength)}</strong> → <strong>${fmtSize(outBytes.byteLength)}</strong> (${saved>0?((saved/bytes.byteLength*100).toFixed(1)+'% saved'):'no change'})</div>`;
+      const { href } = saveBlob(outBytes, `optimized.pdf`);
+      const link = document.createElement('div');
+      link.style.marginTop='8px';
+      link.innerHTML = `<a class="btn" href="${href}" download="optimized.pdf">Download optimized.pdf</a>`;
+      outBox.appendChild(link);
+    }catch(err){ console.error(err); alert('Optimize failed. Encrypted or malformed PDFs may not process.'); }
+  });
 })();

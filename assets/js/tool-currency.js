@@ -1,140 +1,104 @@
-// tool-currency.js — resilient Currency Converter (symbols + multi-API + cache + fallbacks)
-(function () {
+// tool-currency.js — Live rates with offline fallback (Frankfurter API primary)
+(() => {
   const $ = id => document.getElementById(id);
-  const fmt = (n, cur) =>
-    n.toLocaleString(undefined, { style: "currency", currency: cur, maximumFractionDigits: 2 });
-
-  const CACHE_RATES_KEY = "ksrm_fx_cache_rates";
-  const CACHE_RATES_HOURS = 1;
-
-  // Fallback currency codes if all symbol sources fail
-  const FALLBACK_SYMBOLS = [
-    "GBP","USD","EUR","INR","AUD","CAD","NZD","JPY","CHF","CNY","HKD","SGD","ZAR","AED","SAR",
-    "SEK","NOK","DKK","PLN","CZK","HUF","TRY","MXN","BRL","ILS","KRW","TWD","THB","MYR","IDR","PHP","RUB"
-  ];
-
-  // Primary & secondary APIs
-  const API = {
-    symbols1: "https://api.exchangerate.host/symbols",
-    latest1:  base => `https://api.exchangerate.host/latest?base=${encodeURIComponent(base)}`,
-    // fallback (note: different JSON shape)
-    latest2:  base => `https://open.er-api.com/v6/latest/${encodeURIComponent(base)}`
+  const money = (n, code) => {
+    try { return new Intl.NumberFormat('en-GB', { style:'currency', currency: code || 'GBP' }).format(n); }
+    catch { return n.toFixed(2) + ' ' + (code||''); }
   };
 
-  async function fetchJSON(url) {
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-    return res.json();
-  }
+  // Major ISO 4217 set (trimmed for clarity)
+  const CURRENCIES = [
+    'GBP','USD','EUR','INR','AUD','CAD','CHF','JPY','NZD','SEK','NOK','DKK','PLN','CZK','HUF','TRY','ZAR','CNY','HKD','SGD','AED','SAR','QAR','ILS','MXN','BRL','CLP','COP','THB','MYR','IDR','KRW','TWD','PHP','RUB'
+  ];
 
-  // ---- SYMBOLS ----
-  async function getSymbols() {
-    try {
-      const data = await fetchJSON(API.symbols1);
-      if (data && data.symbols) return Object.keys(data.symbols).sort();
-      throw new Error("No symbols in response");
-    } catch (err) {
-      console.warn("Symbols fetch failed, using fallback list:", err);
-      return FALLBACK_SYMBOLS;
+  // Offline fallback rates (base: GBP). Update periodically.
+  const FALLBACK = {
+    base: 'GBP',
+    date: '2024-10-01',
+    rates: {
+      USD: 1.30, EUR: 1.15, INR: 108.0, AUD: 2.00, CAD: 1.76, CHF: 1.13, JPY: 195.0,
+      NZD: 2.18, SEK: 13.50, NOK: 14.00, DKK: 8.60, PLN: 4.96, CZK: 28.3, HUF: 487,
+      TRY: 42.0, ZAR: 23.5, CNY: 9.45, HKD: 10.17, SGD: 1.77, AED: 4.77, SAR: 4.88,
+      QAR: 4.74, ILS: 4.85, MXN: 22.0, BRL: 6.7, CLP: 1190, COP: 5140, THB: 47.0,
+      MYR: 6.2, IDR: 20500, KRW: 1720, TWD: 41.0, PHP: 74.0, RUB: 120.0
     }
+  };
+
+  // Populate selects
+  function fillSelects() {
+    const from = $('from'), to = $('to');
+    from.innerHTML = CURRENCIES.map(c => `<option value="${c}">${c}</option>`).join('');
+    to.innerHTML   = CURRENCIES.map(c => `<option value="${c}">${c}</option>`).join('');
+    from.value = 'GBP';
+    to.value   = 'USD';
   }
 
-  // ---- RATES CACHE ----
-  function loadCachedRates(base) {
-    try {
-      const raw = localStorage.getItem(CACHE_RATES_KEY);
-      if (!raw) return null;
-      const obj = JSON.parse(raw);
-      if (!obj || obj.base !== base) return null;
-      if (Date.now() - obj.ts > CACHE_RATES_HOURS * 3600 * 1000) return null;
-      return obj.rates;
-    } catch { return null; }
-  }
-  function saveCachedRates(base, rates) {
-    try { localStorage.setItem(CACHE_RATES_KEY, JSON.stringify({ base, ts: Date.now(), rates })); } catch {}
+  async function fetchLive(base, symbols) {
+    // Frankfurter: free, CORS, no key needed
+    const url = `https://api.frankfurter.app/latest?from=${encodeURIComponent(base)}&to=${encodeURIComponent(symbols.join(','))}`;
+    const r = await fetch(url, { cache: 'no-store' });
+    if (!r.ok) throw new Error('rate fetch failed');
+    return await r.json(); // {amount:1, base:'GBP', date:'YYYY-MM-DD', rates:{USD:1.2,...}}
   }
 
-  // ---- RATES (multi-source) ----
-  async function getRates(base) {
-    // cache first
-    const cached = loadCachedRates(base);
-    if (cached) return cached;
-
-    // primary
-    try {
-      const data = await fetchJSON(API.latest1(base));
-      if (data && data.rates) {
-        saveCachedRates(base, data.rates);
-        return data.rates;
-      }
-      throw new Error("No rates in primary response");
-    } catch (e1) {
-      console.warn("Primary rates API failed, trying fallback:", e1);
-      // secondary
-      try {
-        const data2 = await fetchJSON(API.latest2(base));
-        if (data2 && data2.result === "success" && data2.rates) {
-          saveCachedRates(base, data2.rates);
-          return data2.rates;
-        }
-        throw new Error("No rates in fallback response");
-      } catch (e2) {
-        console.error("Both rate APIs failed:", e2);
-        throw e2;
-      }
+  function fallbackRates(base, symbols) {
+    // Convert FALLBACK (base GBP) to arbitrary base
+    const baseToGBP = (code) => {
+      if (code === 'GBP') return 1;
+      // rate[code] = amount of that currency for 1 GBP, so 1 base unit in GBP = 1 / rate[base]
+      return 1 / FALLBACK.rates[code];
+    };
+    const gbpPerBase = baseToGBP(base); // GBP per 1 base
+    const out = {};
+    for (const s of symbols) {
+      if (s === base) { out[s] = 1; continue; }
+      // 1 base -> GBP -> target
+      const gbpPerTarget = baseToGBP(s);
+      out[s] = gbpPerBase / gbpPerTarget;
     }
+    return { base, date: FALLBACK.date, rates: out, source: 'offline' };
   }
 
-  // ---- UI wiring ----
-  async function populateSelects() {
-    const codes = await getSymbols();
-    const fromSel = $("from");
-    const toSel   = $("to");
-
-    fromSel.innerHTML = codes.map(c => `<option value="${c}">${c}</option>`).join("");
-    toSel.innerHTML   = codes.map(c => `<option value="${c}">${c}</option>`).join("");
-
-    fromSel.value = codes.includes("GBP") ? "GBP" : codes[0];
-    toSel.value   = codes.includes("USD") ? "USD" : (codes[1] || codes[0]);
+  async function getRate(base, to) {
+    if (base === to) return { rate:1, date: new Date().toISOString().slice(0,10), source:'same' };
+    try {
+      const live = await fetchLive(base, [to]);
+      return { rate: live.rates[to], date: live.date, source: 'live' };
+    } catch(e) {
+      const fb = fallbackRates(base, [to]);
+      return { rate: fb.rates[to], date: fb.date, source: 'offline' };
+    }
   }
 
   async function convert() {
-    const amount = parseFloat($("amount").value || "0");
-    const from = $("from").value;
-    const to   = $("to").value;
-    if (!(amount > 0)) { alert("Enter a valid amount."); return; }
+    const amt = parseFloat($('amount').value) || 0;
+    const from = $('from').value;
+    const to = $('to').value;
 
-    try {
-      const rates = await getRates(from);
-      const rate  = rates[to];
-      if (!rate) throw new Error("Rate not available for selected currency");
+    const { rate, date, source } = await getRate(from, to);
+    const out = amt * rate;
 
-      const result = amount * rate;
-      $("summary").style.display = "grid";
-      $("kpi-result").textContent = fmt(result, to);
-      $("kpi-rate").textContent   = `1 ${from} = ${rate.toFixed(4)} ${to}`;
-      $("updated").textContent    = `Last updated: ${new Date().toLocaleString()}`;
-    } catch (err) {
-      $("summary").style.display = "grid";
-      $("kpi-result").textContent = "—";
-      $("kpi-rate").textContent   = "Live rate unavailable";
-      $("updated").textContent    = "Could not fetch rates right now. Please try again.";
-      alert("Could not fetch live rates. Please try again shortly.");
-    }
+    $('kpi-out').textContent  = money(out, to);
+    $('kpi-rate').textContent = `1 ${from} = ${rate.toFixed(6)} ${to}`;
+    $('kpi-src').textContent  = source === 'live' ? 'Live (Frankfurter)' : (source === 'offline' ? 'Offline fallback' : '—');
+    $('kpi-date').textContent = date;
+
+    $('rateLine').innerHTML = `Rate used: <code>1 ${from} = ${rate.toFixed(6)} ${to}</code> • Source: <strong>${$('kpi-src').textContent}</strong> • Date: ${date}`;
   }
 
-  $("convert").addEventListener("click", convert);
-  $("reset").addEventListener("click", async () => {
-    $("amount").value = 100;
-    await populateSelects();
-    $("summary").style.display = "none";
-    $("updated").textContent = "";
-  });
-  $("swap").addEventListener("click", () => {
-    const a = $("from").value;
-    $("from").value = $("to").value;
-    $("to").value = a;
-  });
+  function swap() {
+    const a = $('from').value, b = $('to').value;
+    $('from').value = b; $('to').value = a;
+    convert();
+  }
 
-  document.addEventListener("DOMContentLoaded", populateSelects);
+  // Bind events
+  document.addEventListener('DOMContentLoaded', () => {
+    fillSelects();
+    $('btnCalc').addEventListener('click', convert);
+    $('btnSwap').addEventListener('click', swap);
+    $('amount').addEventListener('keyup', e => { if (e.key === 'Enter') convert(); });
+    // auto-run once
+    convert();
+  });
 })();
