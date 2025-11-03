@@ -15,86 +15,113 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
   </script>
-  <!-- End Google Tag Manager -->
 
-  <link rel="stylesheet" href="../../assets/css/main.css?v=tools1" />
+  <!-- Google AdSense (global) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
+
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="../../assets/css/main.css?v=emi2" />
   <style>
     section#tool { background:#FFFFFF; }
-    .tool-wrap { max-width:1000px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
+    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
     .panel {
       background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px;
-      box-shadow:0 4px 8px rgba(0,0,0,.04);
+      box-shadow:0 10px 22px rgba(2,8,23,.05);
     }
     .panel h2 { margin-bottom:8px; }
-    .row { display:flex; gap:12px; }
-    .field { flex:1; margin:10px 0; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .field { flex:1; min-width:240px; margin:10px 0; }
     .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
     .field input, .field select {
-      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit;
-      background:#F9FBFF;
+      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
     }
+    .hint { color:#6B7280; font-size:.9rem; }
+
     .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
-    .kpi {
-      background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px;
-    }
+    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
     .kpi small { color:#64748B; display:block; }
     .kpi strong { font-size:1.2rem; }
-    .hint { color:#6B7280; font-size:.9rem; }
+
+    .ads{ margin:16px 0; }
+
+    .chart-wrap{ margin-top:14px; border:1px solid #E6E9EF; border-radius:12px; padding:10px; background:#fff; }
     table { width:100%; border-collapse:collapse; margin-top:10px; }
     th, td { border-bottom:1px solid #EEF2F7; text-align:right; padding:10px 8px; }
     th { text-align:right; font-weight:600; color:#0F172A; background:#F8FAFE; }
     td:first-child, th:first-child { text-align:left; }
-    .ad-placeholder { margin: 16px 0; }
-    @media (max-width: 900px) { .tool-wrap { grid-template-columns: 1fr; } }
+
+    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
+  <!-- GTM (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <header data-include></header>
 
   <section id="tool">
     <div class="container">
       <h1 style="text-align:center">Loan EMI Calculator</h1>
-      <p style="text-align:center;color:#6B7280;max-width:760px;margin:8px auto 24px">
-        Enter your loan amount, rate and term to calculate the monthly EMI, total interest and payoff schedule.
+      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
+        Enter your loan amount, interest rate and term to calculate <strong>EMI</strong>, <strong>total interest</strong>, and view a full <strong>amortization schedule</strong> with charts.
       </p>
+
+      <!-- TOP AD (horizontal) -->
+      <div class="ads">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-9718922267093672"
+             data-ad-slot="3997839388"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+      </div>
 
       <div class="tool-wrap">
         <!-- Inputs -->
         <div class="panel">
           <h2>Inputs</h2>
+
           <div class="row">
             <div class="field">
-              <label for="amount">Loan amount</label>
-              <input id="amount" type="number" min="0" step="100" placeholder="e.g., 25000" value="25000"/>
+              <label for="amount">Loan amount (£)</label>
+              <input id="amount" type="number" min="0" step="100" value="25000" />
             </div>
             <div class="field">
-              <label for="rate">Annual interest %</label>
-              <input id="rate" type="number" min="0" step="0.01" placeholder="e.g., 8.5" value="8.5"/>
+              <label for="rate">Annual interest (%)</label>
+              <input id="rate" type="number" min="0" step="0.01" value="8.5" />
+              <div class="hint">Fixed-rate loans supported.</div>
             </div>
           </div>
+
           <div class="row">
             <div class="field">
-              <label for="term">Term</label>
-              <input id="term" type="number" min="1" step="1" placeholder="e.g., 36" value="36"/>
-              <div class="hint">Number of months</div>
+              <label for="term">Term (months)</label>
+              <input id="term" type="number" min="1" step="1" value="36" />
             </div>
             <div class="field">
-              <label for="start">Start month</label>
+              <label for="start">Start month (optional)</label>
               <input id="start" type="month" />
             </div>
           </div>
 
           <div style="margin-top:12px">
-            <button id="calc" class="btn-primary">Calculate EMI</button>
-            <button id="reset" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
+            <button id="calc" type="button" class="btn-primary">Calculate EMI</button>
+            <button id="reset" type="button" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
           </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
+          <!-- MID AD (inside Inputs) -->
+          <div class="ads">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-9718922267093672"
+                 data-ad-slot="3997839388"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+          </div>
         </div>
 
         <!-- Results -->
@@ -102,37 +129,28 @@
           <h2>Results</h2>
 
           <div class="summary">
-            <div class="kpi">
-              <small>Monthly EMI</small>
-              <strong id="kpi-emi">—</strong>
-            </div>
-            <div class="kpi">
-              <small>Total Interest</small>
-              <strong id="kpi-interest">—</strong>
-            </div>
-            <div class="kpi">
-              <small>Total Payment</small>
-              <strong id="kpi-total">—</strong>
-            </div>
-            <div class="kpi">
-              <small>Payoff Date</small>
-              <strong id="kpi-date">—</strong>
-            </div>
+            <div class="kpi"><small>Monthly EMI</small><strong id="kpi-emi">—</strong></div>
+            <div class="kpi"><small>Total Interest</small><strong id="kpi-interest">—</strong></div>
+            <div class="kpi"><small>Total Payment</small><strong id="kpi-total">—</strong></div>
+            <div class="kpi"><small>Payoff Date</small><strong id="kpi-date">—</strong></div>
           </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Middle)</div>
+          <!-- Chart -->
+          <div class="chart-wrap">
+            <canvas id="emiChart" height="280"></canvas>
+          </div>
 
-          <h3 style="margin-top:10px">Amortization Schedule</h3>
-          <div style="max-height:380px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
-            <table id="table">
+          <h3 style="margin-top:14px">Amortization Schedule</h3>
+          <div style="max-height:420px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
+            <table>
               <thead>
-                <tr>
-                  <th>Month</th>
-                  <th>Payment</th>
-                  <th>Principal</th>
-                  <th>Interest</th>
-                  <th>Balance</th>
-                </tr>
+              <tr>
+                <th>Month</th>
+                <th>Payment</th>
+                <th>Principal</th>
+                <th>Interest</th>
+                <th>Balance</th>
+              </tr>
               </thead>
               <tbody id="tbody">
                 <tr><td colspan="5" style="text-align:center;color:#6B7280;padding:16px">Run a calculation to see the schedule.</td></tr>
@@ -140,7 +158,16 @@
             </table>
           </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Bottom)</div>
+          <!-- BOTTOM AD (horizontal) -->
+          <div class="ads">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-9718922267093672"
+                 data-ad-slot="3997839388"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+          </div>
         </div>
       </div>
     </div>
@@ -148,7 +175,10 @@
 
   <footer data-include></footer>
 
+  <!-- Load header/footer -->
   <script src="../../assets/js/include.js?v=logo1"></script>
-  <script src="../../assets/js/tool-emi.js?v=1"></script>
+
+  <!-- EMI logic -->
+  <script src="../../assets/js/tool-emi.js?v=2"></script>
 </body>
 </html>
