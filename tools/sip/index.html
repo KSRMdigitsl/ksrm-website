@@ -1,151 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
   <title>SIP Calculator — KSRM Digital</title>
-  <meta name="description" content="Project your SIP corpus with monthly contributions, annual CAGR, step-up percentage, and inflation adjustment." />
-  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- Google Tag Manager (KSRM Website) -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
-  </script>
-  <!-- End Google Tag Manager -->
+  <!-- Google AdSense (global) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="../../assets/css/main.css?v=tools1" />
+  <!-- Chart.js for the growth chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    section#tool { background:#FFFFFF; }
-    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
-    .panel { background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,.04); }
-    .panel h2 { margin-bottom:8px; }
-    .row { display:flex; gap:12px; }
-    .field { flex:1; margin:10px 0; }
-    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
-    .field input, .field select {
-      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    :root{
+      --bg:#f6f7fb; --card:#fff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
+      --chip:#eef2ff; --chip-on:#3b82f6; --chip-on-ink:#fff;
+      --radius:14px; --shadow:0 10px 22px rgba(2,8,23,.05);
     }
-    .hint { color:#6B7280; font-size:.9rem; }
-    .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
-    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
-    .kpi small { color:#64748B; display:block; }
-    .kpi strong { font-size:1.2rem; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { border-bottom:1px solid #EEF2F7; text-align:right; padding:10px 8px; }
-    th { text-align:right; font-weight:600; color:#0F172A; background:#F8FAFE; }
-    td:first-child, th:first-child { text-align:left; }
-    .ad-placeholder { margin:16px 0; }
-    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
+    html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    .wrap{max-width:1200px;margin:0 auto;padding:16px 20px 48px;position:relative}
+
+    .chips{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+    .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600}
+    .chip.is-on{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+    h1{font-weight:800;font-size:clamp(26px,3.4vw,36px);margin:10px 0 6px}
+    .lead{color:var(--muted);margin:0 0 18px}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card .hd{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700}
+    .card .bd{padding:16px}
+
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:720px){.two{grid-template-columns:1fr}}
+
+    .lab{display:block;font-weight:600;margin:10px 0 6px}
+    input[type="number"],select{
+      width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:600
+    }
+
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:840px){.stat-grid{grid-template-columns:1fr}}
+    .stat{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px}
+    .stat .k{color:var(--muted);font-size:14px}
+    .stat .v{font-weight:800;font-size:22px;margin-top:6px}
+
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
+    .btn.primary{background:#3b82f6;color:#fff;border-color:#3b82f6}
+
+    .ads{margin:16px 0}
+    .ads-vertical{position:absolute;right:-180px;top:160px;width:160px;display:block}
+    @media(max-width:1300px){.ads-vertical{display:none}}
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
-  <header data-include></header>
+<!-- Header -->
+<div id="header-slot"></div>
 
-  <section id="tool">
-    <div class="container">
-      <h1 style="text-align:center">SIP Calculator</h1>
-      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
-        Visualize your long-term corpus with monthly SIPs, annual CAGR, optional step-up, and inflation adjustment.
-      </p>
+<main class="wrap">
 
-      <div class="tool-wrap">
-        <!-- Inputs -->
-        <div class="panel">
-          <h2>Inputs</h2>
+  <!-- top chips -->
+  <div class="chips">
+    <span class="chip is-on">SIP</span>
+    <span class="chip" id="chipSummary">Total Value: £0.00</span>
+    <span class="chip" id="chipInvested">Invested: £0.00</span>
+    <span class="chip" id="chipGain">Gain: £0.00</span>
 
-          <div class="row">
-            <div class="field">
-              <label for="monthly">Monthly contribution (£)</label>
-              <input id="monthly" type="number" min="0" step="10" value="300" />
-            </div>
-            <div class="field">
-              <label for="years">Duration (years)</label>
-              <input id="years" type="number" min="1" step="1" value="15" />
-            </div>
+    <span style="flex:1"></span>
+    <a class="chip" href="/tools/">All tools</a>
+  </div>
+
+  <!-- TOP AD (horizontal) -->
+  <div class="ads">
+    <!-- ad1 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9718922267093672"
+         data-ad-slot="3997839388"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  </div>
+
+  <h1>SIP Calculator</h1>
+  <p class="lead">Project your SIP growth with monthly compounding. Supports annual step-up in contributions, realistic return assumptions, and a clear growth chart.</p>
+
+  <!-- Vertical AD (desktop) -->
+  <div class="ads-vertical">
+    <!-- vertical -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9718922267093672"
+         data-ad-slot="1830841042"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  </div>
+
+  <div class="grid">
+    <!-- Inputs -->
+    <section class="card">
+      <div class="hd">Inputs</div>
+      <div class="bd">
+
+        <div class="two">
+          <div>
+            <span class="lab">Monthly Investment (£)</span>
+            <input id="inAmt" type="number" min="0" step="10" placeholder="e.g. 500" />
           </div>
-
-          <div class="row">
-            <div class="field">
-              <label for="rate">Annual return (CAGR) %</label>
-              <input id="rate" type="number" min="0" step="0.1" value="10" />
-              <div class="hint">Compounded monthly.</div>
-            </div>
-            <div class="field">
-              <label for="inflation">Inflation % (optional)</label>
-              <input id="inflation" type="number" min="0" step="0.1" value="4" />
-              <div class="hint">Used to show inflation-adjusted corpus.</div>
-            </div>
+          <div>
+            <span class="lab">Expected Return (% p.a.)</span>
+            <input id="inRate" type="number" min="0" step="0.1" placeholder="e.g. 10" />
           </div>
-
-          <div class="row">
-            <div class="field">
-              <label for="lumpsum">Initial lump sum (£)</label>
-              <input id="lumpsum" type="number" min="0" step="100" value="0" />
-            </div>
-            <div class="field">
-              <label for="stepup">Step-up contribution % / year</label>
-              <input id="stepup" type="number" min="0" step="0.5" value="0" />
-              <div class="hint">Increase monthly contribution each year by this %.</div>
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <button id="calc" class="btn-primary">Calculate</button>
-            <button id="reset" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
-          </div>
-
-          <div class="ad-placeholder">Ad Placeholder (Tool – Top)</div>
         </div>
 
-        <!-- Results -->
-        <div class="panel">
-          <h2>Results</h2>
-
-          <div class="summary">
-            <div class="kpi"><small>Total invested</small><strong id="kpi-invested">—</strong></div>
-            <div class="kpi"><small>Corpus (future value)</small><strong id="kpi-fv">—</strong></div>
-            <div class="kpi"><small>Gains</small><strong id="kpi-gain">—</strong></div>
-            <div class="kpi"><small>Inflation-adjusted</small><strong id="kpi-real">—</strong></div>
+        <div class="two">
+          <div>
+            <span class="lab">Investment Duration (years)</span>
+            <input id="inYears" type="number" min="1" step="1" placeholder="e.g. 15" />
           </div>
-
-          <div class="ad-placeholder">Ad Placeholder (Tool – Middle)</div>
-
-          <h3 style="margin-top:10px">Year-by-Year Summary</h3>
-          <div style="max-height:420px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
-            <table>
-              <thead>
-                <tr>
-                  <th>Year</th>
-                  <th>Invested (year)</th>
-                  <th>Invested (cumulative)</th>
-                  <th>End balance</th>
-                  <th>Gains</th>
-                </tr>
-              </thead>
-              <tbody id="tbody">
-                <tr><td colspan="5" style="text-align:center;color:#6B7280;padding:16px">Run a calculation to see the projection.</td></tr>
-              </tbody>
-            </table>
+          <div>
+            <span class="lab">Annual Step-up in SIP (%)</span>
+            <input id="inStep" type="number" min="0" step="0.5" placeholder="e.g. 5" />
           </div>
+        </div>
 
-          <div class="ad-placeholder">Ad Placeholder (Tool – Bottom)</div>
+        <div class="two">
+          <div>
+            <span class="lab">Contribution Day of Month</span>
+            <select id="inDom">
+              <option value="1">1st</option>
+              <option value="5">5th</option>
+              <option value="10">10th</option>
+              <option value="15" selected>15th</option>
+              <option value="20">20th</option>
+              <option value="25">25th</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:end">
+            <button id="btnCalc" class="btn primary" style="width:100%">Calculate</button>
+          </div>
+        </div>
+
+        <!-- MID AD (horizontal) -->
+        <div class="ads">
+          <!-- ad1 -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-9718922267093672"
+               data-ad-slot="3997839388"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer data-include></footer>
+    <!-- Results / Chart -->
+    <section class="card">
+      <div class="hd">Results</div>
+      <div class="bd">
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="k">Total Value</div>
+            <div class="v" id="rValue">£0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">Total Invested</div>
+            <div class="v" id="rInvested">£0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">Total Gain</div>
+            <div class="v" id="rGain">£0.00</div>
+          </div>
+        </div>
 
-  <script src="../../assets/js/include.js?v=2" defer></script>
-  <script src="../../assets/js/tool-sip.js?v=1" defer></script>
+        <div style="margin-top:14px">
+          <canvas id="sipChart" height="320"></canvas>
+        </div>
+
+        <!-- BOTTOM AD (horizontal) -->
+        <div class="ads">
+          <!-- ad1 -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-9718922267093672"
+               data-ad-slot="3997839388"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Footer -->
+<div id="footer-slot"></div>
+
+<script>
+  // Load partials (absolute paths for Azure)
+  async function loadPartial(id, url){
+    try{
+      const r = await fetch(url, {cache:'no-store'});
+      if(r.ok) document.getElementById(id).innerHTML = await r.text();
+    }catch(e){ console.warn('Partial load failed:', url, e); }
+  }
+  loadPartial('header-slot','/partials/header.html');
+  loadPartial('footer-slot','/partials/footer.html');
+</script>
+
+<!-- SIP logic -->
+<script src="./sip.js"></script>
 </body>
 </html>
