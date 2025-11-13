@@ -5,153 +5,198 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SIP Calculator — KSRM Digital</title>
   <meta name="description" content="Project your SIP corpus with monthly contributions, annual CAGR, step-up percentage, and inflation adjustment." />
-  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
 
-  <!-- Google Tag Manager (KSRM Website) -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
-  </script>
-  <!-- End Google Tag Manager -->
+  <link rel="icon" type="image/png" href="/assets/img/KSRM_IconOnly_transparent.png" sizes="32x32">
+  <meta name="theme-color" content="#1B2A49">
 
-  <!-- AdSense (global) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/css/brand.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/overrides.css">
 
-  <!-- Chart.js for growth chart -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <link rel="stylesheet" href="../../assets/css/main.css?v=tools2" />
   <style>
-    section#tool { background:#FFFFFF; }
-    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
-    .panel { background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,.04); }
-    .panel h2 { margin-bottom:8px; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .field { flex:1; min-width:240px; margin:10px 0; }
-    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
-    .field input, .field select {
-      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    .tool-page-main { background: #F3F5F9; padding-bottom: 60px; }
+    .card {
+      background: #fff;
+      border: 1px solid #E6E9EF;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.04);
+      margin-bottom: 24px;
     }
-    .hint { color:#6B7280; font-size:.9rem; }
-    .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
-    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
-    .kpi small { color:#64748B; display:block; }
-    .kpi strong { font-size:1.2rem; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { border-bottom:1px solid #EEF2F7; text-align:right; padding:10px 8px; }
-    th { text-align:right; font-weight:600; color:#0F172A; background:#F8FAFE; }
-    td:first-child, th:first-child { text-align:left; }
-    .ads { margin:16px 0; }
-    .chart-wrap { margin-top:12px; border:1px solid #E6E9EF; border-radius:12px; padding:10px; background:#fff; }
-    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #3B82F6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .actions { display: flex; gap: 12px; margin-top: 30px; }
+    .actions .btn-secondary {
+      background: #F3F4F6;
+      color: #4B5563;
+      border-radius: 10px;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: 1px solid #D1D5DB;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .actions .btn-secondary:hover { background: #E5E7EB; }
+
+    /* Key Performance Indicators (KPIs) */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+      margin-bottom: 24px;
+      padding: 0;
+      background: none;
+    }
+    .kpi small { display: block; color: #6B7280; font-weight: 500; font-size: 0.85rem; margin-bottom: 4px; }
+    .kpi strong { font-size: 1.5rem; font-weight: 700; color: #4B5563; line-height: 1.2; display: block; }
+    .kpi-main strong { color: #10B981; font-size: 2.5rem; } /* Green for Main Value */
+
+    /* Amortization Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #E6E9EF;
+      font-size: 0.9rem;
+    }
+    th {
+      background: #F9FAFB;
+      color: #4B5563;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .table-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    /* Grid Layout */
+    .content-grid {
+      display: grid; 
+      grid-template-columns: 340px 1fr; /* Inputs on left, larger results on right */
+      gap: 24px; 
+      margin-top: 32px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 960px) {
+      .content-grid { grid-template-columns: 1fr; }
+    }
   </style>
+
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
-  <header data-include></header>
+<header data-include="/partials/header.html"></header>
 
-  <section id="tool">
-    <div class="container">
-      <h1 style="text-align:center">SIP Calculator</h1>
-      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
-        Visualize your long-term corpus with monthly SIPs, annual CAGR, optional step-up, and inflation adjustment.
+<main class="tool-page-main">
+  <section class="tool-hero" style="background: #F7F9FC; padding: 40px 0 20px;">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="section-title" style="margin-bottom: 0;">Systematic Investment Plan (SIP) Calculator</h1>
+      <p style="text-align: center; color: #6B7280; margin-bottom: 24px; font-size: 1.1rem;">
+        Project your SIP corpus with monthly contributions, annual CAGR, and step-up percentage.
       </p>
+    </div>
+  </section>
 
-      <!-- TOP AD -->
-      <div class="ads">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-9718922267093672"
-             data-ad-slot="3997839388"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  <div class="container">
+    <div class="ad-placeholder" style="margin-top: 32px;">Ad Placeholder (Top)</div>
+
+    <div class="content-grid">
+      
+      <div class="inputs">
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Investment Details</h3>
+
+          <div class="form-group">
+            <label for="inAmt">Monthly Investment (£)</label>
+            <input type="number" id="inAmt" value="500" min="10" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="inRate">Expected Annual Return (%)</label>
+            <input type="number" id="inRate" value="10" min="0" step="0.01" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="inYears">Investment Duration (Years)</label>
+            <input type="number" id="inYears" value="15" min="1" max="50" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inStep">Annual Step-Up Percentage (%)</label>
+            <input type="number" id="inStep" value="5" min="0" max="100" step="1" required>
+            <p style="color:#6B7280; font-size:0.85rem; margin-top:4px;">Increase in monthly investment each year.</p>
+          </div>
+          
+          <input type="hidden" id="inDom" value="1"> 
+
+          <div class="actions">
+            <button class="btn-primary" id="btnCalc">Calculate Projection</button>
+            <button class="btn-secondary" id="reset">Reset</button>
+          </div>
+        </section>
       </div>
 
-      <div class="tool-wrap">
-        <!-- Inputs -->
-        <div class="panel">
-          <h2>Inputs</h2>
-
-          <div class="row">
-            <div class="field">
-              <label for="monthly">Monthly contribution (£)</label>
-              <input id="monthly" type="number" min="0" step="10" value="300" />
-            </div>
-            <div class="field">
-              <label for="years">Duration (years)</label>
-              <input id="years" type="number" min="1" step="1" value="15" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="field">
-              <label for="rate">Annual return (CAGR) %</label>
-              <input id="rate" type="number" min="0" step="0.1" value="10" />
-              <div class="hint">Compounded monthly.</div>
-            </div>
-            <div class="field">
-              <label for="inflation">Inflation % (optional)</label>
-              <input id="inflation" type="number" min="0" step="0.1" value="4" />
-              <div class="hint">Used to show inflation-adjusted corpus.</div>
+      <div class="results">
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Final Corpus Projection</h3>
+          
+          <div style="text-align: center; background: #EBF8FF; padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+            <small style="font-weight: 500; color: #1E40AF;">Total Investment Value</small>
+            <strong id="rValue" class="kpi-main">—</strong>
+            
+            <div style="display:flex; justify-content:space-around; margin-top:16px; color:#4B5563; font-weight:600; font-size:0.9rem;">
+                <div id="chipSummary" style="color:#10B981;">—</div>
+                <div id="chipInvested">—</div>
+                <div id="chipGain" style="color:#F97316;">—</div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="field">
-              <label for="lumpsum">Initial lump sum (£)</label>
-              <input id="lumpsum" type="number" min="0" step="100" value="0" />
+          <div class="summary-grid">
+            <div class="kpi" style="text-align: left; padding: 0;">
+              <small>Total Amount Invested</small>
+              <strong id="rInvested" style="font-size: 1.5rem;">—</strong>
             </div>
-            <div class="field">
-              <label for="stepup">Step-up contribution % / year</label>
-              <input id="stepup" type="number" min="0" step="0.5" value="0" />
-              <div class="hint">Increase monthly contribution each year by this %.</div>
+            <div class="kpi" style="text-align: left; padding: 0;">
+              <small>Estimated Gains (Interest)</small>
+              <strong id="rGain" style="font-size: 1.5rem;">—</strong>
             </div>
           </div>
+        </section>
 
-          <div style="margin-top:12px">
-            <button id="calc" type="button" class="btn-primary">Calculate</button>
-            <button id="reset" type="button" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
-          </div>
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Year-by-Year Growth Chart</h3>
+          <canvas id="sipChart" style="max-height: 300px;"></canvas>
 
-          <!-- MID AD (inside Inputs) -->
-          <div class="ads">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-9718922267093672"
-                 data-ad-slot="3997839388"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
-        </div>
-
-        <!-- Results -->
-        <div class="panel">
-          <h2>Results</h2>
-
-          <div class="summary">
-            <div class="kpi"><small>Total invested</small><strong id="kpi-invested">—</strong></div>
-            <div class="kpi"><small>Corpus (future value)</small><strong id="kpi-fv">—</strong></div>
-            <div class="kpi"><small>Gains</small><strong id="kpi-gain">—</strong></div>
-            <div class="kpi"><small>Inflation-adjusted</small><strong id="kpi-real">—</strong></div>
-          </div>
-
-          <!-- CHART -->
-          <div class="chart-wrap">
-            <canvas id="sipChart" height="240"></canvas>
-          </div>
-
-          <!-- TABLE -->
-          <h3 style="margin-top:14px">Year-by-Year Summary</h3>
-          <div style="max-height:420px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
+          <h3 style="font-size: 1.2rem; margin-top: 24px; margin-bottom: 16px;">Projection Schedule</h3>
+          
+          <div class="table-container">
             <table>
               <thead>
                 <tr>
@@ -167,28 +212,19 @@
               </tbody>
             </table>
           </div>
-
-          <!-- BOTTOM AD -->
-          <div class="ads">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-9718922267093672"
-                 data-ad-slot="3997839388"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
-        </div>
+        </section>
       </div>
     </div>
-  </section>
+    
+    <div class="ad-placeholder" style="margin-top: 16px;">Ad Placeholder (Bottom)</div>
+  </div>
+</main>
 
-  <footer data-include></footer>
+<footer data-include="/partials/footer.html"></footer>
 
-  <!-- Load header/footer -->
-  <script src="../../assets/js/include.js?v=2" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/sip.js" defer></script>
 
-  <!-- SIP logic -->
-  <script src="../../assets/js/tool-sip.js?v=2" defer></script>
 </body>
 </html>

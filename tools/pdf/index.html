@@ -5,196 +5,237 @@
   <title>PDF Tools — KSRM Digital</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="Free PDF tools: merge, split, rotate, and lightly optimize PDFs — secure and fully in your browser." />
-  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
 
-  <!-- GTM -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
-  </script>
+  <link rel="icon" type="image/png" href="/assets/img/KSRM_IconOnly_transparent.png" sizes="32x32">
+  <meta name="theme-color" content="#1B2A49">
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/css/brand.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/overrides.css">
 
-  <!-- pdf-lib -->
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
-  <link rel="stylesheet" href="../../assets/css/main.css?v=pdf1" />
   <style>
-    section#tool{background:#fff}
-    .tool-wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    .panel{background:#fff;border:1px solid #E6E9EF;border-radius:16px;padding:20px;box-shadow:0 10px 22px rgba(2,8,23,.05)}
-    .panel h2{margin-bottom:8px}
-    .chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 16px}
-    .chip{border:1px solid #D8DFEA;border-radius:999px;background:#fff;padding:8px 14px;font-weight:700;cursor:pointer}
-    .chip.is-on{background:#3b82f6;color:#fff;border-color:#3b82f6}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .field{flex:1;min-width:220px;margin:10px 0}
-    .field label{display:block;font-weight:600;margin-bottom:6px;color:#0F172A}
-    .field input[type="text"],.field input[type="number"],.field input[type="file"],.field select{
-      width:100%;padding:12px 14px;border:1px solid #D8DFEA;border-radius:10px;background:#F9FBFF
+    .tool-page-main { background: #F3F5F9; padding-bottom: 60px; }
+    .card {
+      background: #fff;
+      border: 1px solid #E6E9EF;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.04);
+      margin-bottom: 24px;
     }
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid #D8DFEA;background:#fff;font-weight:700;cursor:pointer}
-    .btn.primary{background:#3b82f6;color:#fff;border-color:#3b82f6}
-    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-    .ads{margin:16px 0}
-    .ads-vertical{position:absolute;right:-180px;top:160px;width:160px;display:block}
-    @media(max-width:1300px){.ads-vertical{display:none}}
-    .out-box{max-height:460px;overflow:auto;border:1px solid #E6E9EF;border-radius:12px;margin-top:10px;padding:10px;background:#fff}
-    .hint{color:#6B7280;font-size:.9rem}
-    .thumb{display:inline-block;border:1px solid #E6E9EF;border-radius:8px;padding:6px;margin:6px;background:#fff}
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .form-group input[type="text"], 
+    .form-group input[type="number"], 
+    .form-group input[type="file"],
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+      background: #fff; /* Ensure file inputs look consistent */
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #3B82F6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .actions { display: flex; gap: 12px; margin-top: 30px; }
+    
+    /* Chips for Mode Selection */
+    .mode-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .chip {
+      background: #E5E7EB;
+      color: #4B5563;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .chip:hover {
+      background: #D1D5DB;
+    }
+    .chip.is-on {
+      background: #3B82F6;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    }
+    
+    /* Output Box */
+    .out-box {
+      min-height: 150px;
+      padding: 16px;
+      background: #F9FAFB;
+      border: 1px solid #E6E9EF;
+      border-radius: 12px;
+    }
+    .out-box .hint {
+      color: #6B7280;
+      font-size: 0.9rem;
+    }
+    .out-box strong { color: #10B981; }
+    .out-box a.btn { 
+      display: inline-block; 
+      background: #46B2FF; 
+      color: #fff; 
+      padding: 10px 20px; 
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    /* Grid Layout */
+    .content-grid {
+      display: grid; 
+      grid-template-columns: 1fr 1fr; /* Equal columns for inputs and results */
+      gap: 24px; 
+      margin-top: 32px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 960px) {
+      .content-grid { grid-template-columns: 1fr; }
+    }
   </style>
+
 </head>
 <body>
-  <!-- GTM noscript -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <header data-include></header>
+<header data-include="/partials/header.html"></header>
 
-  <section id="tool">
-    <div class="container">
-      <h1 style="text-align:center">PDF Tools (Merge • Split • Rotate • Optimize)</h1>
-      <p style="text-align:center;color:#6B7280;max-width:840px;margin:8px auto 24px">
-        100% client-side. Your files never leave your browser.
+<main class="tool-page-main">
+  <section class="tool-hero" style="background: #F7F9FC; padding: 40px 0 20px;">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="section-title" style="margin-bottom: 0;">PDF Toolkit</h1>
+      <p style="text-align: center; color: #6B7280; margin-bottom: 24px; font-size: 1.1rem;">
+        Merge, split, rotate, and optimize PDFs — secure and fully in your browser.
       </p>
-
-      <!-- TOP AD -->
-      <div class="ads">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-9718922267093672"
-             data-ad-slot="3997839388"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-      </div>
-
-      <!-- Vertical Ad (desktop) -->
-      <div class="ads-vertical">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-9718922267093672"
-             data-ad-slot="1830841042"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-      </div>
-
-      <div class="tool-wrap">
-        <!-- Controls -->
-        <div class="panel">
-          <h2>Controls</h2>
-
-          <!-- Mode chips -->
-          <div class="chips" id="modeChips">
-            <button class="chip is-on" data-mode="merge">Merge</button>
-            <button class="chip" data-mode="split">Split</button>
-            <button class="chip" data-mode="rotate">Rotate</button>
-            <button class="chip" data-mode="opt">Optimize</button>
-          </div>
-
-          <!-- MERGE -->
-          <div class="mode" id="mode-merge">
-            <div class="field">
-              <label>PDFs to merge (order matters)</label>
-              <input id="mergeFiles" type="file" accept="application/pdf" multiple />
-              <div class="hint">Select multiple PDFs (hold Ctrl/Cmd) in the order you want.</div>
-            </div>
-            <div class="btn-row">
-              <button id="btnMerge" type="button" class="btn primary">Merge PDFs</button>
-            </div>
-          </div>
-
-          <!-- SPLIT -->
-          <div class="mode" id="mode-split" style="display:none">
-            <div class="field">
-              <label>PDF to split</label>
-              <input id="splitFile" type="file" accept="application/pdf" />
-            </div>
-            <div class="field">
-              <label>Page ranges</label>
-              <input id="ranges" type="text" placeholder="e.g. 1-3,5,8-9 (1-based)" />
-              <div class="hint">Leave empty to split into single pages.</div>
-            </div>
-            <div class="btn-row">
-              <button id="btnSplit" type="button" class="btn primary">Split PDF</button>
-            </div>
-          </div>
-
-          <!-- ROTATE -->
-          <div class="mode" id="mode-rotate" style="display:none">
-            <div class="field">
-              <label>PDF to rotate</label>
-              <input id="rotFile" type="file" accept="application/pdf" />
-            </div>
-            <div class="field">
-              <label>Rotation</label>
-              <select id="rotDeg">
-                <option value="90">90° clockwise</option>
-                <option value="180">180°</option>
-                <option value="270">270° clockwise</option>
-              </select>
-            </div>
-            <div class="btn-row">
-              <button id="btnRotate" type="button" class="btn primary">Rotate Pages</button>
-            </div>
-          </div>
-
-          <!-- OPTIMIZE -->
-          <div class="mode" id="mode-opt" style="display:none">
-            <div class="field">
-              <label>PDF to optimize</label>
-              <input id="optFile" type="file" accept="application/pdf" />
-              <div class="hint">Re-saves using modern object streams; reduces size in some PDFs.</div>
-            </div>
-            <div class="btn-row">
-              <button id="btnOptimize" type="button" class="btn primary">Optimize</button>
-            </div>
-          </div>
-
-          <!-- MID AD -->
-          <div class="ads">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-9718922267093672"
-                 data-ad-slot="3997839388"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
-        </div>
-
-        <!-- Output -->
-        <div class="panel">
-          <h2>Output</h2>
-          <div class="out-box" id="outBox">
-            <div class="hint">Run a tool to see download links and thumbnails (for multi-page outputs).</div>
-          </div>
-
-          <!-- BOTTOM AD -->
-          <div class="ads">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-9718922267093672"
-                 data-ad-slot="3997839388"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <footer data-include></footer>
+  <div class="container">
+    <div class="ad-placeholder" style="margin-top: 32px;">Ad Placeholder (Top)</div>
 
-  <!-- include header/footer -->
-  <script src="../../assets/js/include.js?v=2" defer></script>
+    <div class="content-grid">
+      
+      <div class="inputs">
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Select a Tool</h3>
+          
+          <div class="mode-chips" id="modeChips">
+            <div class="chip is-on" data-mode="merge">Merge</div>
+            <div class="chip" data-mode="split">Split</div>
+            <div class="chip" data-mode="rotate">Rotate</div>
+            <div class="chip" data-mode="optimize">Optimize</div>
+          </div>
 
-  <!-- Tool logic -->
-  <script src="../../assets/js/tool-pdf.js?v=1" defer></script>
+          <div class="ad-placeholder" style="margin-bottom: 20px;">Ad Placeholder (Tool – Top)</div>
+        </section>
+
+
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Tool Settings</h3>
+
+          <div class="mode" id="mode-merge" style="display: block;">
+            <div class="form-group">
+              <label for="file1">First PDF File</label>
+              <input type="file" id="file1" accept=".pdf" required>
+            </div>
+            <div class="form-group">
+              <label for="file2">Second PDF File</label>
+              <input type="file" id="file2" accept=".pdf" required>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" id="btnMerge">Merge PDFs</button>
+            </div>
+          </div>
+
+          <div class="mode" id="mode-split" style="display: none;">
+            <div class="form-group">
+              <label for="splitFile">PDF to Split</label>
+              <input type="file" id="splitFile" accept=".pdf" required>
+            </div>
+            <div class="form-group">
+              <label for="pages">Pages to Keep (e.g., "1-5, 8, 10-end")</label>
+              <input type="text" id="pages" placeholder="e.g., 1, 3, 5-10" required>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" id="btnSplit">Split PDF</button>
+            </div>
+          </div>
+
+          <div class="mode" id="mode-rotate" style="display: none;">
+            <div class="form-group">
+              <label for="rotateFile">PDF to Rotate</label>
+              <input type="file" id="rotateFile" accept=".pdf" required>
+            </div>
+            <div class="form-group">
+              <label for="deg">Rotation (Degrees)</label>
+              <select id="deg">
+                <option value="90">90° Clockwise</option>
+                <option value="180">180°</option>
+                <option value="270">90° Counter-Clockwise</option>
+              </select>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" id="btnRotate">Rotate PDF</button>
+            </div>
+          </div>
+
+          <div class="mode" id="mode-optimize" style="display: none;">
+            <div class="form-group">
+              <label for="optFile">PDF to Optimize</label>
+              <input type="file" id="optFile" accept=".pdf" required>
+            </div>
+            <p style="color:#6B7280; font-size:0.9rem;">
+              This performs a light optimization (re-saves with object streams) which can reduce file size for some PDFs.
+            </p>
+            <div class="actions">
+              <button class="btn-primary" id="btnOptimize">Optimize PDF</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="results">
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Output</h3>
+          <div class="out-box" id="outBox">
+            <div class="hint">Run a tool to see download links and thumbnails (for multi-page outputs).</div>
+          </div>
+          
+          <div class="ad-placeholder" style="margin-top: 24px;">Ad Placeholder (Tool – Middle)</div>
+        </section>
+      </div>
+    </div>
+    
+    <div class="ad-placeholder" style="margin-top: 40px;">Ad Placeholder (Bottom)</div>
+  </div>
+</main>
+
+<footer data-include="/partials/footer.html"></footer>
+
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/tool-pdf.js" defer></script>
+
 </body>
 </html>

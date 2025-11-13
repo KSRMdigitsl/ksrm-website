@@ -21,42 +21,6 @@
       "order": 1,
       "enabled": true
     },
-{
-  "title": "Age Calculator",
-  "desc": "Exact age in years, months, days — plus next birthday and zodiac.",
-  "href": "/tools/age/",
-  "icon": "calendar",
-  "cta_label": "Open Tool →",
-  "order": 7,
-  "enabled": true
-},
-{
-  "title": "VAT Calculator (UK)",
-  "desc": "Add or remove VAT (20%, 5%, 0% or custom).",
-  "href": "/tools/vat/",
-  "icon": "percent",
-  "cta_label": "Open Tool →",
-  "order": 7,
-  "enabled": true
-},
-{
-  "title": "Mortgage Calculator (UK)",
-  "desc": "Monthly payments, LTV & Stamp Duty with charts.",
-  "href": "/tools/mortgage/",
-  "icon": "home",
-  "cta_label": "Open Tool →",
-  "order": 6,
-  "enabled": true
-},
-{
-  "title": "Currency Converter (Live)",
-  "desc": "Convert between currencies instantly using live exchange rates.",
-  "href": "/tools/currency/",
-  "icon": "dollar-sign",
-  "cta_label": "Open Tool →",
-  "order": 6,
-  "enabled": true
-},
     {
       "title": "SIP Calculator",
       "desc": "Visualize your SIP growth and compounding returns.",
@@ -92,13 +56,24 @@
       "cta_label": "Open Tool →",
       "order": 5,
       "enabled": true
+    },
+    {
+      "title": "Age Calculator",
+      "desc": "Exact age in years, months, days — plus next birthday and zodiac.",
+      "href": "/tools/age/",
+      "icon": "calendar",
+      "cta_label": "Open Tool →",
+      "order": 6,
+      "enabled": true
+    },
+    {
+      "title": "VAT Calculator",
+      "desc": "Add or remove VAT. UK presets (20%, 5%, 0%) and custom rates.",
+      "href": "/tools/vat-calc/",
+      "icon": "percent",
+      "cta_label": "Open Tool →",
+      "order": 7,
+      "enabled": true
     }
-  ],
-
-  "footer_links": [
-    { "label": "Privacy Policy", "href": "/privacy/", "order": 1, "enabled": true },
-    { "label": "Cookies",        "href": "/cookies/", "order": 2, "enabled": true },
-    { "label": "Terms of Use",   "href": "/terms/",   "order": 3, "enabled": true },
-    { "label": "Contact",        "href": "/contact/", "order": 4, "enabled": true }
   ]
 }
