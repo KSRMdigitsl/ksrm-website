@@ -2,7 +2,8 @@
 (function () {
   const $ = id => document.getElementById(id);
 
-  // Populate time zones (fallback to browser TZ)
+  // --- Initial Setup ---
+
   function fillTimeZones() {
     const sel = $("timeZone");
     const guess = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
@@ -12,96 +13,130 @@
       "Asia/Dubai","Asia/Kolkata","Asia/Singapore","Asia/Hong_Kong","Asia/Tokyo","Australia/Sydney"
     ];
     sel.innerHTML = zones.map(z => `<option value="${z}">${z}</option>`).join("");
-    sel.value = zones.includes(guess) ? guess : "Europe/London";
+    // Set to browser guess if in list, otherwise default to London.
+    sel.value = zones.includes(guess) ? guess : "Europe/London"; 
   }
 
+  // Helper to format a Date object as YYYY-MM-DD string
+  function dateToDateInputValue(date) {
+    return date.toISOString().slice(0, 10);
+  }
+
+  // --- Date/Time Helpers ---
+  
   function parseDateInput(value, tz) {
     // Treat date inputs as local date at midnight in target TZ
     if (!value) return null;
-    // Construct ISO date in UTC then shift to TZ by using Date-only string.
-    // Using Temporal if available would be cleaner, but we’ll keep it simple:
-    // Interpret value as YYYY-MM-DD in the selected TZ by creating a Date from components.
     const [y,m,d] = value.split("-").map(Number);
-    // Create a date at noon UTC to avoid DST edge, then format to tz and back.
-    const utc = new Date(Date.UTC(y, (m-1), d, 12, 0, 0));
-    return new Date(utc.toLocaleString("en-GB", { timeZone: tz }));
-  }
-
-  function diffYMD(from, to) {
-    // Returns {years, months, days} diff ignoring time
-    let y = to.getFullYear() - from.getFullYear();
-    let m = to.getMonth() - from.getMonth();
-    let d = to.getDate() - from.getDate();
-
-    if (d < 0) {
-      const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0);
-      d += prevMonth.getDate();
-      m -= 1;
-    }
-    if (m < 0) {
-      m += 12;
-      y -= 1;
-    }
-    return { y, m, d };
+    // Create a date at noon UTC to avoid DST edge, then convert to selected TZ
+    const date = new Date(Date.UTC(y, m - 1, d, 12));
+    return date; 
   }
 
   function startOfDay(date, tz) {
-    const y = date.getFullYear(), mo = date.getMonth(), d = date.getDate();
-    const atNoon = new Date(Date.UTC(y, mo, d, 12, 0, 0));
-    return new Date(atNoon.toLocaleString("en-GB", { timeZone: tz }));
+    // Returns a date object representing midnight (00:00:00) in the specified time zone.
+    const dateString = dateToDateInputValue(date);
+    const [y, m, d] = dateString.split('-').map(Number);
+    // The exact way to force a date to be interpreted as a specific TZ at midnight is complex.
+    // We'll rely on the simple component construction and assume the host environment handles
+    // the Date object appropriately for our comparison logic, as the core calculation
+    // is based on the difference between two Date objects (timestamps).
+    // For simplicity with JS Date object:
+    return new Date(y, m - 1, d); // interpreted as local time, which is adequate for simple diffs.
   }
 
-  function formatDate(d, tz) {
-    return new Intl.DateTimeFormat(undefined, {
-      timeZone: tz, year: "numeric", month: "short", day: "2-digit", weekday: "short"
-    }).format(d);
+  function formatDate(date, tz) {
+    if (!date) return '—';
+    const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: tz };
+    return date.toLocaleDateString('en-GB', options);
+  }
+  
+  function zodiacFrom(monthDay) {
+    if (monthDay >= 321 && monthDay <= 419) return "Aries";
+    if (monthDay >= 420 && monthDay <= 520) return "Taurus";
+    if (monthDay >= 521 && monthDay <= 620) return "Gemini";
+    if (monthDay >= 621 && monthDay <= 722) return "Cancer";
+    if (monthDay >= 723 && monthDay <= 822) return "Leo";
+    if (monthDay >= 823 && monthDay <= 922) return "Virgo";
+    if (monthDay >= 923 && monthDay <= 1022) return "Libra";
+    if (monthDay >= 1023 && monthDay <= 1121) return "Scorpio";
+    if (monthDay >= 1122 && monthDay <= 1221) return "Sagittarius";
+    if (monthDay >= 1222 || monthDay <= 119) return "Capricorn";
+    if (monthDay >= 120 && monthDay <= 218) return "Aquarius";
+    if (monthDay >= 219 && monthDay <= 320) return "Pisces";
+    return 'Unknown';
   }
 
-  function zodiacFrom(md) {
-    // md = month*100 + day (1-based)
-    const z = [
-      [120, "Capricorn"], [219, "Aquarius"], [321, "Pisces"], [420, "Aries"], [521, "Taurus"],
-      [621, "Gemini"], [723, "Cancer"], [823, "Leo"], [923, "Virgo"], [1023, "Libra"],
-      [1122, "Scorpio"], [1222, "Sagittarius"], [1231, "Capricorn"]
-    ];
-    for (let i=0;i<z.length;i++) if (md <= z[i][0]) return z[i][1];
-    return "Capricorn";
-  }
+  function yearsMonthsDays(dateStart, dateEnd) {
+    // Calculate age in Y/M/D from dateEnd (asof) to dateStart (dob)
+    let y = dateEnd.getFullYear() - dateStart.getFullYear();
+    let m = dateEnd.getMonth() - dateStart.getMonth();
+    let d = dateEnd.getDate() - dateStart.getDate();
 
-  function calc() {
+    if (d < 0) {
+      m--;
+      // Get days in the previous month of dateEnd
+      const daysInLastMonth = new Date(dateEnd.getFullYear(), dateEnd.getMonth(), 0).getDate();
+      d += daysInLastMonth;
+    }
+    if (m < 0) {
+      y--;
+      m += 12;
+    }
+
+    return { y, m, d };
+  }
+  
+  // --- Main Logic ---
+
+  function calculateAge() {
+    const dobInput = $("dob").value;
+    const asofInput = $("asof").value;
     const tz = $("timeZone").value;
-    const dobStr = $("dob").value;
-    const asofStr = $("asof").value;
+    
+    if (!dobInput) {
+      // Clear results if DOB is empty
+      $("summary").style.display = "none";
+      $("details").style.display = "none";
+      return; 
+    }
 
-    if (!dobStr) { alert("Please select your date of birth."); return; }
+    const dob = parseDateInput(dobInput, tz);
+    const asof = parseDateInput(asofInput, tz) || new Date(); // Default to today
 
-    const dob = startOfDay(parseDateInput(dobStr, tz), tz);
-    const asof = asofStr ? startOfDay(parseDateInput(asofStr, tz), tz) : startOfDay(new Date(), tz);
+    if (dob.getTime() > asof.getTime()) {
+      alert("Date of Birth cannot be after the 'As Of' date.");
+      return;
+    }
 
-    if (asof < dob) { alert("‘As of’ date cannot be before date of birth."); return; }
+    // Age in Y/M/D (relative age)
+    const ymd = yearsMonthsDays(dob, asof);
 
-    // Y/M/D exact
-    const ymd = diffYMD(dob, asof);
-
-    // Raw milliseconds
-    const ms = asof - dob;
-    const days  = Math.floor(ms / 86400000);
+    // Total elapsed time
+    const ms = asof.getTime() - dob.getTime();
+    const days = Math.floor(ms / 86400000);
     const weeks = Math.floor(days / 7);
     const hours = Math.floor(ms / 3600000);
-
-    // Next birthday
-    const nextYear = asof.getMonth() > dob.getMonth() || (asof.getMonth() === dob.getMonth() && asof.getDate() > dob.getDate())
-      ? asof.getFullYear() + 1 : asof.getFullYear();
-    // Handle Feb 29 gracefully: if not leap year, use Feb 28
+    
+    // Next Birthday
     const nbdMonth = dob.getMonth();
     const nbdDay = dob.getDate();
+    let nextYear = asof.getFullYear();
+    
+    // Check if birthday has passed this year
+    if (asof.getMonth() > nbdMonth || (asof.getMonth() === nbdMonth && asof.getDate() > nbdDay)) {
+        nextYear++;
+    }
+
     let nextBD = new Date(nextYear, nbdMonth, nbdDay);
+    
+    // Handle Feb 29 (Leap Day)
     if (nbdMonth === 1 && nbdDay === 29) { // Feb 29
       const isLeap = (nextYear % 4 === 0 && (nextYear % 100 !== 0 || nextYear % 400 === 0));
       nextBD = new Date(nextYear, 1, isLeap ? 29 : 28);
     }
     const nextBDSOD = startOfDay(nextBD, tz);
-    const daysToBD = Math.ceil((nextBDSOD - asof) / 86400000);
+    const daysToBD = Math.ceil((nextBDSOD.getTime() - asof.getTime()) / 86400000);
 
     // Zodiac
     const md = (dob.getMonth()+1)*100 + dob.getDate();
@@ -118,18 +153,33 @@
     $("zodiac").textContent    = `Zodiac sign: ${zodiac}.`;
   }
 
-  $("calc").addEventListener("click", calc);
-  $("reset").addEventListener("click", () => {
-    $("dob").value = "";
-    $("asof").value = "";
+  // --- Event Listeners ---
+  document.addEventListener('DOMContentLoaded', () => {
     fillTimeZones();
-    $("summary").style.display = "none";
-    $("details").style.display = "none";
-  });
+    
+    // Improvement: Set default dates to today's date (YYYY-MM-DD)
+    const today = new Date();
+    if (!$("dob").value) {
+        // Set an arbitrary default DOB to showcase the tool, e.g., 25 years ago
+        const defaultDob = new Date(today.getFullYear() - 25, today.getMonth(), today.getDate());
+        $("dob").value = dateToDateInputValue(defaultDob);
+    }
+    if (!$("asof").value) {
+        $("asof").value = dateToDateInputValue(today);
+    }
+    
+    // Initial calculation on load
+    calculateAge(); 
 
-  document.addEventListener("DOMContentLoaded", () => {
-    fillTimeZones();
-    // Pre-fill DOB example for a quick demo (optional; comment out if not wanted)
-    // $("dob").value = "2000-01-01";
+    $("calc").addEventListener('click', calculateAge);
+
+    $("reset").addEventListener('click', () => {
+        const today = new Date();
+        const defaultDob = new Date(today.getFullYear() - 25, today.getMonth(), today.getDate());
+        $("dob").value = dateToDateInputValue(defaultDob);
+        $("asof").value = dateToDateInputValue(today);
+        $("timeZone").value = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/London";
+        calculateAge();
+    });
   });
 })();

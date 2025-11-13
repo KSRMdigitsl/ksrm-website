@@ -3,182 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Loan EMI Calculator — KSRM Digital</title>
-  <meta name="description" content="Calculate EMI, total interest and payoff time for your loan. Free and fast." />
-  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicon.svg" />
+  <title>EMI Calculator with Amortization Schedule — KSRM Digital</title>
+  <meta name="description" content="Calculate your Equated Monthly Installment (EMI), total interest, and view a full amortization schedule and chart. Free EMI calculator by KSRM Digital." />
 
-  <!-- Google Tag Manager (KSRM Website) -->
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
-  </script>
+  <link rel="icon" type="image/png" href="/assets/img/KSRM_IconOnly_transparent.png" sizes="32x32">
+  <meta name="theme-color" content="#1B2A49">
 
-  <!-- Google AdSense (global) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/css/brand.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/overrides.css">
 
-  <!-- Chart.js for graphs -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <link rel="stylesheet" href="../../assets/css/main.css?v=emi2" />
   <style>
-    section#tool { background:#FFFFFF; }
-    .tool-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:24px; }
-    .panel {
-      background:#fff; border:1px solid #E6E9EF; border-radius:16px; padding:20px;
-      box-shadow:0 10px 22px rgba(2,8,23,.05);
+    .tool-page-main { background: #F3F5F9; padding-bottom: 60px; }
+    .card {
+      background: #fff;
+      border: 1px solid #E6E9EF;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.04);
+      margin-bottom: 24px; /* Default space between stacked cards */
     }
-    .panel h2 { margin-bottom:8px; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .field { flex:1; min-width:240px; margin:10px 0; }
-    .field label { display:block; font-weight:600; margin-bottom:6px; color:#0F172A; }
-    .field input, .field select {
-      width:100%; padding:12px 14px; border:1px solid #D8DFEA; border-radius:10px; font:inherit; background:#F9FBFF;
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
     }
-    .hint { color:#6B7280; font-size:.9rem; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #3B82F6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .actions { display: flex; gap: 12px; margin-top: 30px; }
+    .actions .btn-secondary {
+      background: #F3F4F6;
+      color: #4B5563;
+      border-radius: 10px;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: 1px solid #D1D5DB;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .actions .btn-secondary:hover { background: #E5E7EB; }
 
-    .summary { display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px; }
-    .kpi { background:#F7F9FC; border:1px solid #E6ECFF; border-radius:12px; padding:14px; }
-    .kpi small { color:#64748B; display:block; }
-    .kpi strong { font-size:1.2rem; }
+    /* Key Performance Indicators (KPIs) */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      text-align: center;
+      padding: 16px;
+      background: #F9FAFB;
+      border-radius: 10px;
+    }
+    .kpi { padding: 8px 0; }
+    .kpi small { display: block; color: #6B7280; font-weight: 500; font-size: 0.85rem; margin-bottom: 4px; }
+    .kpi strong { font-size: 1.5rem; font-weight: 700; color: #10B981; line-height: 1.2; display: block; }
 
-    .ads{ margin:16px 0; }
-
-    .chart-wrap{ margin-top:14px; border:1px solid #E6E9EF; border-radius:12px; padding:10px; background:#fff; }
-    table { width:100%; border-collapse:collapse; margin-top:10px; }
-    th, td { border-bottom:1px solid #EEF2F7; text-align:right; padding:10px 8px; }
-    th { text-align:right; font-weight:600; color:#0F172A; background:#F8FAFE; }
-    td:first-child, th:first-child { text-align:left; }
-
-    @media (max-width: 950px) { .tool-wrap { grid-template-columns: 1fr; } }
+    /* Amortization Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #E6E9EF;
+      font-size: 0.9rem;
+    }
+    th {
+      background: #F9FAFB;
+      color: #4B5563;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .table-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    /* Grid Layout */
+    .content-grid {
+      display: grid; 
+      grid-template-columns: 340px 1fr; /* Inputs on left, larger results on right */
+      gap: 24px; 
+      margin-top: 32px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 960px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+    }
   </style>
+
 </head>
 <body>
-  <!-- GTM (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-  <header data-include></header>
+<header data-include="/partials/header.html"></header>
 
-  <section id="tool">
-    <div class="container">
-      <h1 style="text-align:center">Loan EMI Calculator</h1>
-      <p style="text-align:center;color:#6B7280;max-width:820px;margin:8px auto 24px">
-        Enter your loan amount, interest rate and term to calculate <strong>EMI</strong>, <strong>total interest</strong>, and view a full <strong>amortization schedule</strong> with charts.
+<main class="tool-page-main">
+  <section class="tool-hero" style="background: #F7F9FC; padding: 40px 0 20px;">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="section-title" style="margin-bottom: 0;">EMI Calculator</h1>
+      <p style="text-align: center; color: #6B7280; margin-bottom: 24px; font-size: 1.1rem;">
+        Calculate your loan/mortgage EMI, total interest, and amortization schedule.
       </p>
-
-      <!-- TOP AD (horizontal) -->
-      <div class="ads">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-9718922267093672"
-             data-ad-slot="3997839388"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-      </div>
-
-      <div class="tool-wrap">
-        <!-- Inputs -->
-        <div class="panel">
-          <h2>Inputs</h2>
-
-          <div class="row">
-            <div class="field">
-              <label for="amount">Loan amount (£)</label>
-              <input id="amount" type="number" min="0" step="100" value="25000" />
-            </div>
-            <div class="field">
-              <label for="rate">Annual interest (%)</label>
-              <input id="rate" type="number" min="0" step="0.01" value="8.5" />
-              <div class="hint">Fixed-rate loans supported.</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="field">
-              <label for="term">Term (months)</label>
-              <input id="term" type="number" min="1" step="1" value="36" />
-            </div>
-            <div class="field">
-              <label for="start">Start month (optional)</label>
-              <input id="start" type="month" />
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <button id="calc" type="button" class="btn-primary">Calculate EMI</button>
-            <button id="reset" type="button" class="btn-primary" style="background:#94A3B8;margin-left:8px">Reset</button>
-          </div>
-
-          <!-- MID AD (inside Inputs) -->
-          <div class="ads">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-9718922267093672"
-                 data-ad-slot="3997839388"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
-        </div>
-
-        <!-- Results -->
-        <div class="panel">
-          <h2>Results</h2>
-
-          <div class="summary">
-            <div class="kpi"><small>Monthly EMI</small><strong id="kpi-emi">—</strong></div>
-            <div class="kpi"><small>Total Interest</small><strong id="kpi-interest">—</strong></div>
-            <div class="kpi"><small>Total Payment</small><strong id="kpi-total">—</strong></div>
-            <div class="kpi"><small>Payoff Date</small><strong id="kpi-date">—</strong></div>
-          </div>
-
-          <!-- Chart -->
-          <div class="chart-wrap">
-            <canvas id="emiChart" height="280"></canvas>
-          </div>
-
-          <h3 style="margin-top:14px">Amortization Schedule</h3>
-          <div style="max-height:420px; overflow:auto; border:1px solid #E6E9EF; border-radius:12px;">
-            <table>
-              <thead>
-              <tr>
-                <th>Month</th>
-                <th>Payment</th>
-                <th>Principal</th>
-                <th>Interest</th>
-                <th>Balance</th>
-              </tr>
-              </thead>
-              <tbody id="tbody">
-                <tr><td colspan="5" style="text-align:center;color:#6B7280;padding:16px">Run a calculation to see the schedule.</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- BOTTOM AD (horizontal) -->
-          <div class="ads">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-9718922267093672"
-                 data-ad-slot="3997839388"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <footer data-include></footer>
+  <div class="container">
+    <div class="ad-placeholder" style="margin-top: 32px;">Ad Placeholder (Top)</div>
 
-  <!-- Load header/footer -->
-  <script src="../../assets/js/include.js?v=logo1"></script>
+    <div class="content-grid">
+      
+      <div class="inputs">
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Loan Details</h3>
 
-  <!-- EMI logic -->
-  <script src="../../assets/js/tool-emi.js?v=2"></script>
+          <div class="form-group">
+            <label for="amount">Loan Amount (£)</label>
+            <input type="number" id="amount" value="25000" min="1" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="rate">Annual Interest Rate (%)</label>
+            <input type="number" id="rate" value="8.5" min="0" step="0.1" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="term">Loan Term (Months)</label>
+            <input type="number" id="term" value="36" min="1" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="start">Start Month (Optional)</label>
+            <input type="month" id="start">
+          </div>
+
+          <div class="actions">
+            <button class="btn-primary" id="calc">Calculate EMI</button>
+            <button class="btn-secondary" id="reset">Reset</button>
+          </div>
+          
+        </section>
+      </div>
+
+      <div class="results">
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Key Results</h3>
+          
+          <div class="summary-grid">
+            <div class="kpi"><small>Monthly EMI</small><strong id="kpi-emi">—</strong></div>
+            <div class="kpi"><small>Total Interest Paid</small><strong id="kpi-interest">—</strong></div>
+            <div class="kpi"><small>Total Payment</small><strong id="kpi-total">—</strong></div>
+            <div class="kpi"><small>Payoff Date</small><strong id="kpi-date">—</strong></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Principal vs. Interest Chart</h3>
+          <canvas id="chart" style="max-height: 300px;"></canvas>
+        </section>
+
+        <section class="card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Amortization Schedule</h3>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Payment</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                <tr><td colspan="5" style="text-align:center;color:#6B7280;padding:16px">Enter loan details and click 'Calculate EMI'</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+    
+    <div class="ad-placeholder" style="margin-top: 16px;">Ad Placeholder (Bottom)</div>
+  </div>
+</main>
+
+<footer data-include="/partials/footer.html"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/tool-emi.js" defer></script>
+
 </body>
 </html>
