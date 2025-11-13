@@ -22,11 +22,15 @@ a { color: #2563EB; text-decoration: none; transition: color 0.2s ease; }
 a:hover { color: #1E3A8A; }
 
 /* Container */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 0 1rem; 
+}
 
-/* Generic section spacing (individual sections may override bg) */
-section { padding: 88px 0; }
-@media (max-width: 768px) { section { padding: 64px 0; } }
+/* Generic section spacing (Tighter) */
+section { padding: 64px 0; } 
+@media (max-width: 768px) { section { padding: 48px 0; } } 
 
 /* --------------------------
    2) Typography
@@ -40,12 +44,25 @@ h1, h2, h3, h4, h5 {
 p { color: #374151; margin-bottom: 1rem; }
 small { font-size: 0.875rem; }
 
+/* Enhanced section titles for better visual hierarchy */
+.section-title {
+    font-size: 2.5rem; 
+    font-weight: 800;
+    margin-bottom: 3rem; 
+    color: #0F172A; 
+    text-align: center;
+}
+@media (max-width: 768px) {
+    .section-title { font-size: 2rem; margin-bottom: 2rem; }
+}
+
+
 /* --------------------------
-   3) Buttons
+   3) Buttons (Base)
 --------------------------- */
 .btn-primary{
   display:inline-block;
-  background-color:#3B82F6;           /* vivid blue CTA */
+  background-color:#3B82F6;
   color:#fff;
   padding:.8rem 1.6rem;
   border-radius:10px;
@@ -57,33 +74,65 @@ small { font-size: 0.875rem; }
 .btn-primary:hover{ background-color:#2563EB; transform:translateY(-1px); }
 
 /* --------------------------
-   4) Header (Deep Navy, polished)
+   4) Header (Deep Navy, styles migrated from header.html)
 --------------------------- */
 .site-header{
-  background:#0F172A;                   /* deep navy */
+  background:#0F172A;
   border-bottom:1px solid rgba(255,255,255,0.06);
   position:sticky; top:0; z-index:100;
   box-shadow:0 2px 14px rgba(2,6,23,.18);
 }
-.site-header .brand-name{
-  font-family:'Poppins',sans-serif;
-  font-weight:800; letter-spacing:.2px;
-  color:#F1F5F9;
+.site-header .bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.site-header .brand-tag{ color:#A8B3C7; }
-.site-header a[data-nav="true"]{
-  color:#FFFFFF; opacity:.92; font-weight:600;
+.site-header .site-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
 }
-.site-header a[data-nav="true"]:hover{
-  opacity:1; color:#FFFFFF;
-  text-decoration:underline; text-underline-offset:3px;
+.site-header .brand-text {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
-
-/* Brand mark */
-.brand-logo{
-  background: linear-gradient(135deg, #6D8CFF 0%, #3B6AF6 60%, #2C4CD8 100%);
-  box-shadow: 0 10px 20px rgba(49, 82, 220, .25), inset 0 1px 1px rgba(255,255,255,.16);
-  height:34px; width:34px; border-radius:10px; display:inline-block;
+.site-header nav {
+  margin-left: auto;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.site-header nav a {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.site-header nav a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+@media (max-width: 720px) {
+  .site-header .bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .site-header .brand-text {
+    font-size: 18px;
+  }
+  .site-header nav {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+    gap: 16px;
+  }
 }
 
 /* --------------------------
@@ -102,10 +151,11 @@ small { font-size: 0.875rem; }
 .hero-wrap h1{ font-size:2.4rem; letter-spacing:-.5px; margin:12px 0; }
 .hero-wrap p{ color:#6B7280; max-width:640px; margin:0 auto 1rem; }
 
-/* Quote styling (subtle) */
+/* Quote styling (transition added) */
 #quote-box{
   margin-top:18px; min-height:24px; font-style:italic;
-  color:#475569; font-size:.95rem; opacity:.9; transition:opacity .6s ease;
+  color:#475569; font-size:.95rem; opacity:.9; 
+  transition: opacity .3s ease; 
 }
 #quote-box:before, #quote-box:after{
   content:"“"; letter-spacing:-2px; color:#94a3b8; margin:0 4px;
@@ -115,16 +165,13 @@ small { font-size: 0.875rem; }
 /* --------------------------
    6) Tools Section — WHITE background
 --------------------------- */
-#tools { background:#FFFFFF; }          /* band = white */
-
-#tools .container > h2{
-  text-align:center; font-family:'Poppins',sans-serif;
-}
+#tools { background:#FFFFFF; } 
 
 #tools-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:28px; margin-top:28px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); /* Tighter Grid */
+  gap:24px; 
+  margin-top:24px;
 }
 .tool-card{
   background:#fff; border:1px solid #E6E9EF; border-radius:16px;
@@ -133,21 +180,15 @@ small { font-size: 0.875rem; }
   min-height:180px;
   transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-.tool-card:hover{
-  transform:translateY(-4px); border-color:#DDE3F0;
-  box-shadow:0 10px 24px rgba(2,6,23,.08);
-}
 .tool-card h3{ color:#111827; font-weight:700; }
 .tool-card p{ margin:10px 0 18px; line-height:1.55; color:#374151; }
 
 /* --------------------------
-   7) Blog Section — SOFT BLUE background
+   7) Blog Section — SOFT BLUE background (Removed conflicting background)
 --------------------------- */
 #blog-section {
-  background:#EEF4FF;                   /* soft blue band */
   text-align:center;
 }
-#blog-section h2{ margin-bottom:18px; font-family:'Poppins',sans-serif; color:#0F172A; }
 
 .blog-grid{ display:grid; gap:20px; max-width:1050px; margin:40px auto; }
 .featured, .blog-card{
@@ -167,7 +208,7 @@ small { font-size: 0.875rem; }
 .blog-card a, .featured a{ display:inline-block; margin-top:6px; font-weight:600; }
 
 /* --------------------------
-   8) Ad Placeholders (neutral look)
+   8) Ad Placeholders
 --------------------------- */
 .ad-placeholder{
   border-radius:12px; border:2px dashed #D6DAE1;
@@ -176,17 +217,45 @@ small { font-size: 0.875rem; }
 }
 
 /* --------------------------
-   9) Footer (dark to anchor page)
+   9) Footer (dark to anchor page, styles migrated from footer.html)
 --------------------------- */
 .site-footer{
   background:#0B1220;
   color:#CBD5E1;
   text-align:center; padding:72px 20px 40px;
 }
-.site-footer a{ color:#9BB2FF; margin:0 12px; text-decoration:none; }
-.site-footer a:hover{ text-decoration:underline; }
-.footer-disclaimer{ color:#94A3B8; font-size:13px; margin-top:18px; opacity:.9; }
-.footer-ads{ color:#64748B; font-size:12px; margin-top:8px; }
+.footer-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:16px;
+}
+.footer-logo img{
+  height:36px;
+  width:auto;
+  display:block;
+  margin:0 auto 8px;
+}
+.footer-links{
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.footer-links a{
+  color:#cbd5e1;
+  text-decoration:none;
+  font-weight:500;
+}
+.footer-links a:hover{color:#ffffff;text-decoration:underline;}
+.footer-copy{
+  font-size:13px;
+  color:#94a3b8;
+  margin-top:8px;
+}
 
 /* --------------------------
    10) Responsive

@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tools — KSRM Digital</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All Tools — KSRM Digital</title>
   <meta name="description" content="Browse free finance and IT tools by KSRM Digital." />
-  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
 
-  <!-- Google Tag Manager (KSRM Website) -->
+  <link rel="icon" type="image/png" href="/assets/img/KSRM_IconOnly_transparent.png" sizes="32x32">
+  <meta name="theme-color" content="#1B2A49">
+
+  <link rel="stylesheet" href="/assets/css/brand.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/overrides.css">
+  
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -15,30 +20,25 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-P7ZHLSTZ');
   </script>
-  <!-- End Google Tag Manager -->
-
-  <link rel="stylesheet" href="../assets/css/main.css?v=tools1" />
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7ZHLSTZ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End GTM (noscript) -->
 
-  <header data-include></header>
+  <header data-include="/partials/header.html"></header>
 
-  <section id="tools" style="background:#FFFFFF">
+  <section id="tools" class="tools-page">
     <div class="container">
-      <h1 style="text-align:center">All Tools</h1>
-      <p style="text-align:center;color:#6B7280;max-width:720px;margin:8px auto 24px">
+      <h1 class="section-title">All Tools</h1>
+      <p style="text-align:center;color:#6B7280;max-width:720px;margin:8px auto 32px">
         Explore our free, fast, no-login tools. New tools are added regularly.
       </p>
-      <div id="tools-grid"></div>
+      <div id="tools-grid" class="tools-grid"></div>
     </div>
   </section>
 
-  <footer data-include></footer>
+  <footer data-include="/partials/footer.html"></footer>
 
-  <script src="../assets/js/include.js?v=logo1"></script>
-  <script src="../assets/js/tools-index.js?v=1"></script>
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/tools-index.js" defer></script>
 </body>
 </html>

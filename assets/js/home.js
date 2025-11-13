@@ -39,7 +39,7 @@
     `;
   }
 
-  // Quotes rotation (with soft fade)
+  // Quotes rotation (with soft fade) - IMPROVED FADE EFFECT
   if (flagsData.hero_quotes === "on" && Array.isArray(quotesData) && quotesData.length) {
     const box = document.getElementById("quote-box");
     let index = 0;
@@ -50,9 +50,10 @@
       const q = quotesData[index];
       box.style.opacity = 0;
       setTimeout(() => {
-        box.innerHTML = `${q.text}${q.author ? ` — ${q.author}` : ""}`;
+        // Use a wrapping span for more consistent content rendering after fade
+        box.innerHTML = `<span style="display:inline-block;">${q.text}${q.author ? ` — ${q.author}` : ""}</span>`;
         box.style.opacity = 1;
-      }, 200);
+      }, 300); // Wait 300ms to match the CSS transition time
       index = (index + 1) % quotesData.length;
     }
     showQuote();
@@ -90,7 +91,6 @@
 
       blogSection.innerHTML = `
         <div class="container">
-          <h2>Latest from the Blog</h2>
           ${flagsData.ads_enabled && Array.isArray(flagsData.ads_layout) && flagsData.ads_layout.includes("above_blog")
             ? `<div class="ad-placeholder" style="max-width:1000px;margin:20px auto;">Ad Placeholder (Above Blog)</div>` : ""}
 

@@ -1,75 +1,4 @@
-<!-- /partials/header.html -->
 <header class="site-header" role="banner">
-  <style>
-    /* Base header styling (safe even before external CSS loads) */
-    .site-header {
-      background: #0f172a;
-    }
-    .site-header .bar {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* Logo & text beside it */
-    .site-header .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .site-header .site-logo img {
-      height: 40px;
-      width: auto;
-      display: block;
-    }
-    .site-header .brand-text {
-      color: #f1f5f9;
-      font-weight: 700;
-      font-size: 20px;
-      letter-spacing: 0.5px;
-      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    }
-
-    /* Navigation */
-    .site-header nav {
-      margin-left: auto;
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-    .site-header nav a {
-      color: #e2e8f0;
-      text-decoration: none;
-      font-weight: 500;
-      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    }
-    .site-header nav a:hover {
-      color: #ffffff;
-      text-decoration: underline;
-    }
-
-    /* Mobile adjustments */
-    @media (max-width: 720px) {
-      .site-header .bar {
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .site-header .brand-text {
-        font-size: 18px;
-      }
-      .site-header nav {
-        width: 100%;
-        justify-content: center;
-        margin-left: 0;
-        gap: 16px;
-      }
-    }
-  </style>
-
   <div class="bar">
     <a class="site-logo" href="/" aria-label="KSRM Home">
       <img src="/assets/img/KSRM_Logo_White_transparent.png" alt="KSRM" />
@@ -84,4 +13,3 @@
     </nav>
   </div>
 </header>
-

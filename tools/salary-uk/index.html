@@ -4,222 +4,251 @@
 <meta charset="utf-8">
 <title>Salary Calculator (UK) — KSRM Digital</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Calculate your monthly and annual take-home pay in the UK for the 2024-25 tax year.">
 
-<!-- Google AdSense Auto Ads -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9718922267093672" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/assets/css/brand.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/overrides.css">
 
 <style>
-  :root{
-    --bg:#f6f7fb;
-    --card:#ffffff;
-    --ink:#0f172a;
-    --muted:#64748b;
-    --line:#e5e7eb;
-    --chip:#eef2ff;
-    --chip-on:#3b82f6;
-    --chip-on-ink:#fff;
+/* Base Styling for the Tool Page */
+.tool-page-main { background: #F3F5F9; }
+.card {
+  background: #fff;
+  border: 1px solid #E6E9EF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 8px rgba(0,0,0,.04);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.card-header h3 { font-size: 1.2rem; margin: 0; }
+
+/* Form Elements */
+.form-group { margin-bottom: 20px; }
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: #3B82F6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+.actions .btn-secondary {
+  /* Using primary button styles but overriding the background for a secondary look */
+  background: #F3F4F6;
+  color: #4B5563;
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border: 1px solid #D1D5DB;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.actions .btn-secondary:hover { background: #E5E7EB; }
+
+/* Chips/Toggles (Monthly/Annually) */
+.chips { display: flex; gap: 8px; }
+.chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #F3F4F6;
+  color: #4B5563;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.chip:hover { background: #E5E7EB; }
+.chip.active {
+  background: #3B82F6;
+  color: #fff;
+}
+.chip.active:hover { background: #2563EB; }
+
+/* Results */
+.take-home-result { text-align: center; margin-bottom: 24px; }
+.period-toggle-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.result-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #10B981; /* Green for Take Home Pay */
+  line-height: 1.1;
+}
+.result-subtext {
+  font-size: 1rem;
+  color: #6B7280;
+  margin-bottom: 0;
+  margin-top: 4px;
+}
+.stat-summary {
+  display: grid;
+  gap: 12px;
+}
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 0.95rem;
+}
+.stat:last-child { border-bottom: none; }
+.stat .k { color: #4B5563; }
+.stat .v { font-weight: 600; color: #1F2937; }
+
+/* Responsive adjustments */
+.content-grid {
+  display: grid; 
+  grid-template-columns: 1fr 340px; 
+  gap: 24px; 
+  margin-top: 32px;
+}
+@media (max-width: 960px) {
+  .content-grid {
+    grid-template-columns: 1fr;
   }
-  html,body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:0}
-  .wrap{max-width:1200px;margin:0 auto;padding:16px 20px 40px;position:relative;}
-
-  .chips{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
-  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;color:#111827}
-  .chip.is-on{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
-
-  h1{font-size:clamp(26px,3.4vw,36px);line-height:1.2;margin:12px 0 6px;font-weight:800}
-  p.lead{color:var(--muted);margin:0 0 18px}
-
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media (max-width:980px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 22px rgba(2,8,23,.05)}
-  .card .hd{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700}
-  .card .bd{padding:16px}
-
-  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media (max-width:720px){.stat-grid{grid-template-columns:1fr}}
-  .stat{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px}
-  .stat .k{color:var(--muted);font-size:14px}
-  .stat .v{font-size:22px;font-weight:800;margin-top:6px}
-
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media (max-width:720px){.two{grid-template-columns:1fr}}
-  .lab{display:block;font-weight:600;margin:10px 0 6px}
-  input[type="number"], select{
-    width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:600
-  }
-
-  /* ads */
-  .ads{margin:16px 0}
-  .ads-vertical{
-    position:absolute;
-    right:-180px;
-    top:160px;
-    width:160px;
-    display:block;
-  }
-  @media(max-width:1300px){
-    .ads-vertical{display:none;}
-  }
+}
+@media (max-width: 600px) {
+  .result-value { font-size: 2.8rem; }
+  .card { padding: 20px; }
+  .actions { flex-direction: column; }
+  .actions button { width: 100%; }
+}
 </style>
+
 </head>
 <body>
 
-<div id="header-slot"></div>
+<header data-include="/partials/header.html"></header>
 
-<main class="wrap">
-  <!-- Horizontal ad under chip bar -->
-  <div class="chips" id="chipbar">
-    <button class="chip is-on" data-period="month" id="chipMonth">Month</button>
-    <button class="chip" data-period="year" id="chipYear">Year</button>
+<main class="tool-page-main">
+  <section class="tool-hero" style="background: #F7F9FC; padding: 40px 0 20px;">
+    <div class="container" style="max-width: 900px;">
+      <h1 class="section-title" style="margin-bottom: 0;">UK Salary Calculator</h1>
+      <p style="text-align: center; color: #6B7280; margin-bottom: 24px; font-size: 1.1rem;">
+        Calculate your monthly and annual take-home pay for the **2024–25** tax year.
+      </p>
+    </div>
+  </section>
 
-    <span class="chip" id="chipTake">£0.00</span>
-    <span class="chip" id="chipRate">0%</span>
+  <div class="container" style="max-width: 900px; padding: 0 1rem 60px;">
+    <div class="ad-placeholder" style="margin-top: 32px;">Ad Placeholder (Top)</div>
 
-    <span style="flex:1"></span>
-
-    <button class="chip" id="btnCopy">Copy link</button>
-    <button class="chip" id="btnReset">Reset</button>
-    <a class="chip" href="/tools/">All tools</a>
-  </div>
-
-  <div class="ads">
-    <!-- horizontal ad1 -->
-    <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-9718922267093672"
-        data-ad-slot="3997839388"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <h1>Salary Calculator (UK)</h1>
-  <p class="lead">2024–25 bands for England/Wales/NI and Scotland. Calculates income tax, National Insurance, pension, and student loan. Use the quick presets or paste a salary; switch periods with the toggle.</p>
-
-  <!-- Vertical sidebar ad (desktop only) -->
-  <div class="ads-vertical">
-    <!-- vertical ad -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-9718922267093672"
-         data-ad-slot="1830841042"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <div class="grid">
-    <!-- Inputs -->
-    <section class="card">
-      <div class="hd">Inputs</div>
-      <div class="bd">
-        <div class="two">
-          <div>
-            <span class="lab">Annual gross salary (£)</span>
-            <div style="display:flex;gap:8px;margin-bottom:8px">
-              <button class="chip" data-preset="25000">£25k</button>
-              <button class="chip" data-preset="35000">£35k</button>
-              <button class="chip" data-preset="50000">£50k</button>
-              <button class="chip" data-preset="75000">£75k</button>
-              <button class="chip" data-preset="100000">£100k</button>
-            </div>
-            <input id="salary" type="number" inputmode="decimal" min="0" placeholder="e.g. 52000" />
-          </div>
-          <div>
-            <span class="lab">Show results per</span>
-            <div style="display:flex;gap:8px">
-              <button class="chip is-on" data-period="month" id="chipMonth2">Month</button>
-              <button class="chip" data-period="year" id="chipYear2">Year</button>
+    <div class="content-grid">
+      
+      <div class="inputs">
+        <section class="card">
+          <div class="card-header">
+            <h3>Pay Details</h3>
+            <div class="chips">
+              <span class="chip active" id="chipMonth">Monthly</span>
+              <span class="chip" id="chipYear">Annually</span>
             </div>
           </div>
-        </div>
 
-        <div class="two">
-          <div>
-            <span class="lab">Pension (employee) %</span>
-            <input id="pen" type="number" inputmode="decimal" min="0" value="5" />
+          <div class="form-group">
+            <label for="salary">Gross Salary (£)</label>
+            <input type="number" id="salary" placeholder="50000" min="0">
           </div>
-          <div>
-            <span class="lab">Region</span>
+          
+          <div class="form-group">
+            <label for="pen">Pension Contribution (%)</label>
+            <input type="number" id="pen" value="5" min="0" max="100">
+          </div>
+
+          <div class="form-group">
+            <label for="region">Tax Region</label>
             <select id="region">
-              <option value="EWNI" selected>England / Wales / NI</option>
-              <option value="SCT">Scotland</option>
+              <option value="EWNI">England, Wales & NI (EWNI)</option>
+              <option value="SCOT">Scotland</option>
             </select>
           </div>
-        </div>
 
-        <div class="two">
-          <div>
-            <span class="lab">Student loan</span>
+          <div class="form-group">
+            <label for="loan">Student Loan Type</label>
             <select id="loan">
-              <option value="none" selected>None</option>
+              <option value="none">No Student Loan</option>
               <option value="plan1">Plan 1</option>
               <option value="plan2">Plan 2</option>
               <option value="plan4">Plan 4</option>
-              <option value="pgl">Postgraduate (PGL)</option>
+              <option value="plan5">Plan 5</option>
+              <option value="postgrad">Postgraduate</option>
             </select>
           </div>
-
-          <div class="ads">
-            <!-- horizontal ad1 -->
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-9718922267093672"
-                data-ad-slot="3997839388"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          
+          <div class="actions">
+            <button class="btn-primary" id="btnCopy">Copy link</button>
+            <button class="btn-secondary" id="btnReset">Reset</button>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Results -->
-    <section class="card">
-      <div class="hd">Results</div>
-      <div class="bd">
-        <div class="stat-grid">
-          <div class="stat"><div class="k">Gross pay</div><div class="v" id="rGross">£0.00</div></div>
-          <div class="stat"><div class="k">Take-home</div><div class="v" id="rTake">£0.00</div></div>
-          <div class="stat"><div class="k">Income tax</div><div class="v" id="rTax">£0.00</div></div>
-          <div class="stat"><div class="k">NI (employee)</div><div class="v" id="rNI">£0.00</div></div>
-          <div class="stat"><div class="k">Pension (employee)</div><div class="v" id="rPen">£0.00</div></div>
-        </div>
-
-        <!-- Breakdown -->
-        <section class="card" style="margin-top:16px">
-          <div class="hd">Breakdown</div>
-          <div class="bd"><div id="bk"></div></div>
+          
         </section>
-
-        <!-- Bottom horizontal ad -->
-        <div class="ads">
-          <ins class="adsbygoogle"
-              style="display:block"
-              data-ad-client="ca-pub-9718922267093672"
-              data-ad-slot="3997839388"
-              data-ad-format="auto"
-              data-full-width-responsive="true"></ins>
-          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
       </div>
-    </section>
+
+      <div class="results">
+        <section class="card">
+          <h3 class="card-header">Take-Home Pay</h3>
+          
+          <div class="take-home-result">
+            <div class="period-toggle-row">
+              <span class="chip active" id="chipMonth2">Monthly</span>
+              <span class="chip" id="chipYear2">Annually</span>
+            </div>
+            
+            <div class="result-value" id="rTake">£0.00</div>
+            <p class="result-subtext">Estimated Net Pay</p>
+          </div>
+
+          <div class="stat-summary">
+            <div class="stat"><div class="k">Gross Pay</div><div class="v" id="rGross">£0.00</div></div>
+            <div class="stat"><div class="k">Income tax</div><div class="v" id="rTax">£0.00</div></div>
+            <div class="stat"><div class="k">NI (employee)</div><div class="v" id="rNI">£0.00</div></div>
+            <div class="stat"><div class="k">Pension (employee)</div><div class="v" id="rPen">£0.00</div></div>
+          </div>
+        </section>
+        
+        <section class="card" style="margin-top:24px;">
+          <h3 class="card-header">Full Breakdown</h3>
+          <div class="card-body"><div id="bk"></div></div>
+        </section>
+        
+        <div class="ad-placeholder" style="margin-top: 24px;">Ad Placeholder (Sidebar)</div>
+      </div>
+    </div>
+    
+    <div class="ad-placeholder" style="margin-top: 40px;">Ad Placeholder (Bottom)</div>
   </div>
 </main>
 
-<div id="footer-slot"></div>
+<footer data-include="/partials/footer.html"></footer>
 
-<script>
-  async function loadPartial(id, url){
-    try{
-      const r = await fetch(url,{cache:'no-cache'});
-      if(r.ok) document.getElementById(id).innerHTML = await r.text();
-    }catch(e){ console.warn('Partial load failed:', url); }
-  }
-  loadPartial('header-slot','/partials/header.html');
-  loadPartial('footer-slot','/partials/footer.html');
-</script>
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/salary.js" defer></script>
 
-<script src="./salary.js"></script>
 </body>
 </html>

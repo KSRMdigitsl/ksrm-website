@@ -8,28 +8,19 @@
   padding: 48px 0 32px;
   background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
-#hero .eyebrow,
-#hero small,
-#hero .subtle {
-  color: #64748b;
-}
 #hero h1 {
   font-size: 2.4rem;
   line-height: 1.2;
   margin-bottom: 10px;
 }
-#hero p {
-  max-width: 700px;
-  margin: 0 auto 12px;
-}
 
-/* 2) BUTTONS: vibrant + interactive */
+/* 2) BUTTONS: vibrant + interactive (Refined hover state) */
 button,
 .btn,
 .cta-button,
 .btn-primary,
 #hero .btn-primary {
-  background: #46B2FF; /* Tech Blue */
+  background: #3B82F6; /* Use main primary blue */
   color: #fff;
   border-radius: 10px;
   font-weight: 600;
@@ -42,8 +33,8 @@ button:hover,
 .cta-button:hover,
 .btn-primary:hover,
 #hero .btn-primary:hover {
-  background: #1B2A49; /* Deep Navy */
-  box-shadow: 0 6px 16px rgba(27,42,73,.28);
+  background: #2563EB; /* Darker blue on hover */
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .28); /* Shadow matching hover color */
   transform: translateY(-2px);
 }
 
@@ -80,10 +71,10 @@ button:hover,
   border-top: 1px solid rgba(255,255,255,.08);
 }
 
-/* 6) HEADER LOGO: drop-shadow + responsive sizing */
+/* 6) HEADER LOGO: drop-shadow + responsive sizing (FIXED conflicts) */
 .site-header .site-logo img {
   filter: drop-shadow(0 0 2px rgba(0,0,0,.18));
-  height: 50px;             /* mobile base */
+  height: 44px; /* Mobile base height */
   width: auto;
   transition: height .3s ease;
 }
@@ -91,13 +82,10 @@ button:hover,
   padding: 12px 20px;
 }
 
-/* larger screens = bigger logo */
+/* larger screens = slightly bigger logo */
 @media (min-width: 768px) {
   .site-header .bar { padding: 14px 24px; }
-  .site-header .site-logo img { height: 100px; }
-}
-@media (min-width: 1200px) {
-  .site-header .site-logo img { height: 100px; }
+  .site-header .site-logo img { height: 55px; } /* Corrected desktop size */
 }
 
 /* 7) FOOTER LOGO sizing to match header */
@@ -106,27 +94,12 @@ button:hover,
   width: auto;
   transition: height .3s ease;
 }
-@media (min-width: 1200px) {
-  .site-footer .footer-logo img { height: 44px; }
-}
 
-/* 8) MOBILE TUNING */
+/* 8) MOBILE TUNING (Cleaned up conflicting rules) */
 @media (max-width: 640px) {
-  #hero { padding: 36px 0 22px; }
-  #hero h1 { font-size: 1.85rem; }
+  #hero { padding: 32px 0 20px; } 
+  #hero h1 { font-size: 1.8rem; }
   #hero p { font-size: .95rem; }
   .tools-grid { gap: 16px; }
 }
-.site-header .site-logo img {
-  height: 50px !important;
-}
-@media (min-width: 768px) {
-  .site-header .site-logo img {
-    height: 50px !important;
-  }
-}
-@media (min-width: 1200px) {
-  .site-header .site-logo img {
-    height: 50px !important;
-  }
-}
+/* Removed all conflicting !important logo height rules */

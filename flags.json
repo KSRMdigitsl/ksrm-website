@@ -1,6 +1,6 @@
 {
-  "ads_enabled": false,
-  "ads_layout": ["hero", "above_blog"],
+  "ads_enabled": true,
+  "ads_layout": ["hero", "above_blog", "sidebar"],
   "hero_quotes": "on",
   "analytics": "gtm",
   "gtm_enabled": true,
